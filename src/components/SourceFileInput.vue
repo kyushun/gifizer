@@ -55,7 +55,7 @@ export default {
 <style scoped lang="scss">
 .frame {
   cursor: pointer;
-  margin: 2rem auto;
+  margin: 2rem auto 1rem;
   padding: 1rem;
   width: 500px;
   height: 150px;
