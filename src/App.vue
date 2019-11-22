@@ -1,20 +1,18 @@
 <template>
   <div id="app">
-    <div>{{ sourceFilePath }}</div>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <SourceFileInput />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 import * as Types from "./store/mutation-types";
-import HelloWorld from "./components/HelloWorld.vue";
+import SourceFileInput from "./components/SourceFileInput";
 
 export default {
   name: "app",
   components: {
-    HelloWorld
+    SourceFileInput
   },
   computed: {
     ...mapGetters(["sourceFilePath"])
@@ -32,6 +30,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  //margin-top: 60px;
 }
 </style>
