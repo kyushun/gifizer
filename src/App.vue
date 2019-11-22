@@ -1,17 +1,26 @@
 <template>
   <div id="app">
+    <div>{{ sourceFilePath }}</div>
     <img alt="Vue logo" src="./assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import * as Types from "./store/mutation-types";
 import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
   name: "app",
   components: {
     HelloWorld
+  },
+  computed: {
+    ...mapGetters(["sourceFilePath"])
+  },
+  methods: {
+    ...mapActions([Types.SET_SOURCEFILE])
   }
 };
 </script>
