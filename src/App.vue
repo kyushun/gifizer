@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <SourceFileInput />
+    <ConvertButton />
   </div>
 </template>
 
@@ -8,11 +9,13 @@
 import { mapGetters, mapActions } from "vuex";
 import * as Types from "./store/mutation-types";
 import SourceFileInput from "./components/SourceFileInput";
+import ConvertButton from "./components/ConvertButton";
 
 export default {
   name: "app",
   components: {
-    SourceFileInput
+    SourceFileInput,
+    ConvertButton
   },
   computed: {
     ...mapGetters(["sourceFilePath"])
@@ -30,6 +33,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  //margin-top: 60px;
 }
 </style>
