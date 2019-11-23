@@ -8,9 +8,16 @@
   >
     <div class="border">
       <div class="content">
-        <p v-if="sourceFilePath">
+        <div class="file-loaded" v-if="sourceFilePath">
           {{ sourceFilePath }}
-        </p>
+          <video
+            class="src-video"
+            v-bind:src="'file:' + sourceFilePath"
+            muted
+            autoplay
+            loop
+          ></video>
+        </div>
         <p v-else>
           Drop or Select Movie
         </p>
@@ -25,6 +32,11 @@ import { SET_SOURCEFILE } from "../store/mutation-types";
 
 export default {
   name: "SourceFileInput",
+  data: function() {
+    return {
+      sourceFileObjectURL: ""
+    };
+  },
   computed: {
     ...mapGetters(["sourceFilePath"])
   },
@@ -55,7 +67,7 @@ export default {
 <style scoped lang="scss">
 .frame {
   cursor: pointer;
-  margin: 2rem auto 1rem;
+  margin: 0 auto 1rem;
   padding: 1rem;
   width: 500px;
   height: 150px;
@@ -78,6 +90,16 @@ export default {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+
+      .file-loaded {
+        font-size: 0.9rem;
+
+        .src-video {
+          max-width: 200px;
+          max-height: 110px;
+          border-radius: 12px;
+        }
+      }
     }
   }
 }

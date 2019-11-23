@@ -20,7 +20,8 @@ function createWindow() {
     width: 600,
     height: 400,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: !isDevelopment
     }
   });
 
