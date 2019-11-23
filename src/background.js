@@ -2,6 +2,7 @@
 
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import { convertToGif } from "./lib/ffmpeg";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -90,7 +91,7 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on("convert-start", (event, args) => {
+ipcMain.on("convert-run", async (event, args) => {
   console.log(args);
-  event.sender.send("convert-finished", { success: true });
+  convertToGif(args, event.sender);
 });

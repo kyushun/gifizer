@@ -13,7 +13,7 @@ import { CONVERT } from "../store/mutation-types";
 export default {
   name: "ConvertButton",
   computed: {
-    ...mapGetters(["sourceFilePath", "options"])
+    ...mapGetters(["sourceFilePath", "options", "convert"])
   },
   methods: {
     ...mapActions([CONVERT]),

@@ -3,30 +3,43 @@
     <p class="description">
       Each field will be set the default value if it is empty.
     </p>
-    <label>
-      Framerate:
-      <input
-        type="number"
-        :value="options.framerate"
-        @change="onChange('framerate', $event)"
-      />
-    </label>
-    <label>
-      Width:
-      <input
-        type="number"
-        :value="options.width"
-        @change="onChange('width', $event)"
-      />
-    </label>
-    <label>
-      Height:
-      <input
-        type="number"
-        :value="options.height"
-        @change="onChange('height', $event)"
-      />
-    </label>
+    <div class="input-field">
+      <label>
+        Framerate:
+        <input
+          type="number"
+          :value="options.framerate"
+          @change="onChangeInt('framerate', $event)"
+        />
+      </label>
+      <label>
+        Width:
+        <input
+          type="number"
+          :value="options.width"
+          @change="onChangeInt('width', $event)"
+        />
+      </label>
+      <label>
+        Height:
+        <input
+          type="number"
+          :value="options.height"
+          @change="onChangeInt('height', $event)"
+        />
+      </label>
+    </div>
+    <div class="input-field">
+      <label>
+        Output filename:
+        <input
+          class="long"
+          type="text"
+          :value="options.destFilePath"
+          @change="onChangeStr('destFilePath', $event)"
+        />
+      </label>
+    </div>
   </div>
 </template>
 
@@ -41,9 +54,17 @@ export default {
   },
   methods: {
     ...mapActions([ADD_OPTIONS]),
-    onChange: function(key, event) {
+    onChangeStr: function(key, event) {
       const value = event.target.value;
-      if (!isNaN(value)) {
+      if (value) {
+        this.ADD_OPTIONS({ [key]: value });
+      }
+    },
+    onChangeInt: function(key, event) {
+      const value = event.target.value;
+      if (value == "") {
+        this.ADD_OPTIONS({ [key]: value });
+      } else if (!isNaN(value)) {
         this.ADD_OPTIONS({ [key]: parseInt(value) });
       }
     }
@@ -59,19 +80,27 @@ export default {
     font-size: 0.75rem;
   }
 
-  label {
-    margin: 0 0.25rem;
+  .input-field {
+    margin: 0 0 0.5rem;
 
-    input {
-      width: 2rem;
-      padding: 0.25rem 0.5rem;
-      border: solid 1px #ccc;
-      border-radius: 8px;
+    label {
+      margin: 0 0.25rem;
 
-      &::-webkit-outer-spin-button,
-      &::-webkit-inner-spin-button {
-        margin: 0;
-        -webkit-appearance: none;
+      input {
+        width: 2rem;
+        padding: 0.25rem 0.5rem;
+        border: solid 1px #ccc;
+        border-radius: 8px;
+
+        &.long {
+          width: 12rem;
+        }
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          margin: 0;
+          -webkit-appearance: none;
+        }
       }
     }
   }

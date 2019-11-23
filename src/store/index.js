@@ -8,15 +8,18 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     sourceFilePath: "",
-    options: {}
+    options: {},
+    convert: {}
   },
   getters: {
     sourceFilePath: state => state.sourceFilePath,
-    options: state => state.options
+    options: state => state.options,
+    convert: state => state.convert
   },
   actions: {
     [Types.SET_SOURCEFILE]({ commit }, filePath) {
       commit(Types.SET_SOURCEFILE, filePath);
+      commit(Types.ADD_OPTIONS, { destFilePath: filePath + ".gif" });
     },
     [Types.ADD_OPTIONS]({ commit }, options) {
       commit(Types.ADD_OPTIONS, options);
@@ -24,9 +27,11 @@ export default new Vuex.Store({
     [Types.CONVERT]({ state }) {
       const args = state.options;
       args.sourceFilePath = state.sourceFilePath;
-      ipcRenderer.send("convert-start", args);
+      ipcRenderer.send("convert-run", args);
 
-      //ipcRenderer.on("convert-finished", (event, arg) => {});
+      ipcRenderer.on("convert-status", (_, response) => {
+        this.commit(Types.CONVERT, response);
+      });
     }
   },
   mutations: {
@@ -35,8 +40,24 @@ export default new Vuex.Store({
     },
     [Types.ADD_OPTIONS](state, options) {
       for (const key in options) {
-        state.options[key] = options[key];
+        Vue.set(state.options, key, options[key]);
       }
+    },
+    [Types.CONVERT](state, response) {
+      switch (response.status) {
+        case "processing":
+          state.convert = { progress: response.progress };
+          break;
+        case "error":
+          state.convert = { detail: response.detail };
+          break;
+        case "finished":
+        default:
+          state.convert = {};
+          break;
+      }
+
+      state.convert.status = response.status;
     }
   }
 });
