@@ -1,3 +1,4 @@
+import { ipcRenderer } from "electron";
 import Vue from "vue";
 import Vuex from "vuex";
 import * as Types from "./mutation-types";
@@ -19,6 +20,13 @@ export default new Vuex.Store({
     },
     [Types.ADD_OPTIONS]({ commit }, options) {
       commit(Types.ADD_OPTIONS, options);
+    },
+    [Types.CONVERT]({ state }) {
+      const args = state.options;
+      args.sourceFilePath = state.sourceFilePath;
+      ipcRenderer.send("convert-start", args);
+
+      //ipcRenderer.on("convert-finished", (event, arg) => {});
     }
   },
   mutations: {

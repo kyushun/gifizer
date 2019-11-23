@@ -7,10 +7,19 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import { CONVERT } from "../store/mutation-types";
+
 export default {
   name: "ConvertButton",
+  computed: {
+    ...mapGetters(["sourceFilePath", "options"])
+  },
   methods: {
-    onClick: function() {}
+    ...mapActions([CONVERT]),
+    onClick: function() {
+      this.CONVERT();
+    }
   }
 };
 </script>
