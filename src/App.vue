@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <SourceFileInput />
+    <ConvertStatus />
     <OptionSelect />
     <ConvertButton />
   </div>
@@ -10,6 +11,7 @@
 import { mapGetters, mapActions } from "vuex";
 import * as Types from "./store/mutation-types";
 import SourceFileInput from "./components/SourceFileInput";
+import ConvertStatus from "./components/ConvertStatus";
 import OptionSelect from "./components/OptionSelect";
 import ConvertButton from "./components/ConvertButton";
 
@@ -17,6 +19,7 @@ export default {
   name: "app",
   components: {
     SourceFileInput,
+    ConvertStatus,
     OptionSelect,
     ConvertButton
   },

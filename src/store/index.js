@@ -32,6 +32,9 @@ export default new Vuex.Store({
       ipcRenderer.on("convert-status", (_, response) => {
         this.commit(Types.CONVERT, response);
       });
+    },
+    [Types.RESET]({ commit }) {
+      commit(Types.RESET);
     }
   },
   mutations: {
@@ -49,15 +52,27 @@ export default new Vuex.Store({
           state.convert = { progress: response.progress };
           break;
         case "error":
-          state.convert = { detail: response.detail };
+          state.convert = {
+            detail: (() => {
+              const splited = response.detail.split(":");
+              return splited.length == 3 ? splited[2] : response.detail;
+            })()
+          };
           break;
         case "finished":
+          state.convert = { progress: 100 };
+          break;
         default:
           state.convert = {};
           break;
       }
 
       state.convert.status = response.status;
+    },
+    [Types.RESET](state) {
+      state.sourceFilePath = "";
+      state.convert = {};
+      Vue.set(state.options, "destFilePath", null);
     }
   }
 });

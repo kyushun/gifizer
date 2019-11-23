@@ -15,12 +15,9 @@
             v-bind:src="'file:' + sourceFilePath"
             muted
             autoplay
-            loop
           ></video>
         </div>
-        <p v-else>
-          Drop or Select Movie
-        </p>
+        <p v-else>Drop or Select Movie</p>
       </div>
     </div>
   </div>
@@ -67,7 +64,7 @@ export default {
 <style scoped lang="scss">
 .frame {
   cursor: pointer;
-  margin: 0 auto 1rem;
+  margin: 0 auto 0.25rem;
   padding: 1rem;
   width: 500px;
   height: 150px;
