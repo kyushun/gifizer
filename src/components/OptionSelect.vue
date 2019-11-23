@@ -42,7 +42,10 @@ export default {
   methods: {
     ...mapActions([ADD_OPTIONS]),
     onChange: function(key, event) {
-      this.ADD_OPTIONS({ [key]: event.target.value });
+      const value = event.target.value;
+      if (!isNaN(value)) {
+        this.ADD_OPTIONS({ [key]: parseInt(value) });
+      }
     }
   }
 };
