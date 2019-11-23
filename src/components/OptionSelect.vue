@@ -5,22 +5,46 @@
     </p>
     <label>
       Framerate:
-      <input type="number" />
+      <input
+        type="number"
+        :value="options.framerate"
+        @change="onChange('framerate', $event)"
+      />
     </label>
     <label>
       Width:
-      <input type="number" />
+      <input
+        type="number"
+        :value="options.width"
+        @change="onChange('width', $event)"
+      />
     </label>
     <label>
       Height:
-      <input type="number" />
+      <input
+        type="number"
+        :value="options.height"
+        @change="onChange('height', $event)"
+      />
     </label>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import { ADD_OPTIONS } from "../store/mutation-types";
+
 export default {
-  name: "OptionSelect"
+  name: "OptionSelect",
+  computed: {
+    ...mapGetters(["options"])
+  },
+  methods: {
+    ...mapActions([ADD_OPTIONS]),
+    onChange: function(key, event) {
+      this.ADD_OPTIONS({ [key]: event.target.value });
+    }
+  }
 };
 </script>
 
