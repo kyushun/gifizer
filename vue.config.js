@@ -15,6 +15,11 @@ const FFPROBE_PATH = path.join(
 module.exports = {
   pluginOptions: {
     electronBuilder: {
+      builderOptions: {
+        mac: {
+          icon: "src/assets/icon.png"
+        }
+      },
       chainWebpackMainProcess: config => {
         config.plugin("define").tap(args => {
           args[0]["process.env.FLUENTFFMPEG_COV"] = false;
