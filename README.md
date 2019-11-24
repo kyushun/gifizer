@@ -1,24 +1,27 @@
-# giffer
+# Giffer
 
-## Project setup
-```
+Giffer は動画をかんたんに GIF 化できるアプリケーションです。
+![Giffer](./docs/ss.png "Giffer Screenshot")
+
+## ダウロード
+
+準備中
+
+## 開発環境
+
+- Node.js (v12.x.x で動作確認済み)
+- Yarn
+
+## ビルド
+
+1. モジュールのインストールを行います
+
+```sh
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+2. vue-cli (webpack) を使用してビルドします
 
-### Compiles and minifies for production
+```sh
+yarn electron:build
 ```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
