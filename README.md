@@ -3,9 +3,8 @@
 Giffer は動画をかんたんに GIF 化できるアプリケーションです。
 ![Giffer](./docs/ss.png "Giffer Screenshot")
 
-## ダウロード
-
-準備中
+## ダウロード (macOS, Windows, Linux)
+https://github.com/kyushun/giffer/releases
 
 ## 開発環境
 
