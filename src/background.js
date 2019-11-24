@@ -1,9 +1,86 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain } from "electron";
+import { app, protocol, Menu, BrowserWindow, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import { convertToGif } from "./lib/ffmpeg";
 const isDevelopment = process.env.NODE_ENV !== "production";
+const isMac = process.platform === "darwin";
+
+const menu = Menu.buildFromTemplate([
+  ...(isMac
+    ? [
+        {
+          label: app.name,
+          submenu: [
+            { role: "about" },
+            { label: "Check for Updates", enabled: false },
+            { type: "separator" },
+            { role: "services" },
+            { type: "separator" },
+            { role: "hide" },
+            { role: "hideothers" },
+            { role: "unhide" },
+            { type: "separator" },
+            { role: "quit" }
+          ]
+        }
+      ]
+    : []),
+  {
+    label: "File",
+    submenu: [
+      ...(isMac
+        ? [
+            {
+              id: "new-window",
+              label: "New Window",
+              enabled: false,
+              click: createWindow,
+              accelerator: "CmdOrCtrl+N"
+            },
+            { role: "close" }
+          ]
+        : [{ role: "quit" }])
+    ]
+  },
+  { role: "editMenu" },
+  {
+    label: "View",
+    submenu: [
+      { role: "reload" },
+      { role: "forcereload" },
+      ...(isDevelopment
+        ? [{ type: "separator" }, { role: "toggledevtools" }]
+        : [])
+    ]
+  },
+  { role: "windowMenu" },
+  {
+    role: "help",
+    submenu: [
+      ...(!isMac
+        ? [
+            { label: "Check for Updates", enabled: false },
+            { type: "separator" }
+          ]
+        : []),
+      {
+        label: "Open Repository",
+        click: async () => {
+          const { shell } = require("electron");
+          await shell.openExternal(process.env.npm_package_homepage);
+        }
+      }
+    ]
+  }
+]);
+Menu.setApplicationMenu(menu);
+
+const switchMenu = (id, enabled) => {
+  const _menu = Menu.getApplicationMenu();
+  const item = _menu.getMenuItemById(id);
+  item.enabled = enabled;
+};
 
 let win;
 
@@ -12,6 +89,7 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 function createWindow() {
+  switchMenu("new-window", false);
   win = new BrowserWindow({
     width: 600,
     height: 400,
@@ -26,7 +104,6 @@ function createWindow() {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
     win.loadURL("app://./index.html");
@@ -34,6 +111,7 @@ function createWindow() {
 
   win.on("closed", () => {
     win = null;
+    switchMenu("new-window", true);
   });
 }
 
