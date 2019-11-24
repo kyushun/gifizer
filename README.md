@@ -23,5 +23,5 @@ yarn install
 2. vue-cli (webpack) を使用してビルドします
 
 ```sh
-yarn electron:build
+yarn build
 ```
