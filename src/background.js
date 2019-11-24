@@ -1,10 +1,42 @@
 "use strict";
 
-import { app, protocol, Menu, BrowserWindow, ipcMain } from "electron";
+import {
+  app,
+  protocol,
+  Menu,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  shell
+} from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import * as updater from "./lib/updater";
 import { convertToGif } from "./lib/ffmpeg";
 const isDevelopment = process.env.NODE_ENV !== "production";
 const isMac = process.platform === "darwin";
+
+const checkUpdate = async noUpdateNotification => {
+  const updateUrl = await updater.checkUpdate();
+  if (updateUrl) {
+    const ans = dialog.showMessageBoxSync({
+      type: "info",
+      buttons: ["Yes", "No"],
+      title: "An update is available",
+      message: "An update is available",
+      detail: "Do you want to download?"
+    });
+    if (ans == 0) {
+      shell.openExternal(updateUrl);
+      app.quit();
+    }
+  } else if (noUpdateNotification) {
+    dialog.showMessageBoxSync({
+      type: "info",
+      title: "No updates are available",
+      message: "No updates are available"
+    });
+  }
+};
 
 const menu = Menu.buildFromTemplate([
   ...(isMac
@@ -13,7 +45,12 @@ const menu = Menu.buildFromTemplate([
           label: app.getName(),
           submenu: [
             { role: "about" },
-            { label: "Check for Updates", enabled: false },
+            {
+              label: "Check for Updates",
+              click: () => {
+                checkUpdate(true);
+              }
+            },
             { type: "separator" },
             { role: "services" },
             { type: "separator" },
@@ -60,14 +97,18 @@ const menu = Menu.buildFromTemplate([
     submenu: [
       ...(!isMac
         ? [
-            { label: "Check for Updates", enabled: false },
+            {
+              label: "Check for Updates",
+              click: () => {
+                checkUpdate(true);
+              }
+            },
             { type: "separator" }
           ]
         : []),
       {
         label: "Open Repository",
         click: async () => {
-          const { shell } = require("electron");
           await shell.openExternal(process.env.npm_package_homepage);
         }
       }

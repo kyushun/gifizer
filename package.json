@@ -29,6 +29,7 @@
   "dependencies": {
     "core-js": "^3.3.2",
     "fluent-ffmpeg": "^2.1.2",
+    "request": "^2.88.0",
     "vue": "^2.6.10",
     "vuex": "^3.1.2"
   },
