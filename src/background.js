@@ -10,7 +10,7 @@ const menu = Menu.buildFromTemplate([
   ...(isMac
     ? [
         {
-          label: app.name,
+          label: app.getName(),
           submenu: [
             { role: "about" },
             { label: "Check for Updates", enabled: false },
