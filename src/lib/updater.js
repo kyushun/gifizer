@@ -9,7 +9,7 @@ const fetchLatestVersion = () =>
         url: API_URL,
         method: "GET",
         headers: {
-          "User-Agent": process.env.npm_package_name
+          "User-Agent": require("../../package.json").name
         }
       },
       (error, response, body) => {
@@ -79,7 +79,8 @@ export const checkUpdate = async () => {
   if (release && release.tag_name) {
     const match = release.tag_name.match(/^v(\d+.\d+.\d+)$/);
     if (match && match[1]) {
-      const vc = versionCompare(process.env.npm_package_version, match[1]);
+      const currentVersion = require("../../package.json").version;
+      const vc = versionCompare(currentVersion, match[1]);
       if (vc < 0) {
         return release.html_url;
       }

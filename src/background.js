@@ -109,7 +109,7 @@ const menu = Menu.buildFromTemplate([
       {
         label: "Open Repository",
         click: async () => {
-          await shell.openExternal(process.env.npm_package_homepage);
+          await shell.openExternal(require("../package.json").homepage);
         }
       }
     ]
