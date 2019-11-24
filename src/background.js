@@ -120,7 +120,7 @@ Menu.setApplicationMenu(menu);
 const switchMenu = (id, enabled) => {
   const _menu = Menu.getApplicationMenu();
   const item = _menu.getMenuItemById(id);
-  item.enabled = enabled;
+  if (item) item.enabled = enabled;
 };
 
 let win;
