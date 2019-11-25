@@ -1,10 +1,10 @@
 {
-  "name": "giffer",
-  "productName": "Giffer",
+  "name": "gifizer",
+  "productName": "Gifizer",
   "version": "0.2.1",
   "private": true,
   "author": "kyushun <kyushun12@gmail.com> (https://github.com/kyushun/)",
-  "homepage": "https://github.com/kyushun/giffer",
+  "homepage": "https://github.com/kyushun/gifizer",
   "scripts": {
     "start": "vue-cli-service electron:serve",
     "build": "vue-cli-service electron:build",

@@ -1,6 +1,6 @@
 import request from "request";
 
-const API_URL = "https://api.github.com/repos/kyushun/giffer/releases/latest";
+const API_URL = "https://api.github.com/repos/kyushun/gifizer/releases/latest";
 
 const fetchLatestVersion = () =>
   new Promise((resolve, reject) => {
