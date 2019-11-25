@@ -1,4 +1,14 @@
-const ffmpeg = require("fluent-ffmpeg");
+import ffmpeg from "fluent-ffmpeg";
+import { platform, arch } from "os";
+import path from "path";
+
+const BIN_PATH = path.join(__dirname, "../", "bin", platform(), arch());
+ffmpeg.setFfmpegPath(
+  path.join(BIN_PATH, platform() === "win32" ? "ffmpeg.exe" : "ffmpeg")
+);
+ffmpeg.setFfprobePath(
+  path.join(BIN_PATH, platform() === "win32" ? "ffprobe.exe" : "ffprobe")
+);
 
 export const convertToGif = (args, logSender) => {
   const cmd = ffmpeg(args.sourceFilePath)
