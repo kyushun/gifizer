@@ -98,6 +98,10 @@ const menu = Menu.buildFromTemplate([
       ...(!isMac
         ? [
             {
+              label: `${app.getName()} v${app.getVersion()}`,
+              enabled: false
+            },
+            {
               label: "Check for Updates",
               click: () => {
                 checkUpdate(true);
