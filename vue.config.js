@@ -1,14 +1,22 @@
-const os = require("os");
-const path = require("path");
-
-const BIN_PATH = path.join("bin", os.platform(), os.arch());
-
 module.exports = {
   pluginOptions: {
     electronBuilder: {
+      outputDir: "dist",
       builderOptions: {
-        extraResources: [BIN_PATH],
+        appId: "com.kyushun.app.gifizer",
+        artifactName: "${productName}-${version}-${os}.${ext}",
+        extraResources: ["bin/${os}/${arch}"],
         mac: {
+          category: "public.app-category.graphics-design",
+          target: "dmg",
+          icon: "src/assets/icon.png"
+        },
+        win: {
+          target: ["nsis", "zip"],
+          icon: "src/assets/icon.png"
+        },
+        linux: {
+          target: "AppImage",
           icon: "src/assets/icon.png"
         }
       },

@@ -7,9 +7,7 @@
   "homepage": "https://github.com/kyushun/gifizer",
   "scripts": {
     "start": "vue-cli-service electron:serve",
-    "build": "vue-cli-service electron:build",
-    "vue:serve": "vue-cli-service serve",
-    "vue:build": "vue-cli-service build",
+    "build": "rimraf dist && vue-cli-service electron:build",
     "lint": "vue-cli-service lint",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
