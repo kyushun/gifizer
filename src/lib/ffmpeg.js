@@ -2,7 +2,15 @@ import ffmpeg from "fluent-ffmpeg";
 import { platform, arch } from "os";
 import path from "path";
 
-const BIN_PATH = path.join(__dirname, "../", "bin", platform(), arch());
+const BIN_PATH = path.join(
+  __dirname,
+  "../",
+  "bin",
+  platform()
+    .replace("win32", "win")
+    .replace("darwin", "mac"),
+  arch()
+);
 ffmpeg.setFfmpegPath(
   path.join(BIN_PATH, platform() === "win32" ? "ffmpeg.exe" : "ffmpeg")
 );
