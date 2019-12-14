@@ -2,7 +2,12 @@ import request from "request";
 
 const API_URL = "https://api.github.com/repos/kyushun/gifizer/releases/latest";
 
-const fetchLatestVersion = () =>
+interface ReleaseBody {
+  tag_name: String;
+  html_url: String;
+}
+
+const fetchLatestVersion = (): Promise<ReleaseBody> =>
   new Promise((resolve, reject) => {
     request(
       {
@@ -28,13 +33,13 @@ const fetchLatestVersion = () =>
     );
   });
 
-const versionCompare = (v1, v2, options) => {
+const versionCompare = (v1: String, v2: String, options?: any) => {
   var lexicographical = options && options.lexicographical,
     zeroExtend = options && options.zeroExtend,
-    v1parts = v1.split("."),
-    v2parts = v2.split(".");
+    v1parts: String[] | Number[] = v1.split("."),
+    v2parts: String[] | Number[] = v2.split(".");
 
-  function isValidPart(x) {
+  function isValidPart(x: any) {
     return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
   }
 

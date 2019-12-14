@@ -1,35 +1,20 @@
 <template>
   <div id="app">
-    <SourceFileInput />
-    <ConvertStatus />
-    <OptionSelect />
-    <ConvertButton />
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
   </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from "vuex";
-import * as Types from "./store/mutation-types";
-import SourceFileInput from "./components/SourceFileInput";
-import ConvertStatus from "./components/ConvertStatus";
-import OptionSelect from "./components/OptionSelect";
-import ConvertButton from "./components/ConvertButton";
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import HelloWorld from "./components/HelloWorld.vue";
 
-export default {
-  name: "app",
+@Component({
   components: {
-    SourceFileInput,
-    ConvertStatus,
-    OptionSelect,
-    ConvertButton
-  },
-  computed: {
-    ...mapGetters(["sourceFilePath"])
-  },
-  methods: {
-    ...mapActions([Types.SET_SOURCEFILE])
+    HelloWorld
   }
-};
+})
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
@@ -39,5 +24,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin-top: 60px;
 }
 </style>

@@ -1,6 +1,7 @@
 import ffmpeg from "fluent-ffmpeg";
 import { platform, arch } from "os";
 import path from "path";
+import { ConvertOptions } from "../shared/types";
 
 const BIN_PATH = path.join(
   __dirname,
@@ -18,10 +19,10 @@ ffmpeg.setFfprobePath(
   path.join(BIN_PATH, platform() === "win32" ? "ffprobe.exe" : "ffprobe")
 );
 
-export const convertToGif = (args, logSender) => {
-  const cmd = ffmpeg(args.sourceFilePath)
+export const convertToGif = (options: ConvertOptions, logSender: any) => {
+  const cmd = ffmpeg(options.sourcePath)
     .format("gif")
-    .output(args.destFilePath)
+    .output(options.outputPath)
     .on("start", () => {
       logSender.send("convert-status", {
         status: "processing",
@@ -49,12 +50,12 @@ export const convertToGif = (args, logSender) => {
       });
     });
 
-  if (args.framerate) cmd.fps(args.framerate);
-  if (args.width || args.height) {
+  if (options.fps) cmd.fps(options.fps);
+  if (options.width || options.height) {
     cmd.size(
       (() => {
-        const w = args.width || "?";
-        const h = args.height || "?";
+        const w = options.width || "?";
+        const h = options.height || "?";
         return w + "x" + h;
       })()
     );
