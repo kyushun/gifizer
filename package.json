@@ -26,7 +26,7 @@
       "git add"
     ]
   },
-  "main": "background.ts",
+  "main": "background.js",
   "dependencies": {
     "core-js": "^3.4.3",
     "fluent-ffmpeg": "^2.1.2",
@@ -60,6 +60,7 @@
     "sass-loader": "^8.0.0",
     "typescript": "~3.5.3",
     "vue-cli-plugin-electron-builder": "^1.4.3",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "vuex-module-decorators": "^0.11.0"
   }
 }

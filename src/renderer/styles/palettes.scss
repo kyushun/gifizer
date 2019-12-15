@@ -1,0 +1,67 @@
+/* 
+  Element Chalk Variables
+  Copyright (c) 2016-present ElemeFE
+  https://github.com/ElemeFE/element
+*/
+
+@function --color-lighter($base-color, $level) {
+  @return mix($--color-white, $base-color, percentage($level * 0.1));
+}
+
+/* Color
+-------------------------- */
+$--color-primary: #409eff !default;
+$--color-white: #ffffff !default;
+$--color-black: #000000 !default;
+$--color-success: #67c23a !default;
+$--color-warning: #e6a23c !default;
+$--color-danger: #f56c6c !default;
+$--color-info: #909399 !default;
+
+// text-color
+$--color-text-light: #2c3e50 !default;
+$--color-text-primary: #303133 !default;
+$--color-text-regular: #606266 !default;
+$--color-text-secondary: #909399 !default;
+$--color-text-placeholder: #c0c4cc !default;
+$--color-text-white: #ffffff !default;
+
+// background-color
+$--background-color-base: #ffffff !default;
+$--background-color-disabled-alpha: rgba(0, 0, 0, 0.5) !default;
+
+// border-color
+$--border-color-base: #dcdfe6 !default;
+$--border-color-light: #e4e7ed !default;
+$--border-color-lighter: #ebeef5 !default;
+$--border-color-extra-light: #f2f6fc !default;
+
+// link-color
+$--link-color: --color-lighter($--color-primary, 2) !default;
+$--link-hover-color: $--color-primary !default;
+
+/* Box-shadow
+-------------------------- */
+$--box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04) !default;
+$--box-shadow-dark: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.12) !default;
+$--box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
+
+/* Typography
+-------------------------- */
+$--border-radius-base: 4px !default;
+
+/* Typography
+-------------------------- */
+$--font: "Avenir", Helvetica, Arial, sans-serif !default;
+$--font-size-extra-large: 20px !default;
+$--font-size-large: 18px !default;
+$--font-size-medium: 16px !default;
+$--font-size-base: 14px !default;
+$--font-size-small: 13px !default;
+$--font-size-extra-small: 12px !default;
+$--font-weight-extra-bold: 900 !default;
+$--font-weight-bold: 600 !default;
+$--font-weight-primary: 500 !default;
+$--font-weight-secondary: 100 !default;
+$--font-line-height-primary: 24px !default;
+$--font-line-height-secondary: 16px !default;
