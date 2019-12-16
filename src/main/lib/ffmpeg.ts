@@ -31,20 +31,22 @@ export const inspectFile = (
 ) => {
   ffmpeg.ffprobe(filepath, (err, metadata) => {
     let response: IInspectionReport;
-    if (err || metadata.streams[0].codec_type != "video") {
+    const videos: ffmpeg.FfprobeStream[] = metadata
+      ? metadata.streams.filter(v => v.codec_type === "video")
+      : [];
+    if (err || videos.length < 1) {
       response = {
         error: true
       };
     } else {
-      const movie = metadata.streams[0];
       response = {
         error: false,
         size: metadata.format.size,
-        codec: movie.codec_name,
-        width: movie.width,
-        height: movie.height,
-        aspect_ratio: movie.display_aspect_ratio,
-        fps: calcfps(movie.r_frame_rate)
+        codec: videos[0].codec_name,
+        width: videos[0].width,
+        height: videos[0].height,
+        aspect_ratio: videos[0].display_aspect_ratio,
+        fps: calcfps(videos[0].r_frame_rate)
       };
     }
 
