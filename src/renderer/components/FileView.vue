@@ -4,7 +4,7 @@
     @dragleave.prevent="dragover = false"
     @dragover.prevent="dragover = true"
     @drop.prevent="onDropFile"
-    @click="$refs.input.click()"
+    @click="!disabled && $refs.input.click()"
   >
     <div class="file-wrapper" :class="{ selectable: !disabled, dragover }">
       <div class="file-tag" v-if="tag">{{ tag }}</div>
@@ -18,7 +18,7 @@
         <slot></slot>
       </div>
     </div>
-    <input style="display: none;" type="file" ref="input" @change="onClick" />
+    <input class="file-input" type="file" ref="input" @change="onChange" />
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default class FileView extends Vue {
     }
   }
 
-  onClick(e: { target: HTMLInputElement }) {
+  onChange(e: { target: HTMLInputElement }) {
     if (e.target && e.target.files) {
       this.fileEmitter(e.target.files);
     }
@@ -140,6 +140,10 @@ export default class FileView extends Vue {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  &-input {
+    display: none;
   }
 }
 </style>
