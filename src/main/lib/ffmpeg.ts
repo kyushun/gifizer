@@ -7,11 +7,10 @@ import {
   IConvertReport
 } from "../../shared/types";
 import { INSPECT_FILE, CONVERT_REPORT } from "../../shared/ipcs";
-import { calcfps } from "../util";
+import { getAppPath, calcfps } from "../util";
 
 const BIN_PATH = path.join(
-  __dirname,
-  "../",
+  getAppPath(),
   "bin",
   platform()
     .replace("win32", "win")
@@ -50,7 +49,7 @@ export const inspectFile = (
       };
     }
 
-    console.log(response, metadata);
+    console.log(response, metadata, err);
     sender.send(INSPECT_FILE, response);
   });
 };

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header v-if="isMac" />
-    <Root msg="Welcome to Your Vue.js + TypeScript App" />
+    <Root />
   </div>
 </template>
 

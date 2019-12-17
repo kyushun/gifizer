@@ -79,13 +79,15 @@ const versionCompare = (v1: string, v2: string, options?: any) => {
   return 0;
 };
 
+const getCurrentVersion = () => packageJson().version;
+
 export const checkUpdate = async () => {
   let release = await fetchLatestVersion();
 
   if (release && release.tag_name) {
     const match = release.tag_name.match(/^v(\d+.\d+.\d+)$/);
     if (match && match[1]) {
-      const currentVersion = packageJson().version;
+      const currentVersion = getCurrentVersion();
       const vc = versionCompare(currentVersion, match[1]);
       if (vc < 0) {
         return release.html_url;
