@@ -90,9 +90,9 @@ export default class FileSelector extends Vue {
     return Converter.options;
   }
 
-  onFile(files: FileList) {
-    if (files.length >= 1) {
-      Converter.setSourceFilePath(files[0].path);
+  onFile(filename: string) {
+    if (filename) {
+      Converter.setSourceFilePath(filename);
     }
   }
 

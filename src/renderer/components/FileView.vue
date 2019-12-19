@@ -3,8 +3,8 @@
     class="file"
     @dragleave.prevent="dragover = false"
     @dragover.prevent="dragover = true"
-    @drop.prevent="onDropFile"
-    @click="!disabled && $refs.input.click()"
+    @drop.prevent="!disabled && onDropFile($event)"
+    @click="!disabled && onClick($event)"
   >
     <div class="file-wrapper" :class="{ selectable: !disabled, dragover }">
       <div class="file-tag" v-if="tag">{{ tag }}</div>
@@ -18,12 +18,12 @@
         <slot></slot>
       </div>
     </div>
-    <input class="file-input" type="file" ref="input" @change="onChange" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit } from "vue-property-decorator";
+const { BrowserWindow, dialog } = require("electron").remote;
 
 @Component
 export default class FileView extends Vue {
@@ -45,16 +45,20 @@ export default class FileView extends Vue {
   @Emit("file") fileEmitter(file: any): void {}
 
   onDropFile(e: DragEvent) {
-    if (this.disabled) return;
     this.dragover = false;
     if (e.dataTransfer) {
-      this.fileEmitter(e.dataTransfer.files);
+      this.fileEmitter(e.dataTransfer.files[0].path);
     }
   }
 
-  onChange(e: { target: HTMLInputElement }) {
-    if (e.target && e.target.files) {
-      this.fileEmitter(e.target.files);
+  onClick() {
+    const win = BrowserWindow.getFocusedWindow();
+    if (win) {
+      dialog.showOpenDialog(win, { properties: ["openFile"] }, fileNames => {
+        if (fileNames && fileNames.length > 0) {
+          this.fileEmitter(fileNames[0]);
+        }
+      });
     }
   }
 }
