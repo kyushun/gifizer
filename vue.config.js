@@ -9,15 +9,15 @@ module.exports = {
         mac: {
           category: "public.app-category.graphics-design",
           target: "dmg",
-          icon: "src/assets/icon.png"
+          icon: "src/renderer/assets/icon.png"
         },
         win: {
           target: ["nsis", "zip"],
-          icon: "src/assets/icon.png"
+          icon: "src/renderer/assets/icon.png"
         },
         linux: {
           target: "AppImage",
-          icon: "src/assets/icon.png"
+          icon: "src/renderer/assets/icon.png"
         }
       },
       chainWebpackMainProcess: config => {
@@ -25,7 +25,12 @@ module.exports = {
           args[0]["process.env.FLUENTFFMPEG_COV"] = false;
           return args;
         });
-      }
+      },
+      mainProcessFile: "src/main/index.ts",
+      mainProcessWatch: ["src/main"]
     }
+  },
+  pages: {
+    index: "./src/renderer/index.ts"
   }
 };

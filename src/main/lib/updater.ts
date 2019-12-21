@@ -1,15 +1,21 @@
 import request from "request";
+import { packageJson } from "../util";
 
 const API_URL = "https://api.github.com/repos/kyushun/gifizer/releases/latest";
 
-const fetchLatestVersion = () =>
+interface ReleaseBody {
+  tag_name: string;
+  html_url: string;
+}
+
+const fetchLatestVersion = (): Promise<ReleaseBody> =>
   new Promise((resolve, reject) => {
     request(
       {
         url: API_URL,
         method: "GET",
         headers: {
-          "User-Agent": require("../../package.json").name
+          "User-Agent": packageJson.name
         }
       },
       (error, response, body) => {
@@ -28,13 +34,13 @@ const fetchLatestVersion = () =>
     );
   });
 
-const versionCompare = (v1, v2, options) => {
+const versionCompare = (v1: string, v2: string, options?: any) => {
   var lexicographical = options && options.lexicographical,
     zeroExtend = options && options.zeroExtend,
-    v1parts = v1.split("."),
-    v2parts = v2.split(".");
+    v1parts: string[] | number[] = v1.split("."),
+    v2parts: string[] | number[] = v2.split(".");
 
-  function isValidPart(x) {
+  function isValidPart(x: any) {
     return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
   }
 
@@ -73,13 +79,15 @@ const versionCompare = (v1, v2, options) => {
   return 0;
 };
 
+const getCurrentVersion = () => packageJson.version;
+
 export const checkUpdate = async () => {
   let release = await fetchLatestVersion();
 
   if (release && release.tag_name) {
     const match = release.tag_name.match(/^v(\d+.\d+.\d+)$/);
     if (match && match[1]) {
-      const currentVersion = require("../../package.json").version;
+      const currentVersion = getCurrentVersion();
       const vc = versionCompare(currentVersion, match[1]);
       if (vc < 0) {
         return release.html_url;
