@@ -182,7 +182,7 @@ function createWindow() {
   switchMenu("new-window", false);
   win = new BrowserWindow({
     width: 500,
-    height: isMac ? 280 : 250,
+    height: isMac ? 280 : 270,
     useContentSize: true,
     titleBarStyle: "hidden",
     resizable: isDevelopment,
