@@ -1,6 +1,4 @@
-export const isDevelopment = process.env.NODE_ENV !== "production";
-export const isElectron = process.versions.hasOwnProperty("electron");
-export const isMac = process.platform === "darwin";
+import { isElectron } from "../../shared/util";
 
 export const getAppPath = () => {
   return isElectron ? require("path").join(__dirname, "../") : process.cwd();

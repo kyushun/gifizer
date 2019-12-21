@@ -13,11 +13,13 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import logger from "@/shared/util/logger";
 import * as updater from "./lib/updater";
 import * as ffmpeg from "./lib/ffmpeg";
 import { IConvertOptions } from "../shared/types";
 import * as ipcs from "../shared/ipcs";
-import { isDevelopment, isMac, packageJson } from "./util";
+import { isDevelopment, isMac } from "../shared/util";
+import { packageJson } from "./util";
 
 let win: BrowserWindow | null;
 
@@ -44,18 +46,18 @@ app.on("ready", async () => {
     try {
       await installVueDevtools();
     } catch (e) {
-      console.error("Vue Devtools failed to install:", e.toString());
+      logger.error("Vue Devtools failed to install:", e.toString());
     }
   }
   createWindow();
 });
 
 process.on("uncaughtException", function(err) {
-  console.error(err);
+  logger.error(err);
 });
 
 process.on("unhandledRejection", (reason, p) => {
-  console.error("Unhandled Rejection at:", p, "reason:", reason);
+  logger.error("Unhandled Rejection at:", p, "reason:", reason);
 });
 
 if (isDevelopment) {
@@ -73,7 +75,7 @@ if (isDevelopment) {
 }
 
 ipcMain.on(ipcs.CONVERT, async (event: any, options: IConvertOptions) => {
-  console.log(options);
+  logger.log(options);
   ffmpeg.convertToGif(options, event.sender);
 });
 

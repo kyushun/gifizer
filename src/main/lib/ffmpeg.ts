@@ -1,6 +1,7 @@
 import ffmpeg from "fluent-ffmpeg";
 import { platform, arch } from "os";
 import path from "path";
+import logger from "@/shared/util/logger";
 import {
   IConvertOptions,
   IInspectionReport,
@@ -49,7 +50,7 @@ export const inspectFile = (
       };
     }
 
-    console.log(response, metadata, err);
+    logger.log(response, metadata, err);
     sender.send(INSPECT_FILE, response);
   });
 };
@@ -68,21 +69,21 @@ export const convertToGif = (
       });
     })
     .on("progress", progress => {
-      console.log("Processing: " + progress.percent + "% done");
+      logger.log("Processing: " + progress.percent + "% done");
       sender.send(CONVERT_REPORT, {
         status: "PROCESSING",
         progress: progress.percent
       });
     })
     .on("error", err => {
-      console.log("Cannot process video: " + err.message);
+      logger.log("Cannot process video: " + err.message);
       sender.send(CONVERT_REPORT, {
         status: "ERROR",
         errorDetail: err.message
       });
     })
     .on("end", () => {
-      console.log("Finished processing");
+      logger.log("Finished processing");
       sender.send(CONVERT_REPORT, {
         status: "FINISHED",
         progress: 100
