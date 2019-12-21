@@ -4,13 +4,11 @@ export const getAppPath = () => {
   return isElectron ? require("path").join(__dirname, "../") : process.cwd();
 };
 
-export const packageJson = (): {
+export const packageJson: {
   name: string;
   version: string;
   homepage: string;
-} => {
-  return require("../../../package.json");
-};
+} = require("../../../package.json");
 
 export const calcfps = (formula: string | undefined) => {
   if (formula) {

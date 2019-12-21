@@ -159,7 +159,7 @@ function createMenu() {
         {
           label: "Open Repository",
           click: async () => {
-            await shell.openExternal(packageJson().homepage);
+            await shell.openExternal(packageJson.homepage);
           }
         }
       ]

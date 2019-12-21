@@ -15,7 +15,7 @@ const fetchLatestVersion = (): Promise<ReleaseBody> =>
         url: API_URL,
         method: "GET",
         headers: {
-          "User-Agent": packageJson().name
+          "User-Agent": packageJson.name
         }
       },
       (error, response, body) => {
@@ -79,7 +79,7 @@ const versionCompare = (v1: string, v2: string, options?: any) => {
   return 0;
 };
 
-const getCurrentVersion = () => packageJson().version;
+const getCurrentVersion = () => packageJson.version;
 
 export const checkUpdate = async () => {
   let release = await fetchLatestVersion();

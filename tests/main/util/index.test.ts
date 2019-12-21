@@ -1,9 +1,9 @@
 import * as util from "@/main/util/index";
 jest.setTimeout(50000);
 
-describe("packageJson()", () => {
+describe("packageJson", () => {
   it("app name", () => {
-    expect(util.packageJson().name).toBe("gifizer");
+    expect(util.packageJson.name).toBe("gifizer");
   });
 });
 
