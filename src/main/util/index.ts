@@ -14,7 +14,9 @@ export const calcfps = (formula: string | undefined) => {
   if (formula) {
     const splited = formula.split("/");
     if (splited.length == 2) {
-      return parseInt(splited[0]) / parseInt(splited[1]);
+      return (
+        Math.round((parseInt(splited[0]) / parseInt(splited[1])) * 100) / 100
+      );
     }
   }
   return 0;
