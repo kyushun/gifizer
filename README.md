@@ -1,11 +1,11 @@
 # Gifizer
 
 Gifizer は動画をかんたんに GIF 化できるアプリケーションです。
-![Gifizer](./docs/ss.png "Gifizer Screenshot")
+![Gifizer](./docs/pv.gif "Gifizer")
 
-## ダウロード (macOS, Windows, Linux)
+## ダウロード (macOS, Windows)
 
-https://github.com/kyushun/gifizer/releases
+https://github.com/kyushun/gifizer/releases/latest
 
 ## 開発環境
 
