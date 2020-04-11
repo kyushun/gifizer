@@ -8,6 +8,7 @@ export const packageJson: {
   name: string;
   version: string;
   homepage: string;
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require("../../../package.json");
 
 export const calcfps = (formula: string | undefined) => {

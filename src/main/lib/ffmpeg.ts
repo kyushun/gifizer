@@ -3,9 +3,9 @@ import { platform, arch } from "os";
 import path from "path";
 import logger from "@/shared/util/logger";
 import {
-  IConvertOptions,
-  IInspectionReport,
-  IConvertReport
+  ConvertOptions,
+  InspectionReport,
+  ConvertReport
 } from "../../shared/types";
 import { INSPECT_FILE, CONVERT_REPORT } from "../../shared/ipcs";
 import { getAppPath, calcfps } from "../util";
@@ -13,9 +13,7 @@ import { getAppPath, calcfps } from "../util";
 const BIN_PATH = path.join(
   getAppPath(),
   "bin",
-  platform()
-    .replace("win32", "win")
-    .replace("darwin", "mac"),
+  platform().replace("win32", "win").replace("darwin", "mac"),
   arch()
 );
 ffmpeg.setFfmpegPath(
@@ -27,10 +25,10 @@ ffmpeg.setFfprobePath(
 
 export const inspectFile = (
   filepath: string,
-  sender: { send: (channel: string, response: IInspectionReport) => void }
+  sender: { send: (channel: string, response: InspectionReport) => void }
 ) => {
   ffmpeg.ffprobe(filepath, (err, metadata) => {
-    let response: IInspectionReport;
+    let response: InspectionReport;
     const videos: ffmpeg.FfprobeStream[] = metadata
       ? metadata.streams.filter(v => v.codec_type === "video")
       : [];
@@ -56,8 +54,8 @@ export const inspectFile = (
 };
 
 export const convertToGif = (
-  options: IConvertOptions,
-  sender: { send: (channel: string, status: IConvertReport) => void }
+  options: ConvertOptions,
+  sender: { send: (channel: string, status: ConvertReport) => void }
 ) => {
   const cmd = ffmpeg(options.sourcePath)
     .format("gif")

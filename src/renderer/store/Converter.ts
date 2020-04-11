@@ -10,47 +10,47 @@ import {
 import { ipcRenderer } from "electron";
 import store from ".";
 import {
-  IConvertOptions,
-  IInspectionReport,
-  IConvertReport
+  ConvertOptions,
+  InspectionReport,
+  ConvertReport
 } from "../../shared/types";
 import { INSPECT_FILE, CONVERT, CONVERT_REPORT } from "../../shared/ipcs";
 import { changeFileExtension } from "../util";
 
-export interface IConverter {
-  options: IConvertOptions;
-  inspectReport: IInspectionReport;
-  report: IConvertReport;
+export interface ConverterStore {
+  options: ConvertOptions;
+  inspectReport: InspectionReport;
+  report: ConvertReport;
 }
 
-ipcRenderer.on(INSPECT_FILE, (_: any, report: IInspectionReport) => {
+ipcRenderer.on(INSPECT_FILE, (_: any, report: InspectionReport) => {
   ConverterModule.setInspectReport(report);
 });
 
-ipcRenderer.on(CONVERT_REPORT, (_: any, report: IConvertReport) => {
+ipcRenderer.on(CONVERT_REPORT, (_: any, report: ConvertReport) => {
   ConverterModule.setReport(report);
 });
 
 @Module({ dynamic: true, store, name: "converter", namespaced: true })
-class Converter extends VuexModule implements IConverter {
-  options: IConvertOptions = {
+class Converter extends VuexModule implements ConverterStore {
+  options: ConvertOptions = {
     sourcePath: "",
     outputPath: ""
   };
-  inspectReport: IInspectionReport = {
+  inspectReport: InspectionReport = {
     error: null
   };
-  report: IConvertReport = {
+  report: ConvertReport = {
     status: null
   };
 
   @Mutation
-  setInspectReport(report: IInspectionReport) {
+  setInspectReport(report: InspectionReport) {
     this.inspectReport = report;
   }
 
   @Mutation
-  setReport(report: IConvertReport) {
+  setReport(report: ConvertReport) {
     this.report = report;
   }
 

@@ -60,7 +60,7 @@ describe("ffmpeg", () => {
           {
             send: (_, report) => {
               if (report.status === "FINISHED") {
-                fs.stat(outputPath, async (err, stats) => {
+                fs.stat(outputPath, async err => {
                   if (!err) {
                     const md5 = await getMD5(outputPath);
                     fs.unlink(outputPath, () => {});
@@ -97,8 +97,8 @@ describe("ffmpeg", () => {
 
 function getMD5(filePath: string) {
   return new Promise((resolve, reject) => {
-    var readStream = fs.createReadStream(filePath);
-    var md5hash = require("crypto").createHash("md5");
+    const readStream = fs.createReadStream(filePath);
+    const md5hash = require("crypto").createHash("md5");
     md5hash.setEncoding("base64");
     readStream.pipe(md5hash);
     readStream.on("end", () => {

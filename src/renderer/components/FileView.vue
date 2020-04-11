@@ -28,7 +28,7 @@ const { BrowserWindow, dialog } = remote;
 
 @Component
 export default class FileView extends Vue {
-  dragover: boolean = false;
+  dragover = false;
 
   @Prop({ default: "" })
   title?: string;
@@ -43,6 +43,7 @@ export default class FileView extends Vue {
   @Prop({ default: false })
   defaultImage?: boolean;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @Emit("file") fileEmitter(file: any): void {}
 
   onDropFile(e: DragEvent) {

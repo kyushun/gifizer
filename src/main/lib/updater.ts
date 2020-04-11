@@ -35,9 +35,9 @@ const fetchLatestVersion = (): Promise<ReleaseBody> =>
   });
 
 const versionCompare = (v1: string, v2: string, options?: any) => {
-  var lexicographical = options && options.lexicographical,
-    zeroExtend = options && options.zeroExtend,
-    v1parts: string[] | number[] = v1.split("."),
+  const lexicographical = options && options.lexicographical,
+    zeroExtend = options && options.zeroExtend;
+  let v1parts: string[] | number[] = v1.split("."),
     v2parts: string[] | number[] = v2.split(".");
 
   function isValidPart(x: any) {
@@ -58,7 +58,7 @@ const versionCompare = (v1: string, v2: string, options?: any) => {
     v2parts = v2parts.map(Number);
   }
 
-  for (var i = 0; i < v1parts.length; ++i) {
+  for (let i = 0; i < v1parts.length; ++i) {
     if (v2parts.length == i) {
       return 1;
     }
@@ -82,7 +82,7 @@ const versionCompare = (v1: string, v2: string, options?: any) => {
 const getCurrentVersion = () => packageJson.version;
 
 export const checkUpdate = async () => {
-  let release = await fetchLatestVersion();
+  const release = await fetchLatestVersion();
 
   if (release && release.tag_name) {
     const match = release.tag_name.match(/^v(\d+.\d+.\d+)$/);

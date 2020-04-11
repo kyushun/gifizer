@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { shell } from "electron";
 import Converter from "../../store/Converter";
 import Modal from "../../components/Modal.vue";
