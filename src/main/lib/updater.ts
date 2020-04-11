@@ -1,4 +1,4 @@
-import request from "request";
+import fetch from "node-fetch";
 import { packageJson } from "../util";
 
 const API_URL = "https://api.github.com/repos/kyushun/gifizer/releases/latest";
@@ -8,31 +8,13 @@ interface ReleaseBody {
   html_url: string;
 }
 
-const fetchLatestVersion = (): Promise<ReleaseBody> =>
-  new Promise((resolve, reject) => {
-    request(
-      {
-        url: API_URL,
-        method: "GET",
-        headers: {
-          "User-Agent": packageJson.name
-        }
-      },
-      (error, response, body) => {
-        if (error) {
-          reject(new Error(error));
-        } else if (response.statusCode != 200) {
-          reject(
-            new Error(
-              `${response.statusCode} ${response.statusMessage}: ${body}`
-            )
-          );
-        } else {
-          resolve(JSON.parse(response.body));
-        }
-      }
-    );
-  });
+const fetchLatestVersion = (): Promise<ReleaseBody> => {
+  return fetch(API_URL, {
+    headers: {
+      "User-Agent": packageJson.name
+    }
+  }).then(response => response.json());
+};
 
 const versionCompare = (v1: string, v2: string, options?: any) => {
   const lexicographical = options && options.lexicographical,
