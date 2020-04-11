@@ -23,7 +23,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit } from "vue-property-decorator";
-const { BrowserWindow, dialog } = require("electron").remote;
+import { remote } from "electron";
+const { BrowserWindow, dialog } = remote;
 
 @Component
 export default class FileView extends Vue {
