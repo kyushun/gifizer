@@ -7,7 +7,7 @@
   "homepage": "https://github.com/kyushun/gifizer",
   "scripts": {
     "start": "vue-cli-service electron:serve",
-    "build": "rimraf dist && vue-cli-service electron:build",
+    "build": "rimraf dist && vue-cli-service electron:build --publish=never",
     "vue:serve": "vue-cli-service serve",
     "vue:build": "vue-cli-service build",
     "test": "vue-cli-service test:unit",
