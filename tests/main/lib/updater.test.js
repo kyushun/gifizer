@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { checkUpdate, __RewireAPI__ as RewireAPI } from "@/main/lib/updater";
 
 const sampleUrl = "http://example.com";

@@ -1,11 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { IConverter } from "./Converter";
+import { ConverterStore } from "./Converter";
 
 Vue.use(Vuex);
 
-export interface IRootState {
-  converter: IConverter;
+export interface RootStore {
+  converter: ConverterStore;
 }
 
-export default new Vuex.Store<IRootState>({});
+export default new Vuex.Store<RootStore>({});

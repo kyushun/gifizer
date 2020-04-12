@@ -1,4 +1,4 @@
-import request from "request";
+import fetch from "node-fetch";
 import { packageJson } from "../util";
 
 const API_URL = "https://api.github.com/repos/kyushun/gifizer/releases/latest";
@@ -8,36 +8,18 @@ interface ReleaseBody {
   html_url: string;
 }
 
-const fetchLatestVersion = (): Promise<ReleaseBody> =>
-  new Promise((resolve, reject) => {
-    request(
-      {
-        url: API_URL,
-        method: "GET",
-        headers: {
-          "User-Agent": packageJson.name
-        }
-      },
-      (error, response, body) => {
-        if (error) {
-          reject(new Error(error));
-        } else if (response.statusCode != 200) {
-          reject(
-            new Error(
-              `${response.statusCode} ${response.statusMessage}: ${body}`
-            )
-          );
-        } else {
-          resolve(JSON.parse(response.body));
-        }
-      }
-    );
-  });
+const fetchLatestVersion = (): Promise<ReleaseBody> => {
+  return fetch(API_URL, {
+    headers: {
+      "User-Agent": packageJson.name
+    }
+  }).then(response => response.json());
+};
 
 const versionCompare = (v1: string, v2: string, options?: any) => {
-  var lexicographical = options && options.lexicographical,
-    zeroExtend = options && options.zeroExtend,
-    v1parts: string[] | number[] = v1.split("."),
+  const lexicographical = options && options.lexicographical,
+    zeroExtend = options && options.zeroExtend;
+  let v1parts: string[] | number[] = v1.split("."),
     v2parts: string[] | number[] = v2.split(".");
 
   function isValidPart(x: any) {
@@ -58,7 +40,7 @@ const versionCompare = (v1: string, v2: string, options?: any) => {
     v2parts = v2parts.map(Number);
   }
 
-  for (var i = 0; i < v1parts.length; ++i) {
+  for (let i = 0; i < v1parts.length; ++i) {
     if (v2parts.length == i) {
       return 1;
     }
@@ -82,7 +64,7 @@ const versionCompare = (v1: string, v2: string, options?: any) => {
 const getCurrentVersion = () => packageJson.version;
 
 export const checkUpdate = async () => {
-  let release = await fetchLatestVersion();
+  const release = await fetchLatestVersion();
 
   if (release && release.tag_name) {
     const match = release.tag_name.match(/^v(\d+.\d+.\d+)$/);

@@ -16,7 +16,7 @@ import {
 import logger from "@/shared/util/logger";
 import * as updater from "./lib/updater";
 import * as ffmpeg from "./lib/ffmpeg";
-import { IConvertOptions } from "../shared/types";
+import { ConvertOptions } from "../shared/types";
 import * as ipcs from "../shared/ipcs";
 import { isDevelopment, isMac } from "../shared/util";
 import { packageJson } from "./util";
@@ -52,7 +52,7 @@ app.on("ready", async () => {
   createWindow();
 });
 
-process.on("uncaughtException", function(err) {
+process.on("uncaughtException", function (err) {
   logger.error(err);
 });
 
@@ -74,7 +74,7 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on(ipcs.CONVERT, async (event: any, options: IConvertOptions) => {
+ipcMain.on(ipcs.CONVERT, async (event: any, options: ConvertOptions) => {
   logger.log(options);
   ffmpeg.convertToGif(options, event.sender);
 });
@@ -85,7 +85,7 @@ ipcMain.on(ipcs.INSPECT_FILE, (event: any, filepath: string) => {
 
 function createMenu() {
   const template: Electron.MenuItemConstructorOptions[] = [
-    ...(<Electron.MenuItemConstructorOptions[]>(isMac
+    ...((isMac
       ? [
           {
             label: app.getName(),
@@ -108,10 +108,11 @@ function createMenu() {
             ]
           }
         ]
-      : [])),
+      : []) as Electron.MenuItemConstructorOptions[]),
     {
       label: "File",
-      submenu: [...(<Electron.MenuItemConstructorOptions[]>(isMac
+      submenu: [
+        ...((isMac
           ? [
               {
                 id: "new-window",
@@ -122,7 +123,8 @@ function createMenu() {
               },
               { role: "close" }
             ]
-          : [{ role: "quit" }]))]
+          : [{ role: "quit" }]) as Electron.MenuItemConstructorOptions[])
+      ]
     },
     { role: "editMenu" },
     {
@@ -130,18 +132,16 @@ function createMenu() {
       submenu: [
         { role: "reload" },
         { role: "forcereload" },
-        ...(<Electron.MenuItemConstructorOptions[]>(
-          (isDevelopment
-            ? [{ type: "separator" }, { role: "toggledevtools" }]
-            : [])
-        ))
+        ...((isDevelopment
+          ? [{ type: "separator" }, { role: "toggledevtools" }]
+          : []) as Electron.MenuItemConstructorOptions[])
       ]
     },
     { role: "windowMenu" },
     {
       role: "help",
       submenu: [
-        ...(<Electron.MenuItemConstructorOptions[]>(!isMac
+        ...((!isMac
           ? [
               {
                 label: `${app.getName()} v${app.getVersion()}`,
@@ -155,7 +155,7 @@ function createMenu() {
               },
               { type: "separator" }
             ]
-          : [])),
+          : []) as Electron.MenuItemConstructorOptions[]),
         {
           label: "Open Repository",
           click: async () => {
@@ -207,7 +207,7 @@ function createWindow() {
   });
 }
 
-async function checkUpdate(noUpdateNotification: boolean = false) {
+async function checkUpdate(noUpdateNotification = false) {
   const updateUrl = await updater.checkUpdate();
   if (updateUrl) {
     dialog.showMessageBox(

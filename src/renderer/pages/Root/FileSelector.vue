@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import Converter from "../../store/Converter";
 import { formatBytes } from "../../util/index";
 import FileView from "../../components/FileView.vue";

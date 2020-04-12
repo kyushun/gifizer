@@ -7,9 +7,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import Converter from "../../store/Converter";
-import { formatBytes } from "../../util/index";
 import FileSelector from "./FileSelector.vue";
 import Button from "../../components/Button.vue";
 import StatusModal from "./StatusModal.vue";

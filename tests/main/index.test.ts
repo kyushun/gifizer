@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { testWithSpectron } = require("vue-cli-plugin-electron-builder");
 jest.setTimeout(60 * 1000);
 

@@ -1,4 +1,4 @@
-export interface IConvertOptions {
+export interface ConvertOptions {
   sourcePath: string;
   outputPath: string;
   fps?: number;
@@ -6,7 +6,7 @@ export interface IConvertOptions {
   height?: number;
 }
 
-export interface IInspectionReport {
+export interface InspectionReport {
   error: boolean | null;
   size?: number;
   codec?: string;
@@ -16,7 +16,7 @@ export interface IInspectionReport {
   fps?: number;
 }
 
-export interface IConvertReport {
+export interface ConvertReport {
   status: "PROCESSING" | "ERROR" | "FINISHED" | null;
   progress?: number;
   errorDetail?: any;
