@@ -45,6 +45,17 @@
           :value="options.fps"
           @change="onChangeInt('fps', $event)"
         />FPS
+        <div class="output-option-palette">
+          <Hover
+            message="<b>Use a palette</b><small></small><br />Although processing time increases,<br />GIF would be more beautiful."
+          >
+            <figure
+              class="output-option-palette-image"
+              :class="{ active: !!options.palette }"
+              @click="onChangeBool('palette')"
+            ></figure>
+          </Hover>
+        </div>
       </div>
     </FileView>
   </div>
@@ -56,11 +67,13 @@ import Converter from "../../store/Converter";
 import { formatBytes } from "../../util/index";
 import FileView from "../../components/FileView.vue";
 import Input from "../../components/Input.vue";
+import Hover from "../../components/Hover.vue";
 
 @Component({
   components: {
     FileView,
-    Input
+    Input,
+    Hover
   }
 })
 export default class FileSelector extends Vue {
@@ -111,6 +124,10 @@ export default class FileSelector extends Vue {
       Converter.setOptions({ [key]: parseInt(value) });
     }
   }
+
+  onChangeBool(key: string) {
+    Converter.setOptions({ [key]: !this.options[key] });
+  }
 }
 </script>
 
@@ -149,6 +166,24 @@ export default class FileSelector extends Vue {
         margin-left: 0.1rem;
         width: 1rem;
         text-align: center;
+      }
+
+      &-palette {
+        display: inline-block;
+        margin-left: 0.5rem;
+        vertical-align: sub;
+
+        &-image {
+          cursor: pointer;
+          margin: 0;
+          width: 15px;
+          height: 15px;
+          background-image: url(../../assets/palette-inactive.svg);
+
+          &.active {
+            background-image: url(../../assets/palette-active.svg);
+          }
+        }
       }
     }
   }
