@@ -20,7 +20,9 @@ import { ConvertOptions } from "../shared/types";
 import * as ipcs from "../shared/ipcs";
 import { isDevelopment, isMac } from "../shared/util";
 import { packageJson } from "./util";
+import * as contextMenuRegister from "./lib/contextMenuRegister";
 
+let arg: string | undefined = process.argv.slice(isDevelopment ? 2 : 1)[0];
 let win: BrowserWindow | null;
 
 protocol.registerSchemesAsPrivileged([
@@ -153,6 +155,15 @@ function createMenu() {
                   checkUpdate(true);
                 }
               },
+              { type: "separator" },
+              {
+                label: "Add shortcut to context menu of Explorer",
+                click: addContextMenu
+              },
+              {
+                label: "Remove shortcut from context menu of Explorer",
+                click: removeContextMenu
+              },
               { type: "separator" }
             ]
           : []) as Electron.MenuItemConstructorOptions[]),
@@ -194,12 +205,19 @@ function createWindow() {
     }
   });
 
+  let url;
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+    url = process.env.WEBPACK_DEV_SERVER_URL as string;
   } else {
     createProtocol("app");
-    win.loadURL("app://./index.html");
+    url = "app://./index.html";
   }
+
+  if (arg) {
+    url += `?file=${arg}`;
+    arg = undefined;
+  }
+  win.loadURL(url);
 
   win.on("closed", () => {
     win = null;
@@ -232,4 +250,37 @@ async function checkUpdate(noUpdateNotification = false) {
       message: "No updates are available"
     });
   }
+}
+
+function addContextMenu() {
+  contextMenuRegister
+    .register()
+    .then(() => {
+      dialog.showMessageBox({
+        type: "info",
+        message: "The shortcut has been added successfully."
+      });
+    })
+    .catch(err => {
+      const message = "An error occurred when installing context menu shortcut";
+      logger.error(message, err);
+      dialog.showErrorBox("Cannot add shortcut", message);
+    });
+}
+
+function removeContextMenu() {
+  contextMenuRegister
+    .remove()
+    .then(() => {
+      dialog.showMessageBox({
+        type: "info",
+        message: "The shortcut has been deleted successfully."
+      });
+    })
+    .catch(err => {
+      const message =
+        "An error occurred when uninstalling context menu shortcut";
+      logger.error(message, err);
+      dialog.showErrorBox("Cannot remove shortcut", message);
+    });
 }

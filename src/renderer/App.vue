@@ -8,6 +8,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { isMac } from "./util/index";
+import Converter from "./store/Converter";
 import Header from "./Header.vue";
 import Root from "./pages/Root/index.vue";
 
@@ -18,6 +19,14 @@ import Root from "./pages/Root/index.vue";
   }
 })
 export default class App extends Vue {
+  created() {
+    const file = new URL(location.href).searchParams.get("file");
+
+    if (file) {
+      Converter.setSourceFilePath(file);
+    }
+  }
+
   get isMac() {
     return isMac;
   }
