@@ -9,6 +9,7 @@ import {
 } from "vuex-module-decorators";
 import { ipcRenderer } from "electron";
 import store from ".";
+import Config from "../../shared/config";
 import {
   ConvertOptions,
   InspectionReport,
@@ -39,8 +40,8 @@ ipcRenderer.on(CONVERT_REPORT, (_: any, report: ConvertReport) => {
 @Module({ dynamic: true, store, name: "converter", namespaced: true })
 class Converter extends VuexModule implements ConverterStore {
   options: ConvertOptions = {
-    sourcePath: "",
-    outputPath: ""
+    ...{ sourcePath: "", outputPath: "" },
+    ...Config.convertOptions
   };
   inspectReport: InspectionReport = {
     error: null
@@ -99,12 +100,23 @@ class Converter extends VuexModule implements ConverterStore {
     ipcRenderer.send(CONVERT_CANCEL);
   }
 
+  @Action({})
+  saveOptionsAsDefault() {
+    const options = this.options;
+    delete options.sourcePath;
+    delete options.outputPath;
+    Config.convertOptions = options;
+  }
+
   @MutationAction({ mutate: ["options", "inspectReport", "report"] })
   async reset() {
     return {
       options: {
-        sourcePath: "",
-        outputPath: ""
+        ...{
+          sourcePath: "",
+          outputPath: ""
+        },
+        ...Config.convertOptions
       },
       inspectReport: {
         error: null
