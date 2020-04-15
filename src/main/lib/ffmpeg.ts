@@ -60,7 +60,9 @@ export const convertToGif = (
   const cmd = ffmpeg(options.sourcePath)
     .format("gif")
     .output(options.outputPath)
-    .on("start", () => {
+    .withNoAudio()
+    .on("start", commandLine => {
+      logger.log("Command: " + commandLine);
       sender.send(CONVERT_REPORT, {
         status: "PROCESSING",
         progress: 0
@@ -88,15 +90,18 @@ export const convertToGif = (
       });
     });
 
-  if (options.fps) cmd.fps(options.fps);
+  if (options.fps) cmd.videoFilters("fps=" + options.fps);
   if (options.width || options.height) {
-    cmd.size(
-      (() => {
-        const w = options.width || "?";
-        const h = options.height || "?";
-        return w + "x" + h;
-      })()
+    cmd.videoFilters(
+      `scale=w=${options.width || -1}:h=${options.height || -1}`
     );
+  }
+
+  if (options.palette) {
+    cmd
+      .videoFilters("split[a]")
+      .videoFilters("palettegen")
+      .videoFilters("[a]paletteuse");
   }
 
   cmd.run();

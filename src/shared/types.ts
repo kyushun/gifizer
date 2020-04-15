@@ -1,9 +1,11 @@
 export interface ConvertOptions {
+  [key: string]: any;
   sourcePath: string;
   outputPath: string;
   fps?: number;
   width?: number;
   height?: number;
+  palette?: boolean;
 }
 
 export interface InspectionReport {
