@@ -72,11 +72,19 @@ export default class FFmpeg {
           });
         })
         .on("error", err => {
-          logger.log("Cannot process video: " + err.message);
-          sender.send(CONVERT_REPORT, {
-            status: "ERROR",
-            errorDetail: err.message
-          });
+          if (/SIGKILL/.test(err.message)) {
+            logger.log("Converting has been cancelled");
+            sender.send(CONVERT_REPORT, {
+              status: "CANCELLED",
+              message: "Converting has been cancelled"
+            });
+          } else {
+            logger.log("Cannot process video: " + err.message);
+            sender.send(CONVERT_REPORT, {
+              status: "ERROR",
+              message: err.message
+            });
+          }
         })
         .on("end", () => {
           logger.log("Finished processing");
@@ -91,6 +99,11 @@ export default class FFmpeg {
     } else {
       throw new Error("command is not set.");
     }
+  }
+
+  cancel() {
+    this.command?.kill("SIGKILL");
+    return this;
   }
 
   static inspectFile(

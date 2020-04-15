@@ -24,6 +24,7 @@ import * as contextMenuRegister from "./lib/contextMenuRegister";
 
 let arg: string | undefined = process.argv.slice(isDevelopment ? 2 : 1)[0];
 let win: BrowserWindow | null;
+let converter: FFmpeg | null;
 
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
@@ -78,7 +79,11 @@ if (isDevelopment) {
 
 ipcMain.on(ipcs.CONVERT, async (event: any, options: ConvertOptions) => {
   logger.log(options);
-  new FFmpeg(options).convertToGif(event.sender);
+  converter = new FFmpeg(options).convertToGif(event.sender);
+});
+
+ipcMain.on(ipcs.CONVERT_CANCEL, () => {
+  converter?.cancel();
 });
 
 ipcMain.on(ipcs.INSPECT_FILE, (event: any, filepath: string) => {

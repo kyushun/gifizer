@@ -19,7 +19,7 @@ export interface InspectionReport {
 }
 
 export interface ConvertReport {
-  status: "PROCESSING" | "ERROR" | "FINISHED" | null;
+  status: "PROCESSING" | "ERROR" | "FINISHED" | "CANCELLED" | null;
   progress?: number;
-  errorDetail?: any;
+  message?: any;
 }
