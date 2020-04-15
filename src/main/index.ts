@@ -16,9 +16,10 @@ import {
 import logger from "@/shared/util/logger";
 import * as updater from "./lib/updater";
 import FFmpeg from "./lib/ffmpeg";
+import Config from "../shared/config";
 import { ConvertOptions } from "../shared/types";
 import * as ipcs from "../shared/ipcs";
-import { isDevelopment, isMac } from "../shared/util";
+import { isDevelopment, isProduction, isMac } from "../shared/util";
 import { packageJson } from "./util";
 import * as contextMenuRegister from "./lib/contextMenuRegister";
 
@@ -53,6 +54,15 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+
+  // Check Update
+  const diff =
+    (new Date().getTime() - new Date(Config.updateLastCheckedAt).getTime()) /
+    // h * m * s * ms
+    (24 * 60 * 60 * 1000);
+  if (isProduction && (!Config.updateLastCheckedAt || diff >= 30)) {
+    checkUpdate(false, true);
+  }
 });
 
 process.on("uncaughtException", function (err) {
@@ -136,15 +146,26 @@ function createMenu() {
     { role: "editMenu" },
     {
       label: "View",
-      submenu: [
-        { role: "reload" },
-        { role: "forcereload" },
-        ...((isDevelopment
-          ? [{ type: "separator" }, { role: "toggledevtools" }]
-          : []) as Electron.MenuItemConstructorOptions[])
-      ]
+      submenu: [{ role: "reload" }, { role: "forcereload" }]
     },
     { role: "windowMenu" },
+    ...(isDevelopment
+      ? ([
+          {
+            label: "Development",
+            submenu: [
+              { role: "toggledevtools" },
+              { type: "separator" },
+              {
+                label: "Clear Configs",
+                click: () => {
+                  Config.clear();
+                }
+              }
+            ]
+          }
+        ] as Electron.MenuItemConstructorOptions[])
+      : []),
     {
       role: "help",
       submenu: [
@@ -230,7 +251,10 @@ function createWindow() {
   });
 }
 
-async function checkUpdate(noUpdateNotification = false) {
+async function checkUpdate(
+  showNoUpdateNotification = false,
+  saveLastCheckedAt = false
+) {
   const updateUrl = await updater.checkUpdate();
   if (updateUrl) {
     dialog.showMessageBox(
@@ -245,10 +269,13 @@ async function checkUpdate(noUpdateNotification = false) {
         if (res == 0) {
           shell.openExternal(updateUrl);
           app.quit();
+        } else {
+          if (saveLastCheckedAt)
+            Config.updateLastCheckedAt = new Date().toISOString();
         }
       }
     );
-  } else if (noUpdateNotification) {
+  } else if (showNoUpdateNotification) {
     dialog.showMessageBox({
       type: "info",
       title: "No updates are available",

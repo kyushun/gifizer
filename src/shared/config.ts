@@ -2,7 +2,8 @@ import ElectronStore from "electron-store";
 import { ConvertOptions } from "./types";
 
 const KEYS = {
-  convertOptions: "convert.options"
+  convertOptions: "convert.options",
+  updateLastCheckedAt: "update.lastCheckedAt"
 };
 
 const schema = {
@@ -28,6 +29,18 @@ class Config {
 
   set convertOptions(options: ConvertOptions) {
     this.store.set(KEYS.convertOptions, options);
+  }
+
+  get updateLastCheckedAt() {
+    return this.store.get(KEYS.updateLastCheckedAt);
+  }
+
+  set updateLastCheckedAt(date: string) {
+    this.store.set(KEYS.updateLastCheckedAt, date);
+  }
+
+  clear() {
+    this.store.clear();
   }
 }
 
