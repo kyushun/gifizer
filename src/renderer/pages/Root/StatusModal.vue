@@ -3,23 +3,29 @@
     class="status"
     :title="report.status || ''"
     :visible="!!report.status"
-    :closable="closable"
     @close="close"
   >
-    <div class="status-progress">
-      {{ report.progress ? Math.floor(report.progress) : 0 }}%
+    <div v-if="report.progress || report.progress == 0" class="status-progress">
+      {{ Math.floor(report.progress) }}%
     </div>
-    <div class="status-error" v-if="report.errorDetail">
-      {{ report.errorDetail }}
+    <div v-if="report.message" class="status-error">
+      {{ report.message }}
     </div>
     <ProgressBar
+      v-if="report.progress || report.progress == 0 || status.isError"
       :percent="report.progress"
-      :error="!!report.errorDetail"
+      :error="status.isError"
       :maxWidth="420"
     />
-    <Button class="btn-show-in-directory" color="primary" @click="openDirectory"
-      >Show in directory</Button
+    <Button
+      v-if="status.isProcessing || status.isFinished"
+      :disabled="status.isProcessing"
+      class="btn-show-in-directory"
+      color="primary"
+      @click="openDirectory"
     >
+      Show in directory
+    </Button>
   </Modal>
 </template>
 
@@ -43,14 +49,14 @@ export default class FileSelector extends Vue {
     return Converter.report;
   }
 
-  get closable() {
-    return (
-      Converter.report.status == "ERROR" ||
-      Converter.report.status == "FINISHED"
-    );
+  get status() {
+    return Converter.status;
   }
 
   close() {
+    if (this.status.isProcessing) {
+      Converter.cancel();
+    }
     Converter.reset();
   }
 

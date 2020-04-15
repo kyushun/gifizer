@@ -14,7 +14,12 @@ import {
   InspectionReport,
   ConvertReport
 } from "../../shared/types";
-import { INSPECT_FILE, CONVERT, CONVERT_REPORT } from "../../shared/ipcs";
+import {
+  INSPECT_FILE,
+  CONVERT,
+  CONVERT_CANCEL,
+  CONVERT_REPORT
+} from "../../shared/ipcs";
 import { changeFileExtension } from "../util";
 
 export interface ConverterStore {
@@ -43,6 +48,16 @@ class Converter extends VuexModule implements ConverterStore {
   report: ConvertReport = {
     status: null
   };
+
+  get status() {
+    return {
+      isNull: this.report.status == null,
+      isProcessing: this.report.status == "PROCESSING",
+      isFinished: this.report.status == "FINISHED",
+      isCancelled: this.report.status == "CANCELLED",
+      isError: this.report.status == "ERROR"
+    };
+  }
 
   @Mutation
   setInspectReport(report: InspectionReport) {
@@ -77,6 +92,11 @@ class Converter extends VuexModule implements ConverterStore {
       status: "PROCESSING"
     });
     ipcRenderer.send(CONVERT, this.options);
+  }
+
+  @Action({})
+  cancel() {
+    ipcRenderer.send(CONVERT_CANCEL);
   }
 
   @MutationAction({ mutate: ["options", "inspectReport", "report"] })

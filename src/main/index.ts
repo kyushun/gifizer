@@ -15,7 +15,7 @@ import {
 } from "vue-cli-plugin-electron-builder/lib";
 import logger from "@/shared/util/logger";
 import * as updater from "./lib/updater";
-import * as ffmpeg from "./lib/ffmpeg";
+import FFmpeg from "./lib/ffmpeg";
 import { ConvertOptions } from "../shared/types";
 import * as ipcs from "../shared/ipcs";
 import { isDevelopment, isMac } from "../shared/util";
@@ -24,6 +24,7 @@ import * as contextMenuRegister from "./lib/contextMenuRegister";
 
 let arg: string | undefined = process.argv.slice(isDevelopment ? 2 : 1)[0];
 let win: BrowserWindow | null;
+let converter: FFmpeg | null;
 
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
@@ -78,11 +79,15 @@ if (isDevelopment) {
 
 ipcMain.on(ipcs.CONVERT, async (event: any, options: ConvertOptions) => {
   logger.log(options);
-  ffmpeg.convertToGif(options, event.sender);
+  converter = new FFmpeg(options).convertToGif(event.sender);
+});
+
+ipcMain.on(ipcs.CONVERT_CANCEL, () => {
+  converter?.cancel();
 });
 
 ipcMain.on(ipcs.INSPECT_FILE, (event: any, filepath: string) => {
-  ffmpeg.inspectFile(filepath, event.sender);
+  FFmpeg.inspectFile(filepath, event.sender);
 });
 
 function createMenu() {

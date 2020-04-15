@@ -1,4 +1,4 @@
-import * as ffmpeg from "@/main/lib/ffmpeg";
+import FFmpeg from "@/main/lib/ffmpeg";
 import path from "path";
 import fs from "fs";
 
@@ -20,11 +20,11 @@ const expected = {
   gifMd5: "320a64df6d1d0d8f24f217a87c7329f6"
 };
 
-describe("ffmpeg", () => {
+describe("FFmpeg", () => {
   describe("inspectFile()", () => {
     describe("arg: movie file", () => {
       it("sends normal report", done => {
-        ffmpeg.inspectFile(testMovie, {
+        FFmpeg.inspectFile(testMovie, {
           send: (_, report) => {
             expect(report).toEqual(expected.normalReport);
             done();
@@ -35,7 +35,7 @@ describe("ffmpeg", () => {
 
     describe("arg: except for movie file", () => {
       it("sends error report", done => {
-        ffmpeg.inspectFile(
+        FFmpeg.inspectFile(
           path.join(process.cwd(), "/tests/main/lib/assets/"),
           {
             send: (_, report) => {
@@ -52,44 +52,38 @@ describe("ffmpeg", () => {
     describe("arg: valid options", () => {
       it("generates gif file", done => {
         const outputPath = testMovie + ".gif";
-        ffmpeg.convertToGif(
-          {
-            sourcePath: testMovie,
-            outputPath
-          },
-          {
-            send: (_, report) => {
-              if (report.status === "FINISHED") {
-                fs.stat(outputPath, async err => {
-                  if (!err) {
-                    const md5 = await getMD5(outputPath);
-                    fs.unlink(outputPath, () => {});
-                    expect(md5).toBe(expected.gifMd5);
-                    done();
-                  }
-                });
-              }
+        new FFmpeg({
+          sourcePath: testMovie,
+          outputPath
+        }).convertToGif({
+          send: (_, report) => {
+            if (report.status === "FINISHED") {
+              fs.stat(outputPath, async err => {
+                if (!err) {
+                  const md5 = await getMD5(outputPath);
+                  fs.unlink(outputPath, () => {});
+                  expect(md5).toBe(expected.gifMd5);
+                  done();
+                }
+              });
             }
           }
-        );
+        });
       });
     });
 
     describe("arg: invalid options", () => {
       it("sends error report", done => {
-        ffmpeg.convertToGif(
-          {
-            sourcePath: "invalid input",
-            outputPath: "invalid output"
-          },
-          {
-            send: (_, report) => {
-              if (report.status === "ERROR") {
-                done();
-              }
+        new FFmpeg({
+          sourcePath: "invalid input",
+          outputPath: "invalid output"
+        }).convertToGif({
+          send: (_, report) => {
+            if (report.status === "ERROR") {
+              done();
             }
           }
-        );
+        });
       });
     });
   });
