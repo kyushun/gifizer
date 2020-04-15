@@ -45,7 +45,7 @@
           :value="options.fps"
           @change="onChangeInt('fps', $event)"
         />FPS
-        <div class="output-option-palette">
+        <div class="output-option-div output-option-palette">
           <Hover
             message="<b>Use a palette</b><small></small><br />Although processing time increases,<br />GIF would be more beautiful."
           >
@@ -53,6 +53,15 @@
               class="output-option-palette-image"
               :class="{ active: !!options.palette }"
               @click="onChangeBool('palette')"
+            ></figure>
+          </Hover>
+        </div>
+        <div class="output-option-div output-option-save">
+          <Hover message="<b>Save options as default</b>">
+            <figure
+              class="output-option-save-image"
+              :class="{ active: saveIconActiveTimer }"
+              @click="saveOptions"
             ></figure>
           </Hover>
         </div>
@@ -77,6 +86,8 @@ import Hover from "../../components/Hover.vue";
   }
 })
 export default class FileSelector extends Vue {
+  private saveIconActiveTimer = 0;
+
   get report() {
     return Converter.report;
   }
@@ -128,6 +139,15 @@ export default class FileSelector extends Vue {
   onChangeBool(key: string) {
     Converter.setOptions({ [key]: !this.options[key] });
   }
+
+  saveOptions() {
+    Converter.saveOptionsAsDefault();
+
+    clearInterval(this.saveIconActiveTimer);
+    this.saveIconActiveTimer = window.setTimeout(() => {
+      this.saveIconActiveTimer = 0;
+    }, 500);
+  }
 }
 </script>
 
@@ -168,10 +188,13 @@ export default class FileSelector extends Vue {
         text-align: center;
       }
 
-      &-palette {
+      &-div {
         display: inline-block;
-        margin-left: 0.5rem;
         vertical-align: sub;
+      }
+
+      &-palette {
+        margin-left: 0.5rem;
 
         &-image {
           cursor: pointer;
@@ -182,6 +205,22 @@ export default class FileSelector extends Vue {
 
           &.active {
             background-image: url(../../assets/palette-active.svg);
+          }
+        }
+      }
+
+      &-save {
+        margin-left: 0.75rem;
+
+        &-image {
+          cursor: pointer;
+          margin: 0;
+          width: 15px;
+          height: 15px;
+          background-image: url(../../assets/save.svg);
+
+          &.active {
+            background-image: url(../../assets/save-active.svg);
           }
         }
       }
