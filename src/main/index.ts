@@ -15,7 +15,7 @@ import {
 } from "vue-cli-plugin-electron-builder/lib";
 import logger from "@/shared/util/logger";
 import * as updater from "./lib/updater";
-import * as ffmpeg from "./lib/ffmpeg";
+import FFmpeg from "./lib/ffmpeg";
 import { ConvertOptions } from "../shared/types";
 import * as ipcs from "../shared/ipcs";
 import { isDevelopment, isMac } from "../shared/util";
@@ -78,11 +78,11 @@ if (isDevelopment) {
 
 ipcMain.on(ipcs.CONVERT, async (event: any, options: ConvertOptions) => {
   logger.log(options);
-  ffmpeg.convertToGif(options, event.sender);
+  new FFmpeg(options).convertToGif(event.sender);
 });
 
 ipcMain.on(ipcs.INSPECT_FILE, (event: any, filepath: string) => {
-  ffmpeg.inspectFile(filepath, event.sender);
+  FFmpeg.inspectFile(filepath, event.sender);
 });
 
 function createMenu() {
