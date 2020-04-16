@@ -73,7 +73,7 @@ export default class Modal extends Vue {
     bottom: 0;
     left: 0;
     width: 100vw;
-    max-height: calc(100vh - 75px);
+    max-height: calc(100vh - 22px);
     background-color: $--background-color-base;
     border-radius: 12px 12px 0 0;
   }
@@ -89,7 +89,7 @@ export default class Modal extends Vue {
 
   &-content {
     padding: 1.5rem;
-    max-height: calc(100vh - 75px - 2.75rem - 2rem - 1px);
+    max-height: calc(100vh - 22px - 2.75rem - 2rem - 1px);
     overflow-y: auto;
   }
 
