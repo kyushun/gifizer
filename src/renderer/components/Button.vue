@@ -1,7 +1,12 @@
 <template>
   <div
     class="btn"
-    :class="{ ['btn-' + color]: true, outline, disabled }"
+    :class="{
+      ['btn-' + color]: true,
+      outline,
+      float,
+      disabled
+    }"
     @click="onClick"
   >
     <slot></slot>
@@ -17,6 +22,8 @@ export default class Button extends Vue {
   color?: "primary" | "success" | "warning" | "danger";
   @Prop({ default: false })
   outline?: boolean;
+  @Prop({ default: false })
+  float?: boolean;
   @Prop({ default: false })
   disabled?: boolean;
 
@@ -45,7 +52,7 @@ $colors: (
   color: $--color-text-white;
   font-size: 1rem;
   border-radius: $--border-radius-base;
-  transition: background-color 0.25s, box-shadow 0.25s;
+  transition: background-color 0.25s, box-shadow 0.25s, border-color 0.25s;
 
   &.disabled {
     cursor: not-allowed;
@@ -72,6 +79,14 @@ $colors: (
         &:hover {
           color: $--color-text-white;
           background-color: $color;
+        }
+
+        &.float {
+          &:hover {
+            color: $color;
+            background-color: $--background-color-base;
+            border-color: transparent;
+          }
         }
 
         &.disabled {

@@ -47,7 +47,7 @@
         />FPS
         <div class="output-option-div output-option-palette">
           <Hover
-            message="<b>Use a palette</b><small></small><br />Although processing time increases,<br />GIF would be more beautiful."
+            message="Use a palette.<br />Although processing time increases,<br />GIF would be more beautiful."
           >
             <figure
               class="output-option-palette-image"
@@ -56,8 +56,17 @@
             ></figure>
           </Hover>
         </div>
+        <div class="output-option-div output-option-edit">
+          <Hover message="Edit video">
+            <figure
+              class="output-option-edit-image"
+              :class="{ active: isCutTimeSet }"
+              @click="openEditModal"
+            ></figure>
+          </Hover>
+        </div>
         <div class="output-option-div output-option-save">
-          <Hover message="<b>Save options as default</b>">
+          <Hover message="Save options as default">
             <figure
               class="output-option-save-image"
               :class="{ active: saveIconActiveTimer }"
@@ -71,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Emit } from "vue-property-decorator";
 import Converter from "../../store/Converter";
 import { formatBytes } from "../../util/index";
 import FileView from "../../components/FileView.vue";
@@ -87,6 +96,8 @@ import Hover from "../../components/Hover.vue";
 })
 export default class FileSelector extends Vue {
   private saveIconActiveTimer = 0;
+
+  @Emit("openEditModal") openEditModal(): void {}
 
   get report() {
     return Converter.report;
@@ -112,6 +123,10 @@ export default class FileSelector extends Vue {
 
   get options() {
     return Converter.options;
+  }
+
+  get isCutTimeSet() {
+    return Converter.isCutTimeSet;
   }
 
   onFile(filename: string) {
@@ -205,6 +220,22 @@ export default class FileSelector extends Vue {
 
           &.active {
             background-image: url(../../assets/palette-active.svg);
+          }
+        }
+      }
+
+      &-edit {
+        margin-left: 0.75rem;
+
+        &-image {
+          cursor: pointer;
+          margin: 0;
+          width: 15px;
+          height: 15px;
+          background-image: url(../../assets/edit.svg);
+
+          &.active {
+            background-image: url(../../assets/edit-active.svg);
           }
         }
       }

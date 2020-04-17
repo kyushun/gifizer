@@ -6,6 +6,8 @@ export interface ConvertOptions {
   width?: number;
   height?: number;
   palette?: boolean;
+  startSec?: number;
+  endSec?: number;
 }
 
 export interface InspectionReport {

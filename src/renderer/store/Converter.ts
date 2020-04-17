@@ -60,6 +60,14 @@ class Converter extends VuexModule implements ConverterStore {
     };
   }
 
+  get isCutTimeSet() {
+    return (
+      this.options.startSec ||
+      (this.options.endSec &&
+        (this.options.startSec || 0) < this.options.endSec)
+    );
+  }
+
   @Mutation
   setInspectReport(report: InspectionReport) {
     this.inspectReport = report;
@@ -105,6 +113,8 @@ class Converter extends VuexModule implements ConverterStore {
     const options = this.options;
     delete options.sourcePath;
     delete options.outputPath;
+    delete options.startSec;
+    delete options.endSec;
     Config.convertOptions = options;
   }
 

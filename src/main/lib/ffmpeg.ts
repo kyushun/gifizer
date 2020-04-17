@@ -36,6 +36,15 @@ export default class FFmpeg {
       .output(options.outputPath)
       .withNoAudio();
 
+    if (options.startSec) {
+      this.command.inputOptions(["-ss " + options.startSec]);
+    }
+    if (options.endSec && (options.startSec || 0) < options.endSec) {
+      this.command.outputOptions([
+        "-t " + (options.endSec - (options.startSec || 0))
+      ]);
+    }
+
     if (options.fps) this.command.videoFilters("fps=" + options.fps);
     if (options.width || options.height) {
       this.command.videoFilters(
