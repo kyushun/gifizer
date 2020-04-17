@@ -13,7 +13,7 @@ module.exports = {
         },
         win: {
           target: ["nsis", "zip"],
-          icon: "src/renderer/assets/icon.png"
+          icon: "src/renderer/assets/icon.ico"
         },
         linux: {
           target: "AppImage",
