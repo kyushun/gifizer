@@ -8,6 +8,12 @@ export interface ConvertOptions {
   palette?: boolean;
   startSec?: number;
   endSec?: number;
+  crop?: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  };
 }
 
 export interface InspectionReport {

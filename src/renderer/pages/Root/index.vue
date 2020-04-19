@@ -1,9 +1,13 @@
 <template>
   <div>
-    <FileSelector @openEditModal="switchEditModal" />
+    <FileSelector
+      @openEditModal="switchEditModal"
+      @openCropModal="switchCropModal"
+    />
     <Button :disabled="!convertable" @click="convert">Convert</Button>
     <StatusModal />
     <EditModal :visible="isEditModalOpened" @close="switchEditModal" />
+    <CropModal :visible="isCropModalOpened" @close="switchCropModal" />
   </div>
 </template>
 
@@ -14,17 +18,20 @@ import FileSelector from "./FileSelector.vue";
 import Button from "../../components/Button.vue";
 import StatusModal from "./StatusModal.vue";
 import EditModal from "./EditModal.vue";
+import CropModal from "./CropModal.vue";
 
 @Component({
   components: {
     FileSelector,
     Button,
     StatusModal,
-    EditModal
+    EditModal,
+    CropModal
   }
 })
 export default class Root extends Vue {
   private isEditModalOpened = false;
+  private isCropModalOpened = false;
 
   get convertable() {
     return (
@@ -39,6 +46,10 @@ export default class Root extends Vue {
 
   switchEditModal() {
     this.isEditModalOpened = !this.isEditModalOpened;
+  }
+
+  switchCropModal() {
+    this.isCropModalOpened = !this.isCropModalOpened;
   }
 
   convert() {

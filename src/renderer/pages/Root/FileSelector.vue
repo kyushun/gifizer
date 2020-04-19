@@ -65,6 +65,15 @@
             ></figure>
           </Hover>
         </div>
+        <div class="output-option-div output-option-crop">
+          <Hover message="Crop video">
+            <figure
+              class="output-option-crop-image"
+              :class="{ active: isCropSet }"
+              @click="openCropModal"
+            ></figure>
+          </Hover>
+        </div>
         <div class="output-option-div output-option-save">
           <Hover message="Save options as default">
             <figure
@@ -98,6 +107,7 @@ export default class FileSelector extends Vue {
   private saveIconActiveTimer = 0;
 
   @Emit("openEditModal") openEditModal(): void {}
+  @Emit("openCropModal") openCropModal(): void {}
 
   get report() {
     return Converter.report;
@@ -127,6 +137,10 @@ export default class FileSelector extends Vue {
 
   get isCutTimeSet() {
     return Converter.isCutTimeSet;
+  }
+
+  get isCropSet() {
+    return Converter.isCropSet;
   }
 
   onFile(filename: string) {
@@ -236,6 +250,22 @@ export default class FileSelector extends Vue {
 
           &.active {
             background-image: url(../../assets/edit-active.svg);
+          }
+        }
+      }
+
+      &-crop {
+        margin-left: 0.75rem;
+
+        &-image {
+          cursor: pointer;
+          margin: 0;
+          width: 15px;
+          height: 15px;
+          background-image: url(../../assets/crop.svg);
+
+          &.active {
+            background-image: url(../../assets/crop-active.svg);
           }
         }
       }
