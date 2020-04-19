@@ -17,7 +17,10 @@ const expected = {
   errorReport: {
     error: true
   },
-  gifMd5: "320a64df6d1d0d8f24f217a87c7329f6"
+  md5: {
+    noOptions: "320a64df6d1d0d8f24f217a87c7329f6",
+    withOptions: "7ca63642007d0957455442dd116706c1"
+  }
 };
 
 describe("FFmpeg", () => {
@@ -49,9 +52,9 @@ describe("FFmpeg", () => {
   });
 
   describe("convertToGif()", () => {
-    describe("arg: valid options", () => {
+    describe("with no options", () => {
       it("generates gif file", done => {
-        const outputPath = testMovie + ".gif";
+        const outputPath = testMovie + "-with-no-options.gif";
         new FFmpeg({
           sourcePath: testMovie,
           outputPath
@@ -62,7 +65,36 @@ describe("FFmpeg", () => {
                 if (!err) {
                   const md5 = await getMD5(outputPath);
                   fs.unlink(outputPath, () => {});
-                  expect(md5).toBe(expected.gifMd5);
+                  expect(md5).toBe(expected.md5.noOptions);
+                  done();
+                }
+              });
+            }
+          }
+        });
+      });
+    });
+
+    describe("with options", () => {
+      it("generates gif file", done => {
+        const outputPath = testMovie + "-with-options.gif";
+        new FFmpeg({
+          sourcePath: testMovie,
+          outputPath,
+          width: 320,
+          height: undefined,
+          fps: 10,
+          palette: true,
+          endSec: 0.5007,
+          crop: { height: 135, left: 240, top: 135, width: 240 }
+        }).convertToGif({
+          send: (_, report) => {
+            if (report.status === "FINISHED") {
+              fs.stat(outputPath, async err => {
+                if (!err) {
+                  const md5 = await getMD5(outputPath);
+                  fs.unlink(outputPath, () => {});
+                  expect(md5).toBe(expected.md5.withOptions);
                   done();
                 }
               });
