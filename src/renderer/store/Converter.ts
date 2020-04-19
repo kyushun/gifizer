@@ -68,6 +68,17 @@ class Converter extends VuexModule implements ConverterStore {
     );
   }
 
+  get isCropSet() {
+    return (
+      this.options.crop?.top ||
+      this.options.crop?.left ||
+      (this.options.crop?.width &&
+        this.options.crop?.width != this.inspectReport.width) ||
+      (this.options.crop?.height &&
+        this.options.crop?.height != this.inspectReport.height)
+    );
+  }
+
   @Mutation
   setInspectReport(report: InspectionReport) {
     this.inspectReport = report;
@@ -91,12 +102,15 @@ class Converter extends VuexModule implements ConverterStore {
 
     return {
       sourcePath: path,
-      outputPath: changeFileExtension(path, "gif")
+      outputPath: changeFileExtension(path, "gif"),
+      crop: {}
     };
   }
 
   @Action({})
   convert() {
+    if (!this.isCropSet) delete this.options.crop;
+
     this.setReport({
       status: "PROCESSING"
     });
@@ -115,6 +129,7 @@ class Converter extends VuexModule implements ConverterStore {
     delete options.outputPath;
     delete options.startSec;
     delete options.endSec;
+    delete options.crop;
     Config.convertOptions = options;
   }
 

@@ -31,6 +31,7 @@ input {
   color: $--color-text-primary;
   border: none;
   border-radius: 4px;
+  background-color: #fff;
   transition: box-shadow 0.25s;
 
   &[type="number"]::-webkit-inner-spin-button,

@@ -46,6 +46,17 @@ export default class FFmpeg {
     }
 
     if (options.fps) this.command.videoFilters("fps=" + options.fps);
+    if (
+      options.crop?.top ||
+      options.crop?.left ||
+      options.crop?.width ||
+      options.crop?.height
+    ) {
+      const crop = `crop=${options.crop?.width || "w"}:${
+        options.crop?.height || "h"
+      }:${options.crop?.left || 0}:${options.crop?.top || 0}`;
+      this.command.videoFilters(crop);
+    }
     if (options.width || options.height) {
       this.command.videoFilters(
         `scale=w=${options.width || -1}:h=${options.height || -1}`
