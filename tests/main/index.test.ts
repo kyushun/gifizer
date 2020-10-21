@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { testWithSpectron } = require("vue-cli-plugin-electron-builder");
+import spectron from "spectron";
+import { testWithSpectron } from "vue-cli-plugin-electron-builder";
 jest.setTimeout(60 * 1000);
 
 test("Window Loads Properly", async () => {
   // Wait for dev server to start
-  const { app, stopServe } = await testWithSpectron();
+  const { app, stopServe } = await testWithSpectron(spectron);
   const win = app.browserWindow;
   const client = app.client;
 
@@ -21,7 +22,9 @@ test("Window Loads Properly", async () => {
   expect(width).toBeGreaterThan(0);
   expect(height).toBeGreaterThan(0);
   // App is loaded properly
-  expect(/Convert/.test(await client.getHTML("#app"))).toBe(true);
+  const { productName } = require("../../package.json");
+  expect(await app.client.getTitle()).toBe(productName);
+  expect(/Convert/.test(await (await client.$("#app")).getHTML())).toBe(true);
 
   await stopServe();
 });

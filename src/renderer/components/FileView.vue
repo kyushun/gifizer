@@ -56,11 +56,13 @@ export default class FileView extends Vue {
   onClick() {
     const win = BrowserWindow.getFocusedWindow();
     if (win) {
-      dialog.showOpenDialog(win, { properties: ["openFile"] }, fileNames => {
-        if (fileNames && fileNames.length > 0) {
-          this.fileEmitter(fileNames[0]);
-        }
-      });
+      dialog
+        .showOpenDialog(win, { properties: ["openFile"] })
+        .then(({ filePaths }) => {
+          if (filePaths && filePaths.length > 0) {
+            this.fileEmitter(filePaths[0]);
+          }
+        });
     }
   }
 }

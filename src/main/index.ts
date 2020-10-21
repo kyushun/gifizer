@@ -9,10 +9,8 @@ import {
   dialog,
   shell
 } from "electron";
-import {
-  createProtocol,
-  installVueDevtools
-} from "vue-cli-plugin-electron-builder/lib";
+import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import logger from "@/shared/util/logger";
 import * as updater from "./lib/updater";
 import FFmpeg from "./lib/ffmpeg";
@@ -48,13 +46,12 @@ app.on("activate", () => {
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     try {
-      await installVueDevtools();
+      await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
       logger.error("Vue Devtools failed to install:", e.toString());
     }
   }
   createWindow();
-
   // Check Update
   const diff =
     (new Date().getTime() - new Date(Config.updateLastCheckedAt).getTime()) /
@@ -63,6 +60,13 @@ app.on("ready", async () => {
   if (isProduction && (!Config.updateLastCheckedAt || diff >= 30)) {
     checkUpdate(false, true);
   }
+});
+
+app.whenReady().then(() => {
+  protocol.registerFileProtocol("file", (request, callback) => {
+    const pathname = decodeURI(request.url.replace("file:///", ""));
+    callback(pathname);
+  });
 });
 
 process.on("uncaughtException", function (err) {
@@ -146,7 +150,7 @@ function createMenu() {
     { role: "editMenu" },
     {
       label: "View",
-      submenu: [{ role: "reload" }, { role: "forcereload" }]
+      submenu: [{ role: "reload" }, { role: "forceReload" }]
     },
     { role: "windowMenu" },
     ...(isDevelopment
@@ -226,7 +230,10 @@ function createWindow() {
     maximizable: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration:
+        typeof process.env.ELECTRON_NODE_INTEGRATION == "boolean"
+          ? process.env.ELECTRON_NODE_INTEGRATION
+          : false,
       webSecurity: false
     }
   });
@@ -257,24 +264,23 @@ async function checkUpdate(
 ) {
   const updateUrl = await updater.checkUpdate();
   if (updateUrl) {
-    dialog.showMessageBox(
-      {
+    dialog
+      .showMessageBox({
         type: "info",
         buttons: ["Yes", "No"],
         title: "An update is available",
         message: "An update is available",
         detail: "Do you want to download?"
-      },
-      res => {
-        if (res == 0) {
+      })
+      .then(({ response }) => {
+        if (response == 0) {
           shell.openExternal(updateUrl);
           app.quit();
         } else {
           if (saveLastCheckedAt)
             Config.updateLastCheckedAt = new Date().toISOString();
         }
-      }
-    );
+      });
   } else if (showNoUpdateNotification) {
     dialog.showMessageBox({
       type: "info",

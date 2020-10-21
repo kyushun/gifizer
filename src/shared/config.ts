@@ -10,7 +10,7 @@ const schema = {
   convert: {
     options: {
       width: 640,
-      height: null,
+      height: undefined,
       fps: 10,
       palette: false
     }
@@ -20,19 +20,19 @@ const schema = {
 class Config {
   private store = new ElectronStore();
 
-  get convertOptions(): ConvertOptions {
+  get convertOptions(): Partial<ConvertOptions> {
     return {
       ...schema.convert.options,
-      ...this.store.get(KEYS.convertOptions)
+      ...(this.store.get(KEYS.convertOptions) as Partial<ConvertOptions>)
     };
   }
 
-  set convertOptions(options: ConvertOptions) {
+  set convertOptions(options: Partial<ConvertOptions>) {
     this.store.set(KEYS.convertOptions, options);
   }
 
   get updateLastCheckedAt() {
-    return this.store.get(KEYS.updateLastCheckedAt);
+    return this.store.get(KEYS.updateLastCheckedAt) as string;
   }
 
   set updateLastCheckedAt(date: string) {
