@@ -10,7 +10,7 @@
     "build": "rimraf dist && vue-cli-service electron:build --publish=never",
     "vue:serve": "vue-cli-service serve",
     "vue:build": "vue-cli-service build",
-    "test": "vue-cli-service test:unit",
+    "test": "IS_TEST=true vue-cli-service test:unit",
     "lint": "vue-cli-service lint --no-fix",
     "lint:fix": "vue-cli-service lint",
     "postinstall": "electron-builder install-app-deps",
