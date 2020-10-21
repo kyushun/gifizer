@@ -146,7 +146,7 @@ function createMenu() {
     { role: "editMenu" },
     {
       label: "View",
-      submenu: [{ role: "reload" }, { role: "forcereload" }]
+      submenu: [{ role: "reload" }, { role: "forceReload" }]
     },
     { role: "windowMenu" },
     ...(isDevelopment
@@ -226,7 +226,10 @@ function createWindow() {
     maximizable: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: typeof process.env.ELECTRON_NODE_INTEGRATION == "boolean" ? process.env.ELECTRON_NODE_INTEGRATION : false,
+      nodeIntegration:
+        typeof process.env.ELECTRON_NODE_INTEGRATION == "boolean"
+          ? process.env.ELECTRON_NODE_INTEGRATION
+          : false,
       webSecurity: false
     }
   });
@@ -257,24 +260,23 @@ async function checkUpdate(
 ) {
   const updateUrl = await updater.checkUpdate();
   if (updateUrl) {
-    dialog.showMessageBox(
-      {
+    dialog
+      .showMessageBox({
         type: "info",
         buttons: ["Yes", "No"],
         title: "An update is available",
         message: "An update is available",
         detail: "Do you want to download?"
-      },
-      res => {
-        if (res == 0) {
+      })
+      .then(({ response }) => {
+        if (response == 0) {
           shell.openExternal(updateUrl);
           app.quit();
         } else {
           if (saveLastCheckedAt)
             Config.updateLastCheckedAt = new Date().toISOString();
         }
-      }
-    );
+      });
   } else if (showNoUpdateNotification) {
     dialog.showMessageBox({
       type: "info",
