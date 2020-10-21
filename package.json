@@ -65,7 +65,7 @@
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
     "typescript": "~3.8.3",
-    "vue-cli-plugin-electron-builder": "^1.4.3",
+    "vue-cli-plugin-electron-builder": "^2.0.0-rc.4",
     "vue-template-compiler": "^2.6.10",
     "vuex-module-decorators": "^0.16.1"
   }

@@ -226,7 +226,7 @@ function createWindow() {
     maximizable: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: typeof process.env.ELECTRON_NODE_INTEGRATION == "boolean" ? process.env.ELECTRON_NODE_INTEGRATION : false,
       webSecurity: false
     }
   });

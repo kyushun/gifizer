@@ -27,7 +27,8 @@ module.exports = {
         });
       },
       mainProcessFile: "src/main/index.ts",
-      mainProcessWatch: ["src/main"]
+      mainProcessWatch: ["src/main"],
+      nodeIntegration: true
     }
   },
   pages: {
