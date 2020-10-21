@@ -14,10 +14,11 @@ jobs:
         with:
           node-version: 12
 
+      - name: Install dependencies
+        run: yarn install
+
       - name: Test app
-        run: |
-          yarn install
-          yarn test
+        run: yarn test
 
   Build:
     runs-on: ${{ matrix.os }}
@@ -35,10 +36,11 @@ jobs:
         with:
           node-version: 12
 
+      - name: Install dependencies
+        run: yarn install
+
       - name: Build app
-        run: |
-          yarn install
-          yarn build
+        run: yarn build
 
       - name: Prepare uploads
         run: find ./dist -mindepth 1 -maxdepth 1 -not \( -name "Gifizer-*-mac.dmg" -or -name "Gifizer-*-win.exe" -or -name "Gifizer-*-win.zip" \) | xargs rm -rf
