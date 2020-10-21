@@ -62,6 +62,13 @@ app.on("ready", async () => {
   }
 });
 
+app.whenReady().then(() => {
+  protocol.registerFileProtocol("file", (request, callback) => {
+    const pathname = decodeURI(request.url.replace("file:///", ""));
+    callback(pathname);
+  });
+});
+
 process.on("uncaughtException", function (err) {
   logger.error(err);
 });
