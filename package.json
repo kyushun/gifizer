@@ -1,0 +1,105 @@
+{
+  "name": "gifizer",
+  "productName": "Gifizer",
+  "version": "1.0.0-beta.1",
+  "main": "./build/main.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyushun/gifizer.git"
+  },
+  "author": {
+    "name": "kyushun",
+    "email": "kyushun12@gmail.com",
+    "url": "https://github.com/kyushun"
+  },
+  "bugs": {
+    "url": "https://github.com/kyushun/gifizer/issues"
+  },
+  "homepage": "https://github.com/kyushun/gifizer",
+  "scripts": {
+    "build": "cross-env NODE_ENV=development webpack",
+    "build:production": "cross-env NODE_ENV=production webpack",
+    "build:main": "cross-env NODE_ENV=development webpack --config-name=main",
+    "build:renderer": "cross-env NODE_ENV=development webpack --config-name=renderer",
+    "package": "yarn build:production && electron-builder",
+    "clean": "rimraf dist build",
+    "start": "run-p -l -r start:renderer start:main",
+    "start:main": "yarn build:main &&  electron .",
+    "start:renderer": "cross-env NODE_ENV=development webpack serve --config-name=renderer",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "yarn lint --fix"
+  },
+  "build": {
+    "productName": "Gifizer",
+    "appId": "com.kyushun.app.gifizer",
+    "artifactName": "${productName}-${version}-${os}.${ext}",
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "target": "dmg",
+      "icon": "src/renderer/assets/icon.png"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "src/renderer/assets/icon.ico"
+    },
+    "files": [
+      "build/"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint:fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "electron-log": "^4.3.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "@babel/preset-typescript": "^7.12.7",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/styled-components": "^5.1.7",
+    "@types/webpack": "^4.41.25",
+    "@typescript-eslint/eslint-plugin": "^4.11.1",
+    "@typescript-eslint/parser": "^4.11.1",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-styled-components": "^1.12.0",
+    "cross-env": "^7.0.3",
+    "electron": "^11.1.1",
+    "electron-builder": "^22.9.1",
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-import-resolver-webpack": "^0.13.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "html-webpack-plugin": "^4.5.0",
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.3",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

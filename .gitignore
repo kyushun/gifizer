@@ -1,0 +1,21 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Dependency directory
+node_modules
+
+# OSX
+.DS_Store
+
+# App packaged
+build
+dist
+
+.idea
+npm-debug.log.*
