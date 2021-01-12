@@ -7,6 +7,7 @@
     //"declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
     "sourceMap": true,
     // "noEmit": true,                        /* Do not emit outputs. */
+    // "allowJs": true,
 
     /* Strict Type-Checking Options */
     "strict": true,                           /* Enable all strict type-checking options. */

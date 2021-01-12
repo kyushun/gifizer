@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     'no-unused-expressions': 'off',
     'class-methods-use-this': 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': [
@@ -31,14 +32,21 @@ module.exports = {
       },
     ],
     'import/order': [2, { alphabetize: { order: 'asc' } }],
+    'react/prop-types': 'off',
+    'react/destructuring-assignment': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/require-default-props': 'off',
     'react/jsx-filename-extension': [
       1,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
   },
   settings: {
+    'import/ignore': ['node_modules\\/(?!@storybook)'],
     'import/resolver': {
       node: {},
       webpack: {
