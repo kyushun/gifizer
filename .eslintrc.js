@@ -21,7 +21,8 @@ module.exports = {
   rules: {
     'no-unused-expressions': 'off',
     'class-methods-use-this': 'off',
-    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': [
@@ -38,6 +39,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
+    'react/jsx-curly-newline': 'off',
     'react/jsx-filename-extension': [
       1,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },

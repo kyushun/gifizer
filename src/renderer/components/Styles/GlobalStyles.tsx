@@ -11,11 +11,13 @@ export const GlobalStyles = createGlobalStyle`
     color: white;
     height: 100vh;
     font-family: 'SF Pro Text', 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    color: ${({ theme }) => theme.palette.textNormal};
     background-color: ${({ theme }) => theme.palette.mainSilent};
     overflow-y: hidden;
   }
 
-  #app {
+  #root {
     width: 100%;
     height: 100%;
   }

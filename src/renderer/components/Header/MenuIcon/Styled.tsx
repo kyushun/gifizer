@@ -11,20 +11,12 @@ export const StyledContainer = styled.div<{ width: number }>`
   -webkit-user-select: none;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: ${({ theme }) => theme.palette.hover};
   }
 
   &:active {
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: ${({ theme }) => theme.palette.active};
   }
-`;
-
-export const StyledMenuIcon = styled.figure`
-  margin: 0;
-  width: 22px;
-  height: 22px;
-  background-repeat: no-repeat;
-  background-position: center;
 `;
 
 export const StyledMenuIconText = styled.div`

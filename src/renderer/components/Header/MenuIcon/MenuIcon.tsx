@@ -1,4 +1,5 @@
-import { StyledContainer, StyledMenuIcon, StyledMenuIconText } from './Styled';
+import { StyledContainer, StyledMenuIconText } from './Styled';
+import { Icon } from '@components/Shared/index';
 
 type Props = {
   width: number;
@@ -8,11 +9,7 @@ type Props = {
 
 export const MenuIcon = (props: Props) => (
   <StyledContainer width={props.width}>
-    <StyledMenuIcon
-      css={`
-        background-image: url(${props.icon});
-      `}
-    />
+    <Icon icon={props.icon} size={22} />
     <StyledMenuIconText>{props.text}</StyledMenuIconText>
   </StyledContainer>
 );
