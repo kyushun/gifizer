@@ -12,6 +12,7 @@ const baseConfig = {
       '@main': path.resolve(__dirname, 'src/main'),
       '@renderer': path.resolve(__dirname, 'src/renderer'),
       '@components': path.resolve(__dirname, 'src/renderer/components'),
+      '@shared': path.resolve(__dirname, 'src/shared'),
     },
   },
   output: {
@@ -71,4 +72,4 @@ const renderer = {
   ],
 };
 
-module.exports = [main, renderer];
+module.exports = [main, preload, renderer];

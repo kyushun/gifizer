@@ -5,7 +5,7 @@ import {
   MenuItemConstructorOptions,
 } from 'electron';
 
-import { isDevelopment, isDarwin, isProduction } from '@main/util';
+import { isDevelopment, isDarwin, isProduction } from '@shared/util';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;

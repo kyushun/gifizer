@@ -1,10 +1,27 @@
+import path from 'path';
 import { app, BrowserWindow } from 'electron';
+import log from 'electron-log';
 import MenuBuilder from './menu';
-import { isProduction } from '@main/util';
+import { isProduction } from '@shared/util';
 
 let win: BrowserWindow | null;
 
-const createWindow = () => {
+const installExtensions = async () => {
+  // eslint-disable-next-line global-require
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+
+  return installer
+    .default(
+      [installer.REACT_DEVELOPER_TOOLS, 'jhfmmdhbinleghabnblahfjfalfgidik'],
+      forceDownload
+    )
+    .catch(log.debug);
+};
+
+const createWindow = async () => {
+  if (!isProduction) await installExtensions();
+
   win = new BrowserWindow({
     show: false,
     width: 900,
@@ -17,7 +34,8 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
-      contextIsolation: true,
+      contextIsolation: false,
+      preload: path.join(__dirname, './preLoad.js'),
     },
   });
 
