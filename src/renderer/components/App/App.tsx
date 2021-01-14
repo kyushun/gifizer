@@ -1,8 +1,7 @@
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components';
-import { OptionContainer } from './OptionContainer';
-import { PlayerContainer } from './PlayerContainer';
-import { StyledApp, StyledContent } from './Styled';
+import { AppContent } from './AppContent';
+import { StyledApp } from './Styled';
 import { Header } from '@components/Header';
 import { GlobalStyles } from '@renderer/components/Styles/GlobalStyles';
 import { theme } from '@renderer/components/Styles/theme';
@@ -12,20 +11,15 @@ const RecoilizeDebugger = isDevelopment
   ? require('recoilize').default
   : () => null;
 
-export const App = () => {
-  return (
-    <RecoilRoot>
-      <RecoilizeDebugger />
-      <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <StyledApp>
-          <Header />
-          <StyledContent>
-            <PlayerContainer />
-            <OptionContainer />
-          </StyledContent>
-        </StyledApp>
-      </ThemeProvider>
-    </RecoilRoot>
-  );
-};
+export const App = () => (
+  <RecoilRoot>
+    <RecoilizeDebugger />
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <StyledApp>
+        <Header />
+        <AppContent />
+      </StyledApp>
+    </ThemeProvider>
+  </RecoilRoot>
+);

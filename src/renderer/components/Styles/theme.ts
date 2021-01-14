@@ -9,5 +9,6 @@ export const theme = {
     textHide: '#444444',
     hover: 'rgba(255, 255, 255, 0.1)',
     active: 'rgba(255, 255, 255, 0.25)',
+    backdropBlur: 'blur(15px)',
   },
 };

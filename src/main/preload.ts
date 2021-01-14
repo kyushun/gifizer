@@ -1,3 +1,6 @@
+const path = require('path');
+
 process.once('loaded', () => {
-  global.process = process;
+  window.process = process;
+  window.path = path;
 });

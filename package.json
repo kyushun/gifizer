@@ -20,7 +20,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=development webpack",
     "build:production": "cross-env NODE_ENV=production webpack",
-    "build:main": "cross-env NODE_ENV=development webpack --config-name=main  --config-name=preload",
+    "build:main": "cross-env NODE_ENV=development webpack --config-name=main --config-name=preload",
     "build:renderer": "cross-env NODE_ENV=development webpack --config-name=renderer",
     "package": "yarn build:production && electron-builder",
     "clean": "rimraf dist build",
@@ -66,6 +66,7 @@
     "electron-log": "^4.3.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-dropzone": "^11.2.4",
     "react-spring": "^8.0.27",
     "recoil": "^0.1.2",
     "styled-components": "^5.2.1"

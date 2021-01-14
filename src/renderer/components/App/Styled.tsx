@@ -6,9 +6,3 @@ export const StyledApp = styled.div`
   width: 100%;
   height: 100%;
 `;
-
-export const StyledContent = styled.div`
-  position: relative;
-  flex: 1;
-  display: flex;
-`;

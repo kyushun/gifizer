@@ -13,6 +13,7 @@ export const Icon = (props: Props) => (
       background-position: center;
       background-image: url(${props.icon});
       //background-size: ${props.size}px ${props.size}px;
+      background-size: contain;
     `}
   />
 );
