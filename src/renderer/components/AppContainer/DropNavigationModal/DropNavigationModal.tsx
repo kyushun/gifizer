@@ -1,7 +1,8 @@
-import { StyledContainer } from './Styled';
-import addFileIconSvg from './add-file-icon.svg';
-import { Modal } from '@components/Shared/Modal';
 import { Icon } from '@components/Shared/index';
+import { Modal } from '@components/Shared/Modal';
+
+import addFileIconSvg from './add-file-icon.svg';
+import { StyledContainer } from './Styled';
 
 type Props = {
   isVisible: boolean;

@@ -17,7 +17,7 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'eslint-plugin-import-helpers'],
   rules: {
     'no-unused-expressions': 'off',
     'class-methods-use-this': 'off',
@@ -32,7 +32,23 @@ module.exports = {
         optionalDependencies: false,
       },
     ],
-    'import/order': [2, { alphabetize: { order: 'asc' } }],
+    'import-helpers/order-imports': [
+      'warn',
+      {
+        newlinesBetween: 'always',
+        groups: [
+          'module',
+          '/^@main/',
+          '/^@renderer/',
+          '/^@components/',
+          '/^@hooks/',
+          '/^@recoil/',
+          '/^@shared/',
+          ['parent', 'sibling', 'index'],
+        ],
+        alphabetize: { order: 'asc', ignoreCase: true },
+      },
+    ],
     'react/prop-types': 'off',
     'react/destructuring-assignment': 'off',
     'react/jsx-uses-react': 'off',

@@ -1,8 +1,11 @@
-import path from 'path';
 import { app, BrowserWindow } from 'electron';
 import log from 'electron-log';
-import MenuBuilder from './menu';
+import path from 'path';
+
 import { isProduction } from '@shared/util';
+
+import { ipcRegister } from './ipc-register';
+import MenuBuilder from './menu';
 
 let win: BrowserWindow | null;
 
@@ -12,10 +15,7 @@ const installExtensions = async () => {
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
 
   return installer
-    .default(
-      [installer.REACT_DEVELOPER_TOOLS, 'jhfmmdhbinleghabnblahfjfalfgidik'],
-      forceDownload
-    )
+    .default([installer.REACT_DEVELOPER_TOOLS], forceDownload)
     .catch(log.debug);
 };
 
@@ -34,7 +34,7 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
-      contextIsolation: false,
+      contextIsolation: true,
       preload: path.join(__dirname, './preLoad.js'),
     },
   });
@@ -66,7 +66,7 @@ const createWindow = async () => {
   menuBuilder.buildMenu();
 };
 
-app.whenReady().then(createWindow);
+app.whenReady().then(ipcRegister).then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

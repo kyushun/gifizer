@@ -1,5 +1,6 @@
-const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -12,6 +13,8 @@ const baseConfig = {
       '@main': path.resolve(__dirname, 'src/main'),
       '@renderer': path.resolve(__dirname, 'src/renderer'),
       '@components': path.resolve(__dirname, 'src/renderer/components'),
+      '@hooks': path.resolve(__dirname, 'src/renderer/hooks'),
+      '@recoil': path.resolve(__dirname, 'src/renderer/recoil'),
       '@shared': path.resolve(__dirname, 'src/shared'),
     },
   },
@@ -44,6 +47,11 @@ const main = {
   entry: {
     main: './src/main/index.ts',
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.FLUENTFFMPEG_COV': false,
+    }),
+  ],
 };
 
 /** @type import('webpack').Configuration */

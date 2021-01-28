@@ -1,8 +1,11 @@
 import { Story, Meta } from '@storybook/react';
 import { useState } from 'react';
-import { Input } from './Input';
-import { theme } from '@components/Styles/theme';
+
 import { ComponentProps } from '@renderer/util/index';
+
+import { theme } from '@components/Styles/theme';
+
+import { Input } from './Input';
 
 export default {
   title: 'Shared/Input',

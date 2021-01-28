@@ -1,4 +1,18 @@
 import { useRecoilState } from 'recoil';
+
+import { Icon, Input } from '@components/Shared/index';
+import { theme } from '@components/Styles/theme';
+
+import {
+  stringOptionStateFamily,
+  numberOptionsStateFamilyString,
+  boolOptionsStateFamily,
+} from '@recoil/atoms/index';
+
+import filenameIconSvg from './filename-icon.svg';
+import fpsIconSvg from './fps-icon.svg';
+import paletteIconSvg from './palette-icon.svg';
+import sizeIconSvg from './size-icon.svg';
 import {
   StyledContainer,
   StyledTitle,
@@ -7,17 +21,6 @@ import {
   StyledItemSpacer,
   StyledIconSwitcher,
 } from './Styled';
-import filenameIconSvg from './filename-icon.svg';
-import fpsIconSvg from './fps-icon.svg';
-import paletteIconSvg from './palette-icon.svg';
-import sizeIconSvg from './size-icon.svg';
-import { Icon, Input } from '@components/Shared/index';
-import { theme } from '@components/Styles/theme';
-import {
-  stringOptionStateFamily,
-  numberOptionsStateFamilyString,
-  boolOptionsStateFamily,
-} from '@renderer/recoil/atoms/index';
 
 export const OptionContainer = () => {
   const [filenameState, setFilenameState] = useRecoilState(

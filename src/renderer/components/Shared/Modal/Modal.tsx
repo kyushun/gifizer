@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { createPortal } from 'react-dom';
+
 import { StyledContainer } from './Styled';
 
 type Props = {

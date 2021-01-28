@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/react';
+
 import convertIconSvg from '../convert-icon.svg';
 import { MenuIcon } from './MenuIcon';
 

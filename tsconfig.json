@@ -25,6 +25,8 @@
       "@main/*": ["src/main/*"],
       "@renderer/*": ["src/renderer/*"],
       "@components/*": ["src/renderer/components/*"],
+      "@hooks/*": ["src/renderer/hooks/*"],
+      "@recoil/*": ["src/renderer/recoil/*"],
       "@shared/*": ["src/shared/*"],
     },
     "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */

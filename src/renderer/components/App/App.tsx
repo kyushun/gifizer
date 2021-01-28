@@ -1,24 +1,20 @@
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components';
-import { AppContent } from './AppContent';
-import { StyledApp } from './Styled';
-import { Header } from '@components/Header';
-import { GlobalStyles } from '@renderer/components/Styles/GlobalStyles';
-import { theme } from '@renderer/components/Styles/theme';
-import { isDevelopment } from '@shared/util';
 
-const RecoilizeDebugger = isDevelopment
-  ? require('recoilize').default
-  : () => null;
+import { AppContainer } from '@components/AppContainer';
+import { Header } from '@components/Header';
+import { GlobalStyles } from '@components/Styles/GlobalStyles';
+import { theme } from '@components/Styles/theme';
+
+import { StyledApp } from './Styled';
 
 export const App = () => (
   <RecoilRoot>
-    <RecoilizeDebugger />
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <StyledApp>
         <Header />
-        <AppContent />
+        <AppContainer />
       </StyledApp>
     </ThemeProvider>
   </RecoilRoot>

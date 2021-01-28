@@ -1,5 +1,6 @@
-import { StyledContainer, StyledMenuIconText } from './Styled';
 import { Icon } from '@components/Shared/index';
+
+import { StyledContainer, StyledMenuIconText } from './Styled';
 
 type Props = {
   width: number;
