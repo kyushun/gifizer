@@ -2,25 +2,34 @@ import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useSetRecoilState } from 'recoil';
 
-import { getFilename } from '@renderer/util';
+import { getFilename, changeExtension } from '@renderer/util';
 
-import { inputFileInfoState, inputFilePathState } from '@recoil/atoms';
+import {
+  inputFileInfoState,
+  inputFilePathState,
+  stringOptionStateFamily,
+} from '@recoil/atoms';
 
 export const useFileInputController = () => {
   const setInputFilePath = useSetRecoilState(inputFilePathState);
   const setInputFileInfo = useSetRecoilState(inputFileInfoState);
+  const setOptionFileName = useSetRecoilState(
+    stringOptionStateFamily('option/filename')
+  );
 
   const setFilePath = useCallback(async (filePath: string) => {
     if (filePath === '') return;
 
     const result = await window.api.inspectFile(filePath);
     if (result === undefined) {
+      // eslint-disable-next-line no-alert
       alert(`${getFilename(filePath)} is invalid file.`);
       return;
     }
 
     setInputFilePath(filePath);
     setInputFileInfo(result);
+    setOptionFileName(changeExtension(filePath, 'gif'));
   }, []);
 
   const onDrop = useCallback(async (files: File[]) => {
