@@ -17,8 +17,15 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'eslint-plugin-import-helpers'],
+  plugins: [
+    'react',
+    'react-hooks',
+    '@typescript-eslint',
+    'eslint-plugin-import-helpers',
+  ],
   rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'no-unused-expressions': 'off',
     'class-methods-use-this': 'off',
     'no-unused-vars': 'off',

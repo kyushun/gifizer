@@ -1,9 +1,9 @@
 import { OptionContainer } from './OptionContainer';
-import { PlayerContainer } from './PlayerContainer';
+import { VideoPlayer } from './VideoPlayer';
 
 export const Edit = () => (
   <>
-    <PlayerContainer />
+    <VideoPlayer />
     <OptionContainer />
   </>
 );

@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, protocol } from 'electron';
 import log from 'electron-log';
 import path from 'path';
 
@@ -26,12 +26,15 @@ const createWindow = async () => {
     show: false,
     width: 900,
     height: 550,
+    minWidth: 700,
+    minHeight: 400,
     titleBarStyle: 'hidden',
     trafficLightPosition: { x: 20, y: 36 },
-    resizable: !isProduction,
-    maximizable: false,
-    fullscreenable: false,
+    resizable: true,
+    maximizable: true,
+    fullscreenable: true,
     webPreferences: {
+      webSecurity: isProduction,
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
       contextIsolation: true,
@@ -52,8 +55,10 @@ const createWindow = async () => {
     if (process.env.START_MINIMIZED) {
       win.minimize();
     } else {
-      win.show();
-      win.focus();
+      if (!win.isVisible()) {
+        win.show();
+        win.focus();
+      }
       !isProduction && win.webContents.openDevTools({ mode: 'detach' });
     }
   });
@@ -66,7 +71,16 @@ const createWindow = async () => {
   menuBuilder.buildMenu();
 };
 
-app.whenReady().then(ipcRegister).then(createWindow);
+app
+  .whenReady()
+  .then(() => {
+    protocol.registerFileProtocol('file', (request, callback) => {
+      const pathname = decodeURI(request.url.replace('file:///', ''));
+      callback(pathname);
+    });
+  })
+  .then(ipcRegister)
+  .then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
