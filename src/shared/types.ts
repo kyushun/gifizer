@@ -12,6 +12,8 @@ export type ConvertOption = {
   height?: number;
   fps?: number;
   palette?: boolean;
+  startTime?: number;
+  endTime?: number;
 };
 
 export type ConvertProcessingStatus = {

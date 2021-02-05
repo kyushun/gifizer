@@ -61,6 +61,13 @@ export const convert = (filePath: string, option: ConvertOption) => {
     );
   }
 
+  if (option.startTime) {
+    command.inputOptions([`-ss ${option.startTime}`]);
+  }
+  if (option.endTime && (option.startTime || 0) < option.endTime) {
+    command.outputOptions([`-t ${option.endTime - (option.startTime || 0)}`]);
+  }
+
   option.palette &&
     command
       .videoFilters('split[a]')

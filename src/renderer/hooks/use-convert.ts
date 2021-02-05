@@ -17,13 +17,16 @@ export const useConvert = () => {
   const height = useRecoilValue(numberOptionStateFamily('option/height'));
   const fps = useRecoilValue(numberOptionStateFamily('option/fps'));
   const palette = useRecoilValue(boolOptionsStateFamily('option/palette'));
+  const startTime = useRecoilValue(numberOptionStateFamily('option/startTime'));
+  const endTime = useRecoilValue(numberOptionStateFamily('option/endTime'));
 
   const option: ConvertOption = useMemo(
-    () => ({ outputPath, width, height, fps, palette }),
-    [fps, height, outputPath, palette, width]
+    () => ({ outputPath, width, height, fps, palette, startTime, endTime }),
+    [fps, height, outputPath, palette, width, startTime, endTime]
   );
 
   const convert = useCallback(() => {
+    window.log.log(option);
     window.api.convert(inputFilePath, option);
   }, [inputFilePath, option]);
 

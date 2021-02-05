@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ComponentProps } from 'react';
 
 import { StyledInput } from './Styled';
 
@@ -9,7 +9,8 @@ type Props = {
   backgroundColor: string;
   placeholder?: string;
   center?: boolean;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: ComponentProps<'input'>['onChange'];
+  onBlur?: ComponentProps<'input'>['onBlur'];
 };
 
 export const Input = (props: Props) => {
@@ -22,6 +23,7 @@ export const Input = (props: Props) => {
       center={props.center}
       placeholder={props.placeholder}
       onChange={props.onChange}
+      onBlur={props.onBlur}
     />
   );
 };

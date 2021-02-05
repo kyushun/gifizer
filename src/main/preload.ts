@@ -4,6 +4,7 @@ import {
   OpenDialogReturnValue,
   shell,
 } from 'electron';
+import log from 'electron-log';
 import path from 'path';
 
 import { ConvertOption, ConvertStatus, InspectData } from '@shared/types';
@@ -16,6 +17,8 @@ contextBridge.exposeInMainWorld('process', {
 contextBridge.exposeInMainWorld('path', {
   ...path,
 });
+
+contextBridge.exposeInMainWorld('log', log.functions);
 
 export const apiContextBridge = {
   inspectFile: (filePath: string): Promise<InspectData | undefined> =>

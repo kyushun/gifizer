@@ -1,14 +1,19 @@
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+
+import { timeToSeconds, secToTimeString } from '@renderer/util';
 
 import { Icon, Input } from '@components/Shared/index';
 import { theme } from '@components/Styles/theme';
 
 import {
   stringOptionStateFamily,
-  numberOptionsStateFamilyString,
+  intOptionsStateFamilyString,
+  numberOptionStateFamily,
   boolOptionsStateFamily,
 } from '@recoil/atoms/index';
 
+import curIconSvg from './cut-icon.svg';
 import filenameIconSvg from './filename-icon.svg';
 import fpsIconSvg from './fps-icon.svg';
 import paletteIconSvg from './palette-icon.svg';
@@ -27,17 +32,62 @@ export const OptionContainer = () => {
     stringOptionStateFamily('option/filename')
   );
   const [widthState, setWidthState] = useRecoilState(
-    numberOptionsStateFamilyString('option/width')
+    intOptionsStateFamilyString('option/width')
   );
   const [heightState, setHeightState] = useRecoilState(
-    numberOptionsStateFamilyString('option/height')
+    intOptionsStateFamilyString('option/height')
   );
   const [fpsState, setFpsState] = useRecoilState(
-    numberOptionsStateFamilyString('option/fps')
+    intOptionsStateFamilyString('option/fps')
   );
   const [paletteState, setPaletteState] = useRecoilState(
     boolOptionsStateFamily('option/palette')
   );
+  const [startTime, setStartTime] = useRecoilState(
+    numberOptionStateFamily('option/startTime')
+  );
+  const [endTime, setEndTime] = useRecoilState(
+    numberOptionStateFamily('option/endTime')
+  );
+
+  const [inputStartTime, setInputStartTime] = useState('');
+  const [inputEndTime, setInputEndTime] = useState('');
+
+  const onStartTimeChanged = useCallback(
+    ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+      if (value === '') {
+        setStartTime(undefined);
+      } else {
+        const seconds = timeToSeconds(value);
+        setInputStartTime(secToTimeString(seconds));
+        setStartTime(seconds);
+      }
+    },
+    [setStartTime]
+  );
+
+  const onEndTimeChanged = useCallback(
+    ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+      if (value === '') {
+        setEndTime(undefined);
+      } else {
+        const seconds = timeToSeconds(value);
+        setInputEndTime(secToTimeString(seconds));
+        setEndTime(seconds);
+      }
+    },
+    [setEndTime]
+  );
+
+  useEffect(() => {
+    setInputStartTime(
+      startTime !== undefined ? secToTimeString(startTime) : ''
+    );
+  }, [startTime]);
+
+  useEffect(() => {
+    setInputEndTime(endTime !== undefined ? secToTimeString(endTime) : '');
+  }, [endTime]);
 
   return (
     <StyledContainer>
@@ -98,6 +148,38 @@ export const OptionContainer = () => {
           />
         </StyledItemSpacer>
         FPS
+      </StyledItem>
+
+      <StyledItemName>Cut</StyledItemName>
+      <StyledItem>
+        <StyledItemSpacer>
+          <Icon icon={curIconSvg} size={22} />
+        </StyledItemSpacer>
+        <StyledItemSpacer>
+          <Input
+            type="text"
+            value={inputStartTime}
+            width={75}
+            backgroundColor={theme.palette.mainSilent}
+            center
+            placeholder="Auto"
+            onChange={(e) => setInputStartTime(e.target.value)}
+            onBlur={onStartTimeChanged}
+          />
+        </StyledItemSpacer>
+        <StyledItemSpacer>-</StyledItemSpacer>
+        <StyledItemSpacer>
+          <Input
+            type="text"
+            value={inputEndTime}
+            width={75}
+            backgroundColor={theme.palette.mainSilent}
+            center
+            placeholder="Auto"
+            onChange={(e) => setInputEndTime(e.target.value)}
+            onBlur={onEndTimeChanged}
+          />
+        </StyledItemSpacer>
       </StyledItem>
 
       <StyledItemName>Palette</StyledItemName>

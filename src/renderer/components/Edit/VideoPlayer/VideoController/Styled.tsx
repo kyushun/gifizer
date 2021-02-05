@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledIconWrapper = styled.div`
+  margin: 0 6px;
   padding: 8px;
   border-radius: 4px;
 
@@ -27,5 +28,5 @@ export const StyledVideoControllerButtons = styled.div`
 `;
 
 export const StyledSeekBarWrapper = styled.div`
-  margin-top: 16px;
+  margin-top: 8px;
 `;
