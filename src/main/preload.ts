@@ -1,7 +1,12 @@
-import { contextBridge, ipcRenderer, OpenDialogReturnValue } from 'electron';
+import {
+  contextBridge,
+  ipcRenderer,
+  OpenDialogReturnValue,
+  shell,
+} from 'electron';
 import path from 'path';
 
-import { InspectData } from '@shared/types';
+import { ConvertOption, ConvertStatus, InspectData } from '@shared/types';
 
 contextBridge.exposeInMainWorld('process', {
   env: process.env,
@@ -17,6 +22,18 @@ export const apiContextBridge = {
     ipcRenderer.invoke('inspect-file', filePath),
   showOpenDialog: (): Promise<OpenDialogReturnValue> =>
     ipcRenderer.invoke('show-open-dialog'),
+  convert: (filePath: string, option: ConvertOption) =>
+    ipcRenderer.send('convert', filePath, option),
+  onConvertStatus: (callback: (status: ConvertStatus) => void) => {
+    const listener = (_: any, status: ConvertStatus) => callback(status);
+    ipcRenderer.on('convert-status', listener);
+
+    return () => {
+      ipcRenderer.removeListener('convert-status', listener);
+    };
+  },
+  cancel: () => ipcRenderer.send('cancel'),
+  revealFile: (filePath: string) => shell.showItemInFolder(filePath),
 };
 
 contextBridge.exposeInMainWorld('api', apiContextBridge);

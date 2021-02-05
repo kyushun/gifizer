@@ -2,7 +2,7 @@ import log from 'electron-log';
 import ffmpeg from 'fluent-ffmpeg';
 import { promisify } from 'util';
 
-import { InspectData } from '@shared/types';
+import { ConvertOption, InspectData } from '@shared/types';
 
 const ffprobeAsync = promisify<string, ffmpeg.FfprobeData>(ffmpeg.ffprobe);
 
@@ -44,4 +44,28 @@ export const inspectFile = async (
     height: videoStream.height || 0,
     fps,
   };
+};
+
+export const convert = (filePath: string, option: ConvertOption) => {
+  const command = ffmpeg()
+    .input(filePath)
+    .format('gif')
+    .withNoAudio()
+    .output(option.outputPath);
+
+  option.fps && command.videoFilters(`fps=${option.fps}`);
+
+  if (option.width || option.height) {
+    command.videoFilters(
+      `scale=w=${option.width || -1}:h=${option.height || -1}`
+    );
+  }
+
+  option.palette &&
+    command
+      .videoFilters('split[a]')
+      .videoFilters('palettegen')
+      .videoFilters('[a]paletteuse');
+
+  return command;
 };

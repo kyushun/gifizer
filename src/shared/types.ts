@@ -5,3 +5,28 @@ export type InspectData = {
   height: number;
   fps: number;
 };
+
+export type ConvertOption = {
+  outputPath: string;
+  width?: number;
+  height?: number;
+  fps?: number;
+  palette?: boolean;
+};
+
+export type ConvertProcessingStatus = {
+  status: 'PROCESSING';
+  progress: number;
+};
+export type ConvertErrorStatus = {
+  status: 'ERROR' | 'CANCELED';
+  message: string;
+};
+export type ConvertEndStatus = {
+  status: 'END';
+};
+
+export type ConvertStatus =
+  | ConvertProcessingStatus
+  | ConvertErrorStatus
+  | ConvertEndStatus;

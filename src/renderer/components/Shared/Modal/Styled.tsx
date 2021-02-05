@@ -6,7 +6,7 @@ export const StyledContainer = styled.div<{ isVisible: boolean }>`
   left: 0;
   width: 100%;
   height: calc(100% - 52px);
-  background-color: ${({ theme }) => theme.palette.hover};
+  background-color: rgba(0, 0, 0, 0.3);
   opacity: ${({ isVisible: visible }) => (visible ? '1' : '0')};
   backdrop-filter: ${({ theme }) => theme.palette.backdropBlur};
   transition: opacity 0.2s;

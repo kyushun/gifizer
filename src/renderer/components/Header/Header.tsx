@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 
 import { getFilename } from '@renderer/util';
 
-import { useFileInputController } from '@hooks/use-file-input-controller';
+import { useConvert, useFileInputController } from '@hooks/index';
 
 import { inputFilePathState } from '@recoil/atoms';
 
@@ -21,6 +21,7 @@ import {
 export const Header = () => {
   const inputFilePath = useRecoilValue(inputFilePathState);
   const { setFilePath } = useFileInputController();
+  const { convert } = useConvert();
 
   const onClickOpenFile = useCallback(async () => {
     const result = await window.api.showOpenDialog();
@@ -45,7 +46,7 @@ export const Header = () => {
         {getFilename(inputFilePath) || 'Gifizer'}
       </StyledHeaderAppName>
 
-      <StyledMenuIconWrapper right={30}>
+      <StyledMenuIconWrapper right={30} onClick={convert}>
         <MenuIcon width={60} icon={convertIconSvg} text="Convert" />
       </StyledMenuIconWrapper>
     </StyledHeaderWrapper>
