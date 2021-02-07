@@ -1,8 +1,22 @@
 import log from 'electron-log';
 import ffmpeg from 'fluent-ffmpeg';
+import path from 'path';
 import { promisify } from 'util';
 
 import { ConvertOption, InspectData } from '@shared/types';
+import { isDarwin, isProduction } from '@shared/util';
+
+const getFfmpegPath = (binaryType: 'ffmpeg' | 'ffprobe') => {
+  const binaryDir = 'node_modules/ffmpeg-ffprobe-static';
+  const exe = isDarwin ? binaryType : `${binaryType}.exe`;
+
+  return isProduction
+    ? path.join(process.resourcesPath, binaryDir, exe)
+    : path.join(binaryDir, exe);
+};
+
+ffmpeg.setFfmpegPath(getFfmpegPath('ffmpeg'));
+ffmpeg.setFfprobePath(getFfmpegPath('ffprobe'));
 
 const ffprobeAsync = promisify<string, ffmpeg.FfprobeData>(ffmpeg.ffprobe);
 

@@ -36,21 +36,35 @@
     "productName": "Gifizer",
     "appId": "com.kyushun.app.gifizer",
     "artifactName": "${productName}-${version}-${os}.${ext}",
+    "files": [
+      "build"
+    ],
+    "extraResources": [
+      "build/preload.js"
+    ],
     "mac": {
       "category": "public.app-category.graphics-design",
       "target": "dmg",
-      "icon": "src/renderer/assets/icon.png"
+      "icon": "src/assets/icon.png",
+      "extraResources": [
+        "node_modules/ffmpeg-ffprobe-static/ffmpeg",
+        "node_modules/ffmpeg-ffprobe-static/ffprobe"
+      ],
+      "electronLanguages": [
+        "en"
+      ]
     },
     "win": {
       "target": [
         "nsis",
         "zip"
       ],
-      "icon": "src/renderer/assets/icon.ico"
-    },
-    "files": [
-      "build/"
-    ]
+      "icon": "src/assets/icon-win.png",
+      "extraResources": [
+        "node_modules/ffmpeg-ffprobe-static/ffmpeg.exe",
+        "node_modules/ffmpeg-ffprobe-static/ffprobe.exe"
+      ]
+    }
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -106,6 +120,7 @@
     "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "ffmpeg-ffprobe-static": "^4.3.1-rc.6",
     "html-webpack-plugin": "^5.0.0-beta.1",
     "husky": "^4.3.6",
     "lint-staged": "^10.5.3",

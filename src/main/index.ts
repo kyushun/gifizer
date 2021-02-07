@@ -38,7 +38,9 @@ const createWindow = async () => {
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
       contextIsolation: true,
-      preload: path.join(__dirname, './preLoad.js'),
+      preload: isProduction
+        ? path.join(process.resourcesPath, 'build', './preLoad.js')
+        : path.join(__dirname, './preLoad.js'),
     },
   });
 
