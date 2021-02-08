@@ -28,6 +28,7 @@ const createWindow = async () => {
     height: 550,
     minWidth: 700,
     minHeight: 400,
+    frame: false,
     titleBarStyle: 'hidden',
     trafficLightPosition: { x: 20, y: 36 },
     resizable: true,

@@ -21,6 +21,9 @@ contextBridge.exposeInMainWorld('path', {
 contextBridge.exposeInMainWorld('log', log.functions);
 
 export const apiContextBridge = {
+  minimizeWindow: () => ipcRenderer.send('minimize-window'),
+  maximizeWindow: () => ipcRenderer.send('maximize-window'),
+  closeWindow: () => ipcRenderer.send('close-window'),
   inspectFile: (filePath: string): Promise<InspectData | undefined> =>
     ipcRenderer.invoke('inspect-file', filePath),
   showOpenDialog: (): Promise<OpenDialogReturnValue> =>

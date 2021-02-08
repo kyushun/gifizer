@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { isDarwin } from '@shared/util';
+
 export const StyledHeaderWrapper = styled.div`
   position: relative;
   display: flex;
@@ -8,8 +10,8 @@ export const StyledHeaderWrapper = styled.div`
   width: 100%;
   height: 52px;
   background-color: ${({ theme }) => theme.palette.mainAccent};
-  -webkit-user-select: none;
-  -webkit-app-region: drag;
+  user-select: none;
+  -webkit-app-region: ${isDarwin ? 'drag' : undefined};
 `;
 
 export const StyledHeaderAppName = styled.div`

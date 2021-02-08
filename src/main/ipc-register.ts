@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import log from 'electron-log';
 import { FfmpegCommand } from 'fluent-ffmpeg';
 
@@ -9,6 +9,20 @@ import { convert, inspectFile } from './lib/ffmpeg';
 let ffcommand: FfmpegCommand | undefined;
 
 export const ipcRegister = () => {
+  ipcMain.on('minimize-window', () => {
+    const win = BrowserWindow.getFocusedWindow();
+    win?.isMinimized() ? win.restore() : win?.minimize();
+  });
+
+  ipcMain.on('maximize-window', () => {
+    const win = BrowserWindow.getFocusedWindow();
+    win?.isMaximized() ? win.unmaximize() : win?.maximize();
+  });
+
+  ipcMain.on('close-window', () => {
+    app.quit();
+  });
+
   ipcMain.handle('inspect-file', async (_, filePath: string) => {
     const result = await inspectFile(filePath);
     return result;

@@ -7,16 +7,17 @@ import { useConvert, useFileInputController } from '@hooks/index';
 
 import { inputFilePathState } from '@recoil/atoms';
 
+import { isDarwin } from '@shared/util';
+
 import addFileIconSvg from './add-file-icon.svg';
 import convertIconSvg from './convert-icon.svg';
-import cropIconSvg from './crop-icon.svg';
-import cutIconSvg from './cut-icon.svg';
 import { MenuIcon } from './MenuIcon';
 import {
   StyledHeaderAppName,
   StyledHeaderWrapper,
   StyledMenuIconWrapper,
 } from './Styled';
+import { TitleBar } from './TitleBar';
 
 export const Header = () => {
   const inputFilePath = useRecoilValue(inputFilePathState);
@@ -31,24 +32,26 @@ export const Header = () => {
   }, []);
 
   return (
-    <StyledHeaderWrapper>
-      <StyledMenuIconWrapper left={100} onClick={onClickOpenFile}>
-        <MenuIcon width={60} icon={addFileIconSvg} text="Open File" />
-      </StyledMenuIconWrapper>
-      <StyledMenuIconWrapper left={160}>
-        <MenuIcon width={50} icon={cutIconSvg} text="Cut" />
-      </StyledMenuIconWrapper>
-      <StyledMenuIconWrapper left={210}>
-        <MenuIcon width={50} icon={cropIconSvg} text="Crop" />
-      </StyledMenuIconWrapper>
+    <>
+      {!isDarwin && <TitleBar />}
+      <StyledHeaderWrapper>
+        <StyledMenuIconWrapper
+          left={isDarwin ? 100 : 15}
+          onClick={onClickOpenFile}
+        >
+          <MenuIcon width={60} icon={addFileIconSvg} text="Open File" />
+        </StyledMenuIconWrapper>
 
-      <StyledHeaderAppName>
-        {getFilename(inputFilePath) || 'Gifizer'}
-      </StyledHeaderAppName>
+        {isDarwin && (
+          <StyledHeaderAppName>
+            {getFilename(inputFilePath) || 'Gifizer'}
+          </StyledHeaderAppName>
+        )}
 
-      <StyledMenuIconWrapper right={30} onClick={convert}>
-        <MenuIcon width={60} icon={convertIconSvg} text="Convert" />
-      </StyledMenuIconWrapper>
-    </StyledHeaderWrapper>
+        <StyledMenuIconWrapper right={isDarwin ? 30 : 15} onClick={convert}>
+          <MenuIcon width={60} icon={convertIconSvg} text="Convert" />
+        </StyledMenuIconWrapper>
+      </StyledHeaderWrapper>
+    </>
   );
 };

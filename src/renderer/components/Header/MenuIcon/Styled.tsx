@@ -8,7 +8,8 @@ export const StyledContainer = styled.div<{ width: number }>`
   justify-content: center;
   align-items: center;
   border-radius: 6px;
-  -webkit-user-select: none;
+  user-select: none;
+  -webkit-app-region: none;
 
   &:hover {
     background-color: ${({ theme }) => theme.palette.hover};

@@ -6,6 +6,7 @@ export const StyledContainer = styled.div`
   height: 100%;
   background-color: ${({ theme }) => theme.palette.mainNormal};
   box-sizing: border-box;
+  overflow-y: auto;
 `;
 
 export const StyledTitle = styled.div`
