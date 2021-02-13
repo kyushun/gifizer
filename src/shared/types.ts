@@ -14,6 +14,12 @@ export type ConvertOption = {
   palette?: boolean;
   startTime?: number;
   endTime?: number;
+  crop: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 };
 
 export type ConvertProcessingStatus = {

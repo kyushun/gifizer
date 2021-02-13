@@ -6,7 +6,8 @@ import { useVideoController } from '@hooks/index';
 
 import { inputFilePathState } from '@recoil/atoms';
 
-import { StyledContainer, StyledVideo } from './Styled';
+import { Crop } from './Crop';
+import { StyledContainer, StyledVideoWrapper, StyledVideo } from './Styled';
 import { VideoController } from './VideoController';
 
 export const VideoPlayer = () => {
@@ -59,12 +60,15 @@ export const VideoPlayer = () => {
 
   return (
     <StyledContainer>
-      <StyledVideo
-        ref={videoRef}
-        src={`file:${filePath}`}
-        preload="auto"
-        onClick={togglePlaying}
-      />
+      <StyledVideoWrapper>
+        <StyledVideo
+          ref={videoRef}
+          src={`file:${filePath}`}
+          preload="auto"
+          onClick={togglePlaying}
+        />
+        <Crop />
+      </StyledVideoWrapper>
       <VideoController videoRef={videoRef} />
     </StyledContainer>
   );

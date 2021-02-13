@@ -6,6 +6,7 @@ import {
   stringOptionStateFamily,
   numberOptionStateFamily,
   boolOptionsStateFamily,
+  cropOptionState,
 } from '@recoil/atoms/index';
 
 import { ConvertOption } from '@shared/types';
@@ -19,10 +20,20 @@ export const useConvert = () => {
   const palette = useRecoilValue(boolOptionsStateFamily('option/palette'));
   const startTime = useRecoilValue(numberOptionStateFamily('option/startTime'));
   const endTime = useRecoilValue(numberOptionStateFamily('option/endTime'));
+  const crop = useRecoilValue(cropOptionState);
 
   const option: ConvertOption = useMemo(
-    () => ({ outputPath, width, height, fps, palette, startTime, endTime }),
-    [fps, height, outputPath, palette, width, startTime, endTime]
+    () => ({
+      outputPath,
+      width,
+      height,
+      fps,
+      palette,
+      startTime,
+      endTime,
+      crop,
+    }),
+    [fps, height, outputPath, palette, width, startTime, endTime, crop]
   );
 
   const convert = useCallback(() => {

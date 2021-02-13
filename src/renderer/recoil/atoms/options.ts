@@ -1,4 +1,6 @@
-import { atomFamily, selectorFamily } from 'recoil';
+import { atom, atomFamily, selectorFamily } from 'recoil';
+
+import { ConvertOption } from '@shared/types';
 
 type StringOptions = 'option/filename';
 
@@ -61,4 +63,14 @@ const DefaultboolOptionsValue: {
 export const boolOptionsStateFamily = atomFamily<boolean, boolOptions>({
   key: 'option/bool-options',
   default: (param) => DefaultboolOptionsValue[param],
+});
+
+export const cropOptionState = atom<ConvertOption['crop']>({
+  key: 'cropOptionState',
+  default: {
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+  },
 });

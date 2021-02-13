@@ -67,6 +67,13 @@ export const convert = (filePath: string, option: ConvertOption) => {
     .withNoAudio()
     .output(option.outputPath);
 
+  if (option.startTime) {
+    command.inputOptions([`-ss ${option.startTime}`]);
+  }
+  if (option.endTime && (option.startTime || 0) < option.endTime) {
+    command.outputOptions([`-t ${option.endTime - (option.startTime || 0)}`]);
+  }
+
   option.fps && command.videoFilters(`fps=${option.fps}`);
 
   if (option.width || option.height) {
@@ -75,11 +82,20 @@ export const convert = (filePath: string, option: ConvertOption) => {
     );
   }
 
-  if (option.startTime) {
-    command.inputOptions([`-ss ${option.startTime}`]);
-  }
-  if (option.endTime && (option.startTime || 0) < option.endTime) {
-    command.outputOptions([`-t ${option.endTime - (option.startTime || 0)}`]);
+  if (
+    option.crop.x !== 0 ||
+    option.crop.y !== 0 ||
+    option.crop.width !== 100 ||
+    option.crop.height !== 100
+  ) {
+    const width = `in_w*(${option.crop.width}/100)`;
+    const height = `in_h*(${option.crop.height}/100)`;
+    const x = `in_w*(${option.crop.x}/100)`;
+    const y = `in_h*(${option.crop.y}/100)`;
+
+    const crop = `crop=${width}:${height}:${x}:${y}`;
+
+    command.videoFilters(crop);
   }
 
   option.palette &&
