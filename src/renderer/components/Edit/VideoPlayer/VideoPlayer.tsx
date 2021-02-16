@@ -63,7 +63,7 @@ export const VideoPlayer = () => {
       <StyledVideoWrapper>
         <StyledVideo
           ref={videoRef}
-          src={`file:${filePath}`}
+          src={filePath && `file:${filePath}`}
           preload="auto"
           onClick={togglePlaying}
         />

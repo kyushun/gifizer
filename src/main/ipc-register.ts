@@ -33,41 +33,48 @@ export const ipcRegister = () => {
     return result;
   });
 
-  ipcMain.on('convert', (event, filePath: string, option: ConvertOption) => {
-    ffcommand = convert(filePath, option);
+  ipcMain.handle(
+    'convert',
+    async (event, filePath: string, option: ConvertOption) => {
+      ffcommand = convert(filePath, option);
 
-    const sendStatus = (status: ConvertStatus) => {
-      event.sender.send('convert-status', status);
-    };
+      const sendStatus = (status: ConvertStatus) => {
+        event.sender.send('convert-status', status);
+      };
 
-    ffcommand
-      .on('start', (commandLine) => {
-        log.info(`Command: ${commandLine}`);
-        sendStatus({ status: 'PROCESSING', progress: 0 });
-      })
-      .on('progress', (progress) => {
-        log.info(`Processing: ${progress.percent}% done`);
-        sendStatus({ status: 'PROCESSING', progress: progress.percent });
-      })
-      .on('error', (err) => {
-        if (/SIGKILL/.test(err.message)) {
-          log.info('Convert has been cancelled.');
-          sendStatus({
-            status: 'CANCELED',
-            message: 'Convert has been cancelled.',
-          });
-        } else {
-          log.error(`Cannot process video: ${err.message}`);
-          sendStatus({ status: 'ERROR', message: err.message });
-        }
-      })
-      .on('end', () => {
-        log.info('Finished processing');
-        sendStatus({ status: 'END' });
-      });
+      ffcommand
+        .on('start', (commandLine) => {
+          log.info(`Command: ${commandLine}`);
+          sendStatus({ status: 'PROCESSING', progress: 0 });
+        })
+        .on('progress', (progress) => {
+          log.info(`Processing: ${progress.percent}% done`);
+          sendStatus({ status: 'PROCESSING', progress: progress.percent });
+        })
+        .on('error', (err) => {
+          if (/SIGKILL/.test(err.message)) {
+            log.info('Convert has been cancelled.');
+            sendStatus({
+              status: 'CANCELED',
+              message: 'Convert has been cancelled.',
+            });
+          } else {
+            log.error(`Cannot process video: ${err.message}`);
+            sendStatus({ status: 'ERROR', message: err.message });
+          }
+        })
+        .on('end', () => {
+          log.info('Finished processing');
+          sendStatus({ status: 'END' });
+        });
 
-    ffcommand.run();
-  });
+      try {
+        ffcommand.run();
+      } catch (e) {
+        Promise.reject(e);
+      }
+    }
+  );
 
   ipcMain.on('cancel', () => {
     ffcommand?.kill('SIGKILL');
