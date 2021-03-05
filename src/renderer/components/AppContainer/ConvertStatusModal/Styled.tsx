@@ -7,6 +7,7 @@ export const StyledConvertStatusModalWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  pointer-events: auto;
 `;
 
 export const StyledConvertStatusModalTitle = styled.div`
