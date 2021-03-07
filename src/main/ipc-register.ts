@@ -29,7 +29,8 @@ export const ipcRegister = () => {
   });
 
   ipcMain.handle('show-open-dialog', async () => {
-    const result = await dialog.showOpenDialog({});
+    const win = BrowserWindow.getFocusedWindow();
+    const result = dialog.showOpenDialog(win || (undefined as any), {});
     return result;
   });
 
