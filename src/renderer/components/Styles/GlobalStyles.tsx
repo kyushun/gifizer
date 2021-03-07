@@ -15,6 +15,7 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.palette.textNormal};
     background-color: ${({ theme }) => theme.palette.mainSilent};
     overflow-y: hidden;
+    user-select: none;
   }
 
   #root {
