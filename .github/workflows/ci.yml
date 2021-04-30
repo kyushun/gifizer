@@ -23,7 +23,7 @@ jobs:
         run: yarn install
 
       - name: Build app
-        run: yarn build
+        run: yarn package
 
       - name: Prepare uploads
         run: find ./dist -mindepth 1 -maxdepth 1 -not \( -name "Gifizer-*-mac.dmg" -or -name "Gifizer-*-win.exe" -or -name "Gifizer-*-win.zip" \) | xargs rm -rf
