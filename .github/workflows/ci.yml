@@ -1,0 +1,36 @@
+name: CI
+
+on: push
+
+jobs:
+  Build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build app
+        run: yarn build
+
+      - name: Prepare uploads
+        run: find ./dist -mindepth 1 -maxdepth 1 -not \( -name "Gifizer-*-mac.dmg" -or -name "Gifizer-*-win.exe" -or -name "Gifizer-*-win.zip" \) | xargs rm -rf
+        shell: bash
+
+      - name: Upload built files
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist-${{ matrix.os }}
+          path: dist
