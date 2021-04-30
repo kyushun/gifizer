@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledTitleBarWrapper = styled.div`
+export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,17 +12,17 @@ export const StyledTitleBarWrapper = styled.div`
   -webkit-app-region: drag;
 `;
 
-export const StyledTitleBarText = styled.div`
+export const TitleText = styled.div`
   font-size: 11px;
 `;
 
-export const StyledTitleBarControllWrapper = styled.div`
+export const Controller = styled.div`
   display: flex;
   height: 100%;
   -webkit-app-region: none;
 `;
 
-export const StyledTitleBarControllIcon = styled.div`
+export const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,9 +34,7 @@ export const StyledTitleBarControllIcon = styled.div`
   }
 `;
 
-export const StyledTitleBarControllCloseIcon = styled(
-  StyledTitleBarControllIcon
-)`
+export const CloseIconWrapper = styled(IconWrapper)`
   &:hover {
     background-color: #d61424;
   }

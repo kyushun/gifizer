@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/react';
 
+import { MenuIcon } from '.';
 import convertIconSvg from '../convert-icon.svg';
-import { MenuIcon } from './MenuIcon';
 
 export default {
   title: 'Header/MenuIcon',

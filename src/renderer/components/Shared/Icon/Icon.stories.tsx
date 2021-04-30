@@ -1,7 +1,7 @@
 import { Story, Meta } from '@storybook/react';
 
+import { Icon } from '.';
 import convertIconSvg from './convert-icon.svg';
-import { Icon } from './Icon';
 
 export default {
   title: 'Shared/Icon',

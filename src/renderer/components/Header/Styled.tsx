@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { isDarwin } from '@shared/util';
 
-export const StyledHeaderWrapper = styled.div`
+export const Container = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
@@ -14,14 +14,14 @@ export const StyledHeaderWrapper = styled.div`
   -webkit-app-region: ${isDarwin ? 'drag' : undefined};
 `;
 
-export const StyledHeaderAppName = styled.div`
+export const AppName = styled.div`
   font-weight: bold;
   font-size: 14px;
   line-height: 18px;
   color: ${({ theme }) => theme.palette.textNormal};
 `;
 
-export const StyledMenuIconWrapper = styled.div<{
+export const IconWrapper = styled.div<{
   left?: number;
   right?: number;
 }>`

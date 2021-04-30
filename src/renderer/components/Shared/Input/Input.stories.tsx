@@ -5,7 +5,7 @@ import { ComponentProps } from '@renderer/util/index';
 
 import { theme } from '@components/Styles/theme';
 
-import { Input } from './Input';
+import { Input } from '.';
 
 export default {
   title: 'Shared/Input',

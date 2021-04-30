@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledContainer = styled.div<{ width: number }>`
+export const Container = styled.div<{ width: number }>`
   width: ${({ width }) => `${width}px`};
   height: 40px;
   display: flex;
@@ -20,7 +20,7 @@ export const StyledContainer = styled.div<{ width: number }>`
   }
 `;
 
-export const StyledMenuIconText = styled.div`
+export const Text = styled.div`
   font-size: 10px;
   color: ${({ theme }) => theme.palette.textNormal};
 `;

@@ -1,12 +1,10 @@
 import styled from 'styled-components';
 
-type StyledInputProps = {
+export const Input = styled.input<{
   width?: number;
   backgroundColor: string;
   center?: boolean;
-};
-
-export const StyledInput = styled.input<StyledInputProps>`
+}>`
   padding: 6px 12px;
   width: ${({ width }) => (width ? `${width}px` : '100%')};
   color: ${({ theme }) => theme.palette.textNormal};

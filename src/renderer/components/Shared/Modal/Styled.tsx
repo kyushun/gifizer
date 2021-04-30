@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledContainer = styled.div<{ isVisible: boolean }>`
+export const Container = styled.div<{ isVisible: boolean }>`
   position: absolute;
   top: 52px;
   left: 0;
