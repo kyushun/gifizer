@@ -22,7 +22,7 @@
     "build:production": "cross-env NODE_ENV=production webpack",
     "build:main": "cross-env NODE_ENV=development webpack --config-name=main --config-name=preload",
     "build:renderer": "cross-env NODE_ENV=development webpack --config-name=renderer",
-    "package": "yarn build:production && electron-builder",
+    "package": "yarn build:production && electron-builder --publish=never",
     "clean": "rimraf dist build",
     "start": "run-p -l -r start:renderer start:main",
     "start:main": "yarn build:main &&  electron .",
