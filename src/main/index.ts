@@ -1,5 +1,6 @@
-import { app, BrowserWindow, protocol } from 'electron';
+import { app, BrowserWindow, dialog, protocol } from 'electron';
 import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
 import path from 'path';
 
 import { isProduction } from '@shared/util';
@@ -8,6 +9,9 @@ import { ipcRegister } from './ipc-register';
 import MenuBuilder from './menu';
 
 let win: BrowserWindow | null;
+
+autoUpdater.logger = log;
+log.transports.file.level = 'info';
 
 const installExtensions = async () => {
   // eslint-disable-next-line global-require
@@ -83,7 +87,10 @@ app
     });
   })
   .then(ipcRegister)
-  .then(createWindow);
+  .then(createWindow)
+  .then(async () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -95,4 +102,24 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+autoUpdater.on('update-downloaded', () => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    defaultId: 0,
+    message: 'Software Update',
+    detail: 'A New version has been downloaded. Would you like to install now?',
+  };
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) {
+      autoUpdater.quitAndInstall();
+    }
+  });
+});
+
+autoUpdater.on('error', (err) => {
+  log.error(process.pid, err);
 });

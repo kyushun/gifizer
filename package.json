@@ -55,10 +55,7 @@
       ]
     },
     "win": {
-      "target": [
-        "nsis",
-        "zip"
-      ],
+      "target": "nsis",
       "icon": "src/assets/icon-win.png",
       "extraResources": [
         "node_modules/ffmpeg-ffprobe-static/ffmpeg.exe",
@@ -78,6 +75,7 @@
   },
   "dependencies": {
     "electron-log": "^4.3.1",
+    "electron-updater": "^4.3.8",
     "fluent-ffmpeg": "^2.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
