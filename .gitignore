@@ -19,3 +19,6 @@ dist
 
 .idea
 npm-debug.log.*
+
+.env
+.envrc

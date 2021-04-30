@@ -22,7 +22,7 @@
     "build:production": "cross-env NODE_ENV=production webpack",
     "build:main": "cross-env NODE_ENV=development webpack --config-name=main --config-name=preload",
     "build:renderer": "cross-env NODE_ENV=development webpack --config-name=renderer",
-    "package": "yarn build:production && electron-builder --publish=never",
+    "package": "yarn build:production && electron-builder",
     "clean": "rimraf dist build",
     "start": "run-p -l -r start:renderer start:main",
     "start:main": "yarn build:main &&  electron .",
@@ -42,6 +42,7 @@
     "extraResources": [
       "build/preload.js"
     ],
+    "afterSign": "scripts/notarize.js",
     "mac": {
       "category": "public.app-category.graphics-design",
       "target": "dmg",
@@ -108,6 +109,7 @@
     "electron": "^11.1.1",
     "electron-builder": "^22.9.1",
     "electron-devtools-installer": "^3.1.1",
+    "electron-notarize": "^1.0.0",
     "eslint": "^7.16.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^7.1.0",
