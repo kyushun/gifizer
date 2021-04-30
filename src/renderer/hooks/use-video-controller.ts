@@ -1,10 +1,11 @@
-import { RefObject, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { inputFilePathState } from '@recoil/atoms';
+import { inputFilePathState, playerRefState } from '@recoil/atoms';
 
-export const useVideoController = (videoRef: RefObject<HTMLVideoElement>) => {
+export const useVideoController = () => {
   const filePath = useRecoilValue(inputFilePathState);
+  const videoRef = useRecoilValue(playerRefState);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);

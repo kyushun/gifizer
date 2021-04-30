@@ -25,6 +25,7 @@ export const Container = styled.div`
 
 export const PlayerWrapper = styled.div`
   position: relative;
+  will-change: width, height;
 `;
 
 export const Player = styled.video`

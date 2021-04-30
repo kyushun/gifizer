@@ -1,17 +1,11 @@
-import { ChangeEvent, RefObject, useCallback } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 
 import { useVideoController } from '@hooks/index';
 
 import * as Styled from './Styled';
 
-type Props = {
-  videoRef: RefObject<HTMLVideoElement>;
-};
-
-export const SeekBar = (props: Props) => {
-  const { currentTime, duration, pause, seekTo } = useVideoController(
-    props.videoRef
-  );
+export const SeekBar = () => {
+  const { currentTime, duration, pause, seekTo } = useVideoController();
 
   const onMouseDown = useCallback(() => {
     pause();

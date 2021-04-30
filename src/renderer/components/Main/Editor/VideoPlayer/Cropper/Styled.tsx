@@ -20,6 +20,7 @@ export const Cropper = styled.div`
   position: absolute;
   background-color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
+  will-change: top, left, width, height;
 `;
 
 export const Corner = styled.div<{ 'data-crop-type': CropType }>`

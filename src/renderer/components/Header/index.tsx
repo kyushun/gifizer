@@ -25,7 +25,7 @@ export const Header = () => {
     if (result.canceled || result.filePaths.length < 1) return;
 
     setFilePath(result.filePaths[0]);
-  }, []);
+  }, [setFilePath]);
 
   return (
     <>

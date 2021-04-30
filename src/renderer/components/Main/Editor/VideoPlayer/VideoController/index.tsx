@@ -1,9 +1,4 @@
-import { RefObject, useCallback } from 'react';
-import { useSetRecoilState } from 'recoil';
-
 import { useVideoController } from '@hooks/index';
-
-import { numberOptionStateFamily } from '@recoil/atoms/index';
 
 import backwardIconSvg from './backward-icon.svg';
 import forwardIconSvg from './forward-icon.svg';
@@ -11,35 +6,19 @@ import pauseIconSvg from './pause-icon.svg';
 import playIconSvg from './play-icon.svg';
 import { SeekBar } from './SeekBar';
 import * as Styled from './Styled';
+import { useSetOptionTime } from './use-set-option-time';
 import { VideoControllerIcon } from './VideoControllerIcon';
 import { VideoTime } from './VideoTime';
 
-type Props = {
-  videoRef: RefObject<HTMLVideoElement>;
-};
-
-export const VideoController = (props: Props) => {
+export const VideoController = () => {
   const {
     isPlaying,
     togglePlaying,
     duration,
     currentTime,
-  } = useVideoController(props.videoRef);
+  } = useVideoController();
 
-  const setStartTime = useSetRecoilState(
-    numberOptionStateFamily('option/startTime')
-  );
-  const setEndTime = useSetRecoilState(
-    numberOptionStateFamily('option/endTime')
-  );
-
-  const onBackwardClicked = useCallback(() => {
-    setStartTime(currentTime);
-  }, [currentTime, setStartTime]);
-
-  const onForwardClicked = useCallback(() => {
-    setEndTime(currentTime);
-  }, [currentTime, setEndTime]);
+  const { onBackwardClicked, onForwardClicked } = useSetOptionTime();
 
   return (
     <Styled.Container>
@@ -58,7 +37,7 @@ export const VideoController = (props: Props) => {
       <VideoTime currentTime={currentTime} duration={duration} />
 
       <Styled.SeekBarWrapper>
-        <SeekBar videoRef={props.videoRef} />
+        <SeekBar />
       </Styled.SeekBarWrapper>
     </Styled.Container>
   );

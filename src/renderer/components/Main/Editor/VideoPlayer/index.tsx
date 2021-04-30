@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { useEffect, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useVideoController } from '@hooks/index';
 
-import { inputFilePathState } from '@recoil/atoms';
+import { inputFilePathState, playerRefState } from '@recoil/atoms';
 
 import { Cropper } from './Cropper';
 import * as Styled from './Styled';
+import { useKeyInput } from './use-key-input';
 import { usePlayerSizeSetter } from './use-player-size-setter';
 import { VideoController } from './VideoController';
 
@@ -15,53 +16,17 @@ export const VideoPlayer = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerSizeRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
   const filePath = useRecoilValue(inputFilePathState);
-
-  const { togglePlaying } = useVideoController(videoRef);
-
-  usePlayerSizeSetter(playerSizeRef, containerRef);
+  const setPlayerRefState = useSetRecoilState(playerRefState);
 
   useEffect(() => {
-    const keyDown = (event: KeyboardEvent) => {
-      if (!videoRef.current) return;
+    setPlayerRefState(videoRef);
+  }, [setPlayerRefState]);
 
-      const isTargetInput =
-        /^(?:input|textarea|select|button)$/i.test(
-          (event.target as HTMLElement).tagName
-        ) && !(event.target as HTMLElement).classList.contains('allow-event');
-
-      if (!isTargetInput) {
-        if (event.code === 'Space') {
-          togglePlaying();
-        }
-
-        if (event.code === 'ArrowRight') {
-          if (event.ctrlKey || event.metaKey) {
-            videoRef.current.currentTime += 2;
-          } else if (event.shiftKey) {
-            videoRef.current.currentTime += 10;
-          } else {
-            videoRef.current.currentTime += 5;
-          }
-        }
-
-        if (event.code === 'ArrowLeft') {
-          if (event.ctrlKey || event.metaKey) {
-            videoRef.current.currentTime -= 2;
-          } else if (event.shiftKey) {
-            videoRef.current.currentTime -= 10;
-          } else {
-            videoRef.current.currentTime -= 5;
-          }
-        }
-      }
-    };
-    document.addEventListener('keydown', keyDown);
-
-    return () => {
-      document.removeEventListener('keydown', keyDown);
-    };
-  }, [togglePlaying]);
+  const { togglePlaying } = useVideoController();
+  useKeyInput();
+  usePlayerSizeSetter(playerSizeRef, containerRef);
 
   return (
     <Styled.Wrapper>
@@ -77,7 +42,7 @@ export const VideoPlayer = () => {
         </Styled.PlayerWrapper>
       </Styled.Container>
 
-      <VideoController videoRef={videoRef} />
+      <VideoController />
     </Styled.Wrapper>
   );
 };
