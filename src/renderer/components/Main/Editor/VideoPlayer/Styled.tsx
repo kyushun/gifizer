@@ -9,12 +9,22 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  overflow: hidden;
 `;
 
 export const Container = styled.div`
   position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   max-width: 100%;
   max-height: calc(100% - 60px);
+`;
+
+export const PlayerWrapper = styled.div`
+  position: relative;
 `;
 
 export const Player = styled.video`

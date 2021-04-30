@@ -8,13 +8,18 @@ import { inputFilePathState } from '@recoil/atoms';
 
 import { Cropper } from './Cropper';
 import * as Styled from './Styled';
+import { usePlayerSizeSetter } from './use-player-size-setter';
 import { VideoController } from './VideoController';
 
 export const VideoPlayer = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const playerSizeRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const filePath = useRecoilValue(inputFilePathState);
 
   const { togglePlaying } = useVideoController(videoRef);
+
+  usePlayerSizeSetter(playerSizeRef, containerRef);
 
   useEffect(() => {
     const keyDown = (event: KeyboardEvent) => {
@@ -60,14 +65,16 @@ export const VideoPlayer = () => {
 
   return (
     <Styled.Wrapper>
-      <Styled.Container>
-        <Styled.Player
-          ref={videoRef}
-          src={filePath && `file:${filePath}`}
-          preload="auto"
-          onClick={togglePlaying}
-        />
-        <Cropper />
+      <Styled.Container ref={containerRef}>
+        <Styled.PlayerWrapper ref={playerSizeRef}>
+          <Styled.Player
+            ref={videoRef}
+            src={filePath && `file:${filePath}`}
+            preload="auto"
+            onClick={togglePlaying}
+          />
+          <Cropper />
+        </Styled.PlayerWrapper>
       </Styled.Container>
 
       <VideoController videoRef={videoRef} />
