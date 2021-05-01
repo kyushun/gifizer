@@ -4,12 +4,12 @@ import { useRecoilValue } from 'recoil';
 import { inputFilePathState, playerRefState } from '@recoil/atoms';
 
 export const useVideoController = () => {
-  const filePath = useRecoilValue(inputFilePathState);
-  const videoRef = useRecoilValue(playerRefState);
-
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const filePath = useRecoilValue(inputFilePathState);
+  const videoRef = useRecoilValue(playerRefState);
 
   const play = useCallback(() => {
     if (!videoRef.current) return;
@@ -48,17 +48,21 @@ export const useVideoController = () => {
   useEffect(() => {
     setIsPlaying(false);
 
-    const handleLoadedmetadata = () =>
+    const handleLoadedmetadata = () => {
       setDuration(videoRef.current?.duration || 0);
+
+      const timeUpdate = () => {
+        setCurrentTime(videoRef.current?.currentTime || 0);
+        requestAnimationFrame(timeUpdate);
+      };
+      requestAnimationFrame(timeUpdate);
+    };
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
-    const handleTimeupdate = () =>
-      setCurrentTime(videoRef.current?.currentTime || 0);
 
     videoRef.current?.addEventListener('loadedmetadata', handleLoadedmetadata);
     videoRef.current?.addEventListener('play', handlePlay);
     videoRef.current?.addEventListener('pause', handlePause);
-    videoRef.current?.addEventListener('timeupdate', handleTimeupdate);
 
     return () => {
       videoRef.current?.removeEventListener(
@@ -66,9 +70,8 @@ export const useVideoController = () => {
         handleLoadedmetadata
       );
       videoRef.current?.removeEventListener('play', handlePlay);
-      videoRef.current?.removeEventListener('pause', handlePause);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      videoRef.current?.removeEventListener('timeupdate', handleTimeupdate);
+      videoRef.current?.removeEventListener('pause', handlePause);
     };
   }, [filePath, videoRef]);
 

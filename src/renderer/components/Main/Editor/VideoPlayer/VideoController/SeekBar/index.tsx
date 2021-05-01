@@ -1,15 +1,29 @@
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useRef } from 'react';
 
 import { useVideoController } from '@hooks/index';
 
 import * as Styled from './Styled';
 
 export const SeekBar = () => {
-  const { currentTime, duration, pause, seekTo } = useVideoController();
+  const wasPlaying = useRef(false);
+
+  const {
+    isPlaying,
+    currentTime,
+    duration,
+    play,
+    pause,
+    seekTo,
+  } = useVideoController();
 
   const onMouseDown = useCallback(() => {
+    wasPlaying.current = isPlaying;
     pause();
-  }, [pause]);
+  }, [isPlaying, pause]);
+
+  const onMouseUp = useCallback(() => {
+    wasPlaying.current && play();
+  }, [play]);
 
   const onChange = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +40,7 @@ export const SeekBar = () => {
       max={duration}
       value={currentTime}
       onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       onChange={onChange}
     />
   );
