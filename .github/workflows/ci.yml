@@ -1,6 +1,10 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   Test:
@@ -73,17 +77,9 @@ jobs:
 
       - name: Build app
         run: yarn package
-        env:
-          CURRENT_BRANCH: ${{ steps.extract_branch.outputs.branch }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
 
       - name: Prepare uploads
-        run: find ./dist -mindepth 1 -maxdepth 1 -not \( -name "Gifizer-*-mac.dmg" -or -name "Gifizer-*-win.exe" -or -name "Gifizer-*-win.zip" \) | xargs rm -rf
+        run: find ./dist -mindepth 1 -maxdepth 1 -not \( -name "Gifizer-*-mac.dmg" -or -name "Gifizer-*-win.exe" \) | xargs rm -rf
         shell: bash
 
       - name: Upload built files

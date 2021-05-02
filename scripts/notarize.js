@@ -6,11 +6,7 @@ const appleId = process.env.APPLE_ID;
 const appleIdPassword = process.env.APPLE_PASSWORD;
 
 exports.default = async function notarizing(context) {
-  if (process.env.CURRENT_BRANCH !== 'master' && !process.env.NOTARIZE) {
-    return;
-  }
-
-  if (!appleId || !appleIdPassword) {
+  if (!process.env.NOTARIZE || !appleId || !appleIdPassword) {
     return;
   }
 
