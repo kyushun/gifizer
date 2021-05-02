@@ -1,24 +1,24 @@
-.DS_Store
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Dependency directory
 node_modules
-/dist
 
-# local env files
-.env.local
-.env.*.local
+# OSX
+.DS_Store
 
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# App packaged
+build
+dist
 
-# Editor directories and files
 .idea
-#.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+npm-debug.log.*
 
-#Electron-builder output
-/dist_electron
+.env
+.envrc

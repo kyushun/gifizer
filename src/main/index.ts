@@ -1,324 +1,125 @@
-"use strict";
+import { app, BrowserWindow, dialog, protocol } from 'electron';
+import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
+import path from 'path';
 
-import {
-  app,
-  protocol,
-  Menu,
-  BrowserWindow,
-  ipcMain,
-  dialog,
-  shell
-} from "electron";
-import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
-import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-import logger from "@/shared/util/logger";
-import * as updater from "./lib/updater";
-import FFmpeg from "./lib/ffmpeg";
-import Config from "../shared/config";
-import { ConvertOptions } from "../shared/types";
-import * as ipcs from "../shared/ipcs";
-import { isDevelopment, isProduction, isMac } from "../shared/util";
-import { packageJson } from "./util";
-import * as contextMenuRegister from "./lib/contextMenuRegister";
+import { isProduction } from '@shared/util';
 
-let arg: string | undefined = process.argv.slice(isDevelopment ? 2 : 1)[0];
+import { ipcRegister } from './ipc-register';
+import MenuBuilder from './menu';
+
 let win: BrowserWindow | null;
-let converter: FFmpeg | null;
 
-protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure: true, standard: true } }
-]);
+autoUpdater.logger = log;
+log.transports.file.level = 'info';
 
-createMenu();
+const installExtensions = async () => {
+  // eslint-disable-next-line global-require
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+  return installer
+    .default([installer.REACT_DEVELOPER_TOOLS], forceDownload)
+    .catch(log.debug);
+};
+
+const createWindow = async () => {
+  if (!isProduction) await installExtensions();
+
+  win = new BrowserWindow({
+    show: false,
+    width: 900,
+    height: 550,
+    minWidth: 700,
+    minHeight: 400,
+    frame: false,
+    titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 20, y: 36 },
+    resizable: true,
+    maximizable: true,
+    fullscreenable: true,
+    webPreferences: {
+      webSecurity: isProduction,
+      nodeIntegration: false,
+      nodeIntegrationInWorker: false,
+      contextIsolation: true,
+      preload: isProduction
+        ? path.join(process.resourcesPath, 'build', './preLoad.js')
+        : path.join(__dirname, './preLoad.js'),
+    },
+  });
+
+  if (process.env.NODE_ENV === 'production') {
+    win.loadFile('./build/index.html');
+  } else {
+    win.loadURL('http://localhost:8080/');
+  }
+
+  win.webContents.on('did-finish-load', () => {
+    if (!win) {
+      throw new Error('"mainWindow" is not defined');
+    }
+    if (process.env.START_MINIMIZED) {
+      win.minimize();
+    } else {
+      if (!win.isVisible()) {
+        win.show();
+        win.focus();
+      }
+      !isProduction && win.webContents.openDevTools({ mode: 'detach' });
+    }
+  });
+
+  win.on('closed', () => {
+    win = null;
+  });
+
+  const menuBuilder = new MenuBuilder(win);
+  menuBuilder.buildMenu();
+};
+
+app
+  .whenReady()
+  .then(() => {
+    protocol.registerFileProtocol('file', (request, callback) => {
+      const pathname = decodeURI(request.url.replace('file:///', ''));
+      callback(pathname);
+    });
+  })
+  .then(ipcRegister)
+  .then(createWindow)
+  .then(async () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on("activate", () => {
-  if (win === null) {
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
 
-app.on("ready", async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    try {
-      await installExtension(VUEJS_DEVTOOLS);
-    } catch (e) {
-      logger.error("Vue Devtools failed to install:", e.toString());
-    }
-  }
-  createWindow();
-  // Check Update
-  const diff =
-    (new Date().getTime() - new Date(Config.updateLastCheckedAt).getTime()) /
-    // h * m * s * ms
-    (24 * 60 * 60 * 1000);
-  if (isProduction && (!Config.updateLastCheckedAt || diff >= 30)) {
-    checkUpdate(false, true);
-  }
-});
+autoUpdater.on('update-downloaded', () => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    defaultId: 0,
+    message: 'Software Update',
+    detail: 'A New version has been downloaded. Would you like to install now?',
+  };
 
-app.whenReady().then(() => {
-  protocol.registerFileProtocol("file", (request, callback) => {
-    const pathname = decodeURI(request.url.replace("file:///", ""));
-    callback(pathname);
-  });
-});
-
-process.on("uncaughtException", function (err) {
-  logger.error(err);
-});
-
-process.on("unhandledRejection", (reason, p) => {
-  logger.error("Unhandled Rejection at:", p, "reason:", reason);
-});
-
-if (isDevelopment) {
-  if (process.platform === "win32") {
-    process.on("message", data => {
-      if (data === "graceful-exit") {
-        app.quit();
-      }
-    });
-  } else {
-    process.on("SIGTERM", () => {
-      app.quit();
-    });
-  }
-}
-
-ipcMain.on(ipcs.CONVERT, async (event: any, options: ConvertOptions) => {
-  logger.log(options);
-  converter = new FFmpeg(options).convertToGif(event.sender);
-});
-
-ipcMain.on(ipcs.CONVERT_CANCEL, () => {
-  converter?.cancel();
-});
-
-ipcMain.on(ipcs.INSPECT_FILE, (event: any, filepath: string) => {
-  FFmpeg.inspectFile(filepath, event.sender);
-});
-
-function createMenu() {
-  const template: Electron.MenuItemConstructorOptions[] = [
-    ...((isMac
-      ? [
-          {
-            label: app.getName(),
-            submenu: [
-              { role: "about" },
-              {
-                label: "Check for Updates",
-                click: () => {
-                  checkUpdate(true);
-                }
-              },
-              { type: "separator" },
-              { role: "services" },
-              { type: "separator" },
-              { role: "hide" },
-              { role: "hideothers" },
-              { role: "unhide" },
-              { type: "separator" },
-              { role: "quit" }
-            ]
-          }
-        ]
-      : []) as Electron.MenuItemConstructorOptions[]),
-    {
-      label: "File",
-      submenu: [
-        ...((isMac
-          ? [
-              {
-                id: "new-window",
-                label: "New Window",
-                enabled: false,
-                click: createWindow,
-                accelerator: "CmdOrCtrl+N"
-              },
-              { role: "close" }
-            ]
-          : [{ role: "quit" }]) as Electron.MenuItemConstructorOptions[])
-      ]
-    },
-    { role: "editMenu" },
-    {
-      label: "View",
-      submenu: [{ role: "reload" }, { role: "forceReload" }]
-    },
-    { role: "windowMenu" },
-    ...(isDevelopment
-      ? ([
-          {
-            label: "Development",
-            submenu: [
-              { role: "toggledevtools" },
-              { type: "separator" },
-              {
-                label: "Clear Configs",
-                click: () => {
-                  Config.clear();
-                }
-              }
-            ]
-          }
-        ] as Electron.MenuItemConstructorOptions[])
-      : []),
-    {
-      role: "help",
-      submenu: [
-        ...((!isMac
-          ? [
-              {
-                label: `${app.getName()} v${app.getVersion()}`,
-                enabled: false
-              },
-              {
-                label: "Check for Updates",
-                click: () => {
-                  checkUpdate(true);
-                }
-              },
-              { type: "separator" },
-              {
-                label: "Add shortcut to context menu of Explorer",
-                click: addContextMenu
-              },
-              {
-                label: "Remove shortcut from context menu of Explorer",
-                click: removeContextMenu
-              },
-              { type: "separator" }
-            ]
-          : []) as Electron.MenuItemConstructorOptions[]),
-        {
-          label: "Open Repository",
-          click: async () => {
-            await shell.openExternal(packageJson.homepage);
-          }
-        }
-      ]
-    }
-  ];
-
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-}
-
-function switchMenu(id: string, enabled: boolean) {
-  const _menu = Menu.getApplicationMenu();
-  if (_menu) {
-    const item = _menu.getMenuItemById(id);
-    if (item) item.enabled = enabled;
-  }
-}
-
-function createWindow() {
-  switchMenu("new-window", false);
-  win = new BrowserWindow({
-    width: 500,
-    height: isMac ? 280 : 270,
-    useContentSize: true,
-    titleBarStyle: "hidden",
-    resizable: isDevelopment,
-    maximizable: false,
-    fullscreenable: false,
-    webPreferences: {
-      nodeIntegration:
-        typeof process.env.ELECTRON_NODE_INTEGRATION == "boolean"
-          ? process.env.ELECTRON_NODE_INTEGRATION
-          : false,
-      webSecurity: false
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) {
+      autoUpdater.quitAndInstall();
     }
   });
+});
 
-  let url;
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    url = process.env.WEBPACK_DEV_SERVER_URL as string;
-  } else {
-    createProtocol("app");
-    url = "app://./index.html";
-  }
-
-  if (arg) {
-    url += `?file=${arg}`;
-    arg = undefined;
-  }
-  win.loadURL(url);
-
-  win.on("closed", () => {
-    win = null;
-    switchMenu("new-window", true);
-  });
-}
-
-async function checkUpdate(
-  showNoUpdateNotification = false,
-  saveLastCheckedAt = false
-) {
-  const updateUrl = await updater.checkUpdate();
-  if (updateUrl) {
-    dialog
-      .showMessageBox({
-        type: "info",
-        buttons: ["Yes", "No"],
-        title: "An update is available",
-        message: "An update is available",
-        detail: "Do you want to download?"
-      })
-      .then(({ response }) => {
-        if (response == 0) {
-          shell.openExternal(updateUrl);
-          app.quit();
-        } else {
-          if (saveLastCheckedAt)
-            Config.updateLastCheckedAt = new Date().toISOString();
-        }
-      });
-  } else if (showNoUpdateNotification) {
-    dialog.showMessageBox({
-      type: "info",
-      title: "No updates are available",
-      message: "No updates are available"
-    });
-  }
-}
-
-function addContextMenu() {
-  contextMenuRegister
-    .register()
-    .then(() => {
-      dialog.showMessageBox({
-        type: "info",
-        message: "The shortcut has been added successfully."
-      });
-    })
-    .catch(err => {
-      const message = "An error occurred when installing context menu shortcut";
-      logger.error(message, err);
-      dialog.showErrorBox("Cannot add shortcut", message);
-    });
-}
-
-function removeContextMenu() {
-  contextMenuRegister
-    .remove()
-    .then(() => {
-      dialog.showMessageBox({
-        type: "info",
-        message: "The shortcut has been deleted successfully."
-      });
-    })
-    .catch(err => {
-      const message =
-        "An error occurred when uninstalling context menu shortcut";
-      logger.error(message, err);
-      dialog.showErrorBox("Cannot remove shortcut", message);
-    });
-}
+autoUpdater.on('error', (err) => {
+  log.error(process.pid, err);
+});

@@ -1,33 +1,40 @@
-export interface ConvertOptions {
-  [key: string]: any;
-  sourcePath: string;
+export type InspectData = {
+  size: number;
+  codec: string;
+  width: number;
+  height: number;
+  fps: number;
+};
+
+export type ConvertOption = {
   outputPath: string;
-  fps?: number;
   width?: number;
   height?: number;
+  fps?: number;
   palette?: boolean;
-  startSec?: number;
-  endSec?: number;
-  crop?: {
-    top: number;
-    left: number;
+  startTime?: number;
+  endTime?: number;
+  crop: {
+    x: number;
+    y: number;
     width: number;
     height: number;
   };
-}
+};
 
-export interface InspectionReport {
-  error: boolean | null;
-  size?: number;
-  codec?: string;
-  width?: number;
-  height?: number;
-  aspect_ratio?: string;
-  fps?: number;
-}
+export type ConvertProcessingStatus = {
+  status: 'PROCESSING';
+  progress: number;
+};
+export type ConvertErrorStatus = {
+  status: 'ERROR' | 'CANCELED';
+  message: string;
+};
+export type ConvertEndStatus = {
+  status: 'END';
+};
 
-export interface ConvertReport {
-  status: "PROCESSING" | "ERROR" | "FINISHED" | "CANCELLED" | null;
-  progress?: number;
-  message?: any;
-}
+export type ConvertStatus =
+  | ConvertProcessingStatus
+  | ConvertErrorStatus
+  | ConvertEndStatus;

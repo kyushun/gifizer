@@ -1,158 +1,108 @@
-import ffmpeg from "fluent-ffmpeg";
-import { platform, arch } from "os";
-import path from "path";
-import logger from "@/shared/util/logger";
-import {
-  ConvertOptions,
-  InspectionReport,
-  ConvertReport
-} from "../../shared/types";
-import { INSPECT_FILE, CONVERT_REPORT } from "../../shared/ipcs";
-import { getAppPath, calcfps } from "../util";
+import log from 'electron-log';
+import ffmpeg from 'fluent-ffmpeg';
+import path from 'path';
+import { promisify } from 'util';
 
-const BIN_PATH = path.join(
-  getAppPath(),
-  "bin",
-  platform().replace("win32", "win").replace("darwin", "mac"),
-  arch()
-);
-ffmpeg.setFfmpegPath(
-  path.join(BIN_PATH, platform() === "win32" ? "ffmpeg.exe" : "ffmpeg")
-);
-ffmpeg.setFfprobePath(
-  path.join(BIN_PATH, platform() === "win32" ? "ffprobe.exe" : "ffprobe")
-);
+import { ConvertOption, InspectData } from '@shared/types';
+import { isDarwin, isProduction } from '@shared/util';
 
-export default class FFmpeg {
-  private command: ffmpeg.FfmpegCommand | null = null;
+const getFfmpegPath = (binaryType: 'ffmpeg' | 'ffprobe') => {
+  const binaryDir = 'node_modules/ffmpeg-ffprobe-static';
+  const exe = isDarwin ? binaryType : `${binaryType}.exe`;
 
-  constructor(options?: ConvertOptions) {
-    if (options) this.setOption(options);
+  return isProduction
+    ? path.join(process.resourcesPath, binaryDir, exe)
+    : path.join(binaryDir, exe);
+};
+
+ffmpeg.setFfmpegPath(getFfmpegPath('ffmpeg'));
+ffmpeg.setFfprobePath(getFfmpegPath('ffprobe'));
+
+const ffprobeAsync = promisify<string, ffmpeg.FfprobeData>(ffmpeg.ffprobe);
+
+export const inspectFile = async (
+  filePath: string
+): Promise<InspectData | undefined> => {
+  log.info(`Inspecting file: ${filePath}`);
+
+  const data = await ffprobeAsync(filePath).catch((err) => {
+    log.error(err);
+    return undefined;
+  });
+
+  log.debug(data);
+
+  const videoStream = data?.streams.find(
+    (stream) => stream.codec_type === 'video'
+  );
+  if (data === undefined || videoStream === undefined) {
+    log.error('Input file is not a video');
+    return undefined;
   }
 
-  setOption(options: ConvertOptions) {
-    this.command = ffmpeg(options.sourcePath)
-      .format("gif")
-      .output(options.outputPath)
-      .withNoAudio();
+  const fps = (() => {
+    const formula = videoStream.avg_frame_rate || '';
+    const match = formula.match(/^(\d+)\/(\d+)$/);
+    if (!match) return NaN;
 
-    if (options.startSec) {
-      this.command.inputOptions(["-ss " + options.startSec]);
-    }
-    if (options.endSec && (options.startSec || 0) < options.endSec) {
-      this.command.outputOptions([
-        "-t " + (options.endSec - (options.startSec || 0))
-      ]);
-    }
+    const [, numer, denom] = match;
+    return parseInt(numer, 10) / parseInt(denom, 10);
+  })();
 
-    if (options.fps) this.command.videoFilters("fps=" + options.fps);
-    if (
-      options.crop?.top ||
-      options.crop?.left ||
-      options.crop?.width ||
-      options.crop?.height
-    ) {
-      const crop = `crop=${options.crop?.width || "w"}:${
-        options.crop?.height || "h"
-      }:${options.crop?.left || 0}:${options.crop?.top || 0}`;
-      this.command.videoFilters(crop);
-    }
-    if (options.width || options.height) {
-      this.command.videoFilters(
-        `scale=w=${options.width || -1}:h=${options.height || -1}`
-      );
-    }
+  if (Number.isNaN(fps)) return undefined;
 
-    if (options.palette) {
-      this.command
-        .videoFilters("split[a]")
-        .videoFilters("palettegen")
-        .videoFilters("[a]paletteuse");
-    }
-    return this;
+  return {
+    size: data.format.size || 0,
+    codec: videoStream.codec_name || '',
+    width: videoStream.width || 0,
+    height: videoStream.height || 0,
+    fps,
+  };
+};
+
+export const convert = (filePath: string, option: ConvertOption) => {
+  const command = ffmpeg()
+    .input(filePath)
+    .format('gif')
+    .withNoAudio()
+    .output(option.outputPath);
+
+  if (option.startTime) {
+    command.inputOptions([`-ss ${option.startTime}`]);
+  }
+  if (option.endTime && (option.startTime || 0) < option.endTime) {
+    command.outputOptions([`-t ${option.endTime - (option.startTime || 0)}`]);
   }
 
-  convertToGif(sender: {
-    send: (channel: string, status: ConvertReport) => void;
-  }) {
-    if (this.command) {
-      this.command
-        .on("start", commandLine => {
-          logger.log("Command: " + commandLine);
-          sender.send(CONVERT_REPORT, {
-            status: "PROCESSING",
-            progress: 0
-          });
-        })
-        .on("progress", progress => {
-          logger.log("Processing: " + progress.percent + "% done");
-          sender.send(CONVERT_REPORT, {
-            status: "PROCESSING",
-            progress: progress.percent
-          });
-        })
-        .on("error", err => {
-          if (/SIGKILL/.test(err.message)) {
-            logger.log("Converting has been cancelled");
-            sender.send(CONVERT_REPORT, {
-              status: "CANCELLED",
-              message: "Converting has been cancelled"
-            });
-          } else {
-            logger.log("Cannot process video: " + err.message);
-            sender.send(CONVERT_REPORT, {
-              status: "ERROR",
-              message: err.message
-            });
-          }
-        })
-        .on("end", () => {
-          logger.log("Finished processing");
-          sender.send(CONVERT_REPORT, {
-            status: "FINISHED",
-            progress: 100
-          });
-        });
+  option.fps && command.videoFilters(`fps=${option.fps}`);
 
-      this.command.run();
-      return this;
-    } else {
-      throw new Error("command is not set.");
-    }
+  if (option.width || option.height) {
+    command.videoFilters(
+      `scale=w=${option.width || -1}:h=${option.height || -1}`
+    );
   }
 
-  cancel() {
-    this.command?.kill("SIGKILL");
-    return this;
-  }
-
-  static inspectFile(
-    filepath: string,
-    sender: { send: (channel: string, response: InspectionReport) => void }
+  if (
+    option.crop.x !== 0 ||
+    option.crop.y !== 0 ||
+    option.crop.width !== 100 ||
+    option.crop.height !== 100
   ) {
-    ffmpeg.ffprobe(filepath, (err, metadata) => {
-      let response: InspectionReport;
-      const videos: ffmpeg.FfprobeStream[] = metadata
-        ? metadata.streams.filter(v => v.codec_type === "video")
-        : [];
-      if (err || videos.length < 1) {
-        response = {
-          error: true
-        };
-      } else {
-        response = {
-          error: false,
-          size: metadata.format.size,
-          codec: videos[0].codec_name,
-          width: videos[0].width,
-          height: videos[0].height,
-          aspect_ratio: videos[0].display_aspect_ratio,
-          fps: calcfps(videos[0].r_frame_rate)
-        };
-      }
+    const width = `in_w*(${option.crop.width}/100)`;
+    const height = `in_h*(${option.crop.height}/100)`;
+    const x = `in_w*(${option.crop.x}/100)`;
+    const y = `in_h*(${option.crop.y}/100)`;
 
-      logger.log(response, metadata, err);
-      sender.send(INSPECT_FILE, response);
-    });
+    const crop = `crop=${width}:${height}:${x}:${y}`;
+
+    command.videoFilters(crop);
   }
-}
+
+  option.palette &&
+    command
+      .videoFilters('split[a]')
+      .videoFilters('palettegen')
+      .videoFilters('[a]paletteuse');
+
+  return command;
+};

@@ -1,4 +1,8 @@
 module.exports = {
-  presets: ["@vue/cli-plugin-babel/preset"],
-  plugins: ["babel-plugin-rewire"]
+  presets: [
+    ['@babel/preset-env', { targets: { node: 'current' } }],
+    ['@babel/preset-react', { runtime: 'automatic' }],
+    '@babel/typescript',
+  ],
+  plugins: ['babel-plugin-styled-components'],
 };

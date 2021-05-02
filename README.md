@@ -1,27 +1,28 @@
-# Gifizer
+<div align="center">
+  <img src="docs/gifizer-logo.png" width="250" alt="Gifizer" />
+  <p><strong>Simple and fast gif maker app.</strong></p>
+  <img src="docs/screenshot.png" width="100%" alt="Screenshot">
+</div>
 
-Gifizer は動画をかんたんに GIF 化できるアプリケーションです。
-![Gifizer](./docs/pv.gif "Gifizer")
+## Download
+For macOS and Windows users.
 
-## ダウロード (macOS, Windows)
+→ [**Gifizer App**](https://github.com/kyushun/gifizer/releases/latest)
 
-https://github.com/kyushun/gifizer/releases/latest
+## Development
 
-## 開発環境
-
-- Node.js (v12.x.x で動作確認済み)
+### Requirements
+- Node.js (14+ recommended)
 - Yarn
 
-## ビルド
-
-1. モジュールのインストールを行います
-
+### Run
 ```sh
-yarn install
+yarn start
 ```
 
-2. vue-cli (webpack) を使用してビルドします
+### Build
+The app can be found in the `dist` folder.
 
 ```sh
-yarn build
+yarn package
 ```
