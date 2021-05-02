@@ -17,27 +17,33 @@ export const useFileInputController = () => {
     stringOptionStateFamily('option/filename')
   );
 
-  const setFilePath = useCallback(async (filePath: string) => {
-    if (filePath === '') return;
+  const setFilePath = useCallback(
+    async (filePath: string) => {
+      if (filePath === '') return;
 
-    const result = await window.api.inspectFile(filePath);
-    if (result === undefined) {
-      // eslint-disable-next-line no-alert
-      alert(`${getFilename(filePath)} is invalid file.`);
-      return;
-    }
+      const result = await window.api.inspectFile(filePath);
+      if (result === undefined) {
+        // eslint-disable-next-line no-alert
+        alert(`${getFilename(filePath)} is invalid file.`);
+        return;
+      }
 
-    setInputFilePath(filePath);
-    setInputFileInfo(result);
-    setOptionFileName(changeExtension(filePath, 'gif'));
-  }, []);
+      setInputFilePath(filePath);
+      setInputFileInfo(result);
+      setOptionFileName(changeExtension(filePath, 'gif'));
+    },
+    [setInputFileInfo, setInputFilePath, setOptionFileName]
+  );
 
-  const onDrop = useCallback(async (files: File[]) => {
-    if (files.length < 1) return;
+  const onDrop = useCallback(
+    async (files: File[]) => {
+      if (files.length < 1) return;
 
-    const filePath = files[0].path;
-    setFilePath(filePath);
-  }, []);
+      const filePath = files[0].path;
+      setFilePath(filePath);
+    },
+    [setFilePath]
+  );
 
   const dropzoneState = useDropzone({
     onDrop,
