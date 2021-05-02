@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyushun/gifizer.git"
+    "url": "https://github.com/kyushun/gifizer.git"
   },
   "author": {
     "name": "kyushun",
@@ -23,7 +23,7 @@
     "build:main": "cross-env NODE_ENV=development webpack --config-name=main --config-name=preload",
     "build:renderer": "cross-env NODE_ENV=development webpack --config-name=renderer",
     "package": "yarn build:production && electron-builder --publish never",
-    "release": "yarn build:production && electron-builder --publish onTag",
+    "release": "yarn build:production && electron-builder --publish onTagOrDraft",
     "clean": "rimraf dist build",
     "start": "run-p -l -r start:renderer start:main",
     "start:main": "yarn build:main &&  electron .",
@@ -64,7 +64,15 @@
         "node_modules/ffmpeg-ffprobe-static/ffmpeg.exe",
         "node_modules/ffmpeg-ffprobe-static/ffprobe.exe"
       ]
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "gifizer",
+        "owner": "kyushun",
+        "releaseType": "draft"
+      }
+    ]
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
