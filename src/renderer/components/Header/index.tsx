@@ -17,15 +17,15 @@ import { TitleBar } from './TitleBar';
 
 export const Header = () => {
   const inputFilePath = useRecoilValue(inputFilePathState);
-  const { setFilePath } = useFileInputController();
+  const { inspectAndSetFileState } = useFileInputController();
   const { convert } = useConvert();
 
   const onClickOpenFile = useCallback(async () => {
     const result = await window.api.showOpenDialog();
     if (result.canceled || result.filePaths.length < 1) return;
 
-    setFilePath(result.filePaths[0]);
-  }, [setFilePath]);
+    inspectAndSetFileState(result.filePaths[0]);
+  }, [inspectAndSetFileState]);
 
   return (
     <>

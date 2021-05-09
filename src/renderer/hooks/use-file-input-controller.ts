@@ -1,23 +1,14 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useSetRecoilState } from 'recoil';
 
-import { getFilename, changeExtension } from '@renderer/util';
+import { getFilename } from '@renderer/util';
 
-import {
-  inputFileInfoState,
-  inputFilePathState,
-  stringOptionStateFamily,
-} from '@recoil/atoms';
+import { useSetFileState } from './use-set-file-state';
 
 export const useFileInputController = () => {
-  const setInputFilePath = useSetRecoilState(inputFilePathState);
-  const setInputFileInfo = useSetRecoilState(inputFileInfoState);
-  const setOptionFileName = useSetRecoilState(
-    stringOptionStateFamily('option/filename')
-  );
+  const setFileState = useSetFileState();
 
-  const setFilePath = useCallback(
+  const inspectAndSetFileState = useCallback(
     async (filePath: string) => {
       if (filePath === '') return;
 
@@ -28,11 +19,9 @@ export const useFileInputController = () => {
         return;
       }
 
-      setInputFilePath(filePath);
-      setInputFileInfo(result);
-      setOptionFileName(changeExtension(filePath, 'gif'));
+      setFileState(filePath, result);
     },
-    [setInputFileInfo, setInputFilePath, setOptionFileName]
+    [setFileState]
   );
 
   const onDrop = useCallback(
@@ -40,9 +29,9 @@ export const useFileInputController = () => {
       if (files.length < 1) return;
 
       const filePath = files[0].path;
-      setFilePath(filePath);
+      inspectAndSetFileState(filePath);
     },
-    [setFilePath]
+    [inspectAndSetFileState]
   );
 
   const dropzoneState = useDropzone({
@@ -51,5 +40,5 @@ export const useFileInputController = () => {
     noKeyboard: true,
   });
 
-  return { ...dropzoneState, setFilePath };
+  return { ...dropzoneState, inspectAndSetFileState };
 };
