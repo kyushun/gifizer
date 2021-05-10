@@ -29,6 +29,14 @@ describe('changeExtension()', () => {
   });
 });
 
+describe('isUrl()', () => {
+  it('returns with new Extension', () => {
+    expect(util.isUrl('http://example.com')).toBe(true);
+    expect(util.isUrl('https://example.com')).toBe(true);
+    expect(util.isUrl('http.mp4')).toBe(false);
+  });
+});
+
 describe('zeroPadding()', () => {
   it('returns padding number', () => {
     expect(util.zeroPadding(10, 0)).toBe('10');

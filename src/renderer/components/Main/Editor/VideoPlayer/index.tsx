@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+
+import { isUrl } from '@renderer/util';
 
 import { useVideoController } from '@hooks/index';
 
@@ -28,13 +30,19 @@ export const VideoPlayer = () => {
   useKeyInput();
   usePlayerSizeSetter(playerSizeRef, containerRef);
 
+  const videoSrc = useMemo(() => {
+    if (!filePath) return undefined;
+
+    return isUrl(filePath) ? filePath : `file:${filePath}`;
+  }, [filePath]);
+
   return (
     <Styled.Wrapper>
       <Styled.Container ref={containerRef}>
         <Styled.PlayerWrapper ref={playerSizeRef}>
           <Styled.Player
             ref={videoRef}
-            src={filePath && `file:${filePath}`}
+            src={videoSrc}
             preload="auto"
             onClick={togglePlaying}
           />

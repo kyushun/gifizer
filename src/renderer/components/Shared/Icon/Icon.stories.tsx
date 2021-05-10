@@ -1,5 +1,7 @@
 import { Story, Meta } from '@storybook/react';
 
+import { ComponentProps } from '@renderer/util/component-props';
+
 import { Icon } from '.';
 import convertIconSvg from './convert-icon.svg';
 
@@ -8,5 +10,12 @@ export default {
   component: Icon,
 } as Meta;
 
-export const Default: Story = () => <Icon size={22} icon={convertIconSvg} />;
-Default.storyName = 'Icon';
+const Template: Story<ComponentProps<typeof Icon>> = (args) => (
+  <Icon {...args} />
+);
+
+export const Default = Template.bind({});
+Default.args = {
+  size: 22,
+  icon: convertIconSvg,
+};
