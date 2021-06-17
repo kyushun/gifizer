@@ -83,7 +83,7 @@ jobs:
         shell: bash
 
       - name: Upload built files
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: dist-${{ matrix.os }}
           path: dist
