@@ -49,7 +49,7 @@ describe('FFmpeg', () => {
     errorReport: undefined,
     md5: {
       noOptions: '320a64df6d1d0d8f24f217a87c7329f6',
-      withOptions: '2aa7bfa790a9606db613bb18a9b54836',
+      withOptions: 'f1d1cca5bbb92e44f1bbf9b9f6b80305',
     },
   };
 
