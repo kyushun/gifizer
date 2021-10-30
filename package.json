@@ -132,17 +132,17 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "ffmpeg-static-electron": "^2.0.3",
     "ffprobe-static-electron": "^2.0.2",
-    "html-webpack-plugin": "^5.3.1",
+    "html-webpack-plugin": "^5.5.0",
     "husky": "^4.3.8",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
     "ts-jest": "^26.5.5",
-    "typescript": "^4.2.4",
+    "typescript": "^4.4.4",
     "url-loader": "^4.1.1",
-    "webpack": "^5.36.2",
-    "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack": "^5.61.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
   }
 }
