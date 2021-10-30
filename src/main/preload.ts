@@ -9,7 +9,7 @@ import path from 'path';
 
 import { ConvertOption, ConvertStatus, InspectData } from '@shared/types';
 
-export const contextBridgeApis = {
+const contextBridgeApis = {
   process: {
     env: {
       NODE_ENV: process.env.NODE_ENV,
@@ -43,7 +43,9 @@ export const contextBridgeApis = {
   },
 };
 
-(Object.keys(contextBridgeApis) as (keyof typeof contextBridgeApis)[]).forEach(
+export type ContextBridgeApis = typeof contextBridgeApis;
+
+(Object.keys(contextBridgeApis) as (keyof ContextBridgeApis)[]).forEach(
   (apiKey) => {
     contextBridge.exposeInMainWorld(apiKey, contextBridgeApis[apiKey]);
   }

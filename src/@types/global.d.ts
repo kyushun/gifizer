@@ -1,6 +1,4 @@
-import { contextBridgeApis } from '@main/preload';
-
-type ContextBridgeApis = typeof contextBridgeApis;
+import { ContextBridgeApis } from '@main/preload';
 
 declare global {
   interface Window extends ContextBridgeApis {}
