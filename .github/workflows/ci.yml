@@ -8,7 +8,7 @@ on:
 
 jobs:
   Test:
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-11, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -79,7 +79,7 @@ jobs:
         run: yarn package
 
       - name: Prepare uploads
-        run: find ./dist -mindepth 1 -maxdepth 1 -not \( -name "Gifizer-*-mac.dmg" -or -name "Gifizer-*-win.exe" \) | xargs rm -rf
+        run: find ./dist -mindepth 1 -maxdepth 1 -not \( -name "Gifizer-*-mac-*.dmg" -or -name "Gifizer-*-win.exe" \) | xargs rm -rf
         shell: bash
 
       - name: Upload built files

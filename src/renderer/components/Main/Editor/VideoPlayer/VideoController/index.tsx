@@ -11,12 +11,8 @@ import { VideoControllerIcon } from './VideoControllerIcon';
 import { VideoTime } from './VideoTime';
 
 export const VideoController = () => {
-  const {
-    isPlaying,
-    togglePlaying,
-    duration,
-    currentTime,
-  } = useVideoController();
+  const { isPlaying, togglePlaying, duration, currentTime } =
+    useVideoController();
 
   const { onBackwardClicked, onForwardClicked } = useSetOptionTime();
 
