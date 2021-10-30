@@ -7,14 +7,8 @@ import * as Styled from './Styled';
 export const SeekBar = () => {
   const wasPlaying = useRef(false);
 
-  const {
-    isPlaying,
-    currentTime,
-    duration,
-    play,
-    pause,
-    seekTo,
-  } = useVideoController();
+  const { isPlaying, currentTime, duration, play, pause, seekTo } =
+    useVideoController();
 
   const onMouseDown = useCallback(() => {
     wasPlaying.current = isPlaying;

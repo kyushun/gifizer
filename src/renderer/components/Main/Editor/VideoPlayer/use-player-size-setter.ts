@@ -12,9 +12,8 @@ export const usePlayerSizeSetter = (
 ) => {
   const fileInfo = useRecoilValue(inputFileInfoState);
 
-  const { width: containerWidth, height: containerHeight } = useResizeObserver(
-    containerRef
-  );
+  const { width: containerWidth, height: containerHeight } =
+    useResizeObserver(containerRef);
 
   useEffect(() => {
     if (!fileInfo || !ref.current) return;

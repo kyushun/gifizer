@@ -1,4 +1,5 @@
-const timeFormat = /^((?<hh>\d{1,2}):)?(?<mm>\d{1,2}):(?<ss>\d{1,2})(\.(?<ms>\d+))?$/;
+const timeFormat =
+  /^((?<hh>\d{1,2}):)?(?<mm>\d{1,2}):(?<ss>\d{1,2})(\.(?<ms>\d+))?$/;
 
 const formatTime = (num: number | string) => {
   return `00${num.toString()}`.slice(-2);
