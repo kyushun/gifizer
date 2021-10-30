@@ -72,7 +72,8 @@
       "extraResources": [
         "node_modules/ffmpeg-static-electron/bin/win",
         "node_modules/ffprobe-static-electron/bin/win"
-      ]
+      ],
+      "forceCodeSigning": false
     },
     "publish": [
       {
