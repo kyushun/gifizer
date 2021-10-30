@@ -29,13 +29,17 @@ export const intOptionsStateFamilyString = selectorFamily<
   numberOptions
 >({
   key: 'option/int-options-string',
-  get: (arg) => ({ get }) =>
-    get(numberOptionStateFamily(arg))?.toString() || '',
-  set: (arg) => ({ set }, newValue) =>
-    set(
-      numberOptionStateFamily(arg),
-      parseInt(newValue as string, 10) || undefined
-    ),
+  get:
+    (arg) =>
+    ({ get }) =>
+      get(numberOptionStateFamily(arg))?.toString() || '',
+  set:
+    (arg) =>
+    ({ set }, newValue) =>
+      set(
+        numberOptionStateFamily(arg),
+        parseInt(newValue as string, 10) || undefined
+      ),
 });
 
 export const floatOptionsStateFamilyString = selectorFamily<
@@ -43,13 +47,17 @@ export const floatOptionsStateFamilyString = selectorFamily<
   numberOptions
 >({
   key: 'option/float-options-string',
-  get: (arg) => ({ get }) =>
-    get(numberOptionStateFamily(arg))?.toString() || '',
-  set: (arg) => ({ set }, newValue) =>
-    set(
-      numberOptionStateFamily(arg),
-      parseFloat(newValue as string) || undefined
-    ),
+  get:
+    (arg) =>
+    ({ get }) =>
+      get(numberOptionStateFamily(arg))?.toString() || '',
+  set:
+    (arg) =>
+    ({ set }, newValue) =>
+      set(
+        numberOptionStateFamily(arg),
+        parseFloat(newValue as string) || undefined
+      ),
 });
 
 type boolOptions = 'option/palette';
