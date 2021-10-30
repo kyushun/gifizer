@@ -1,15 +1,9 @@
-import log from 'electron-log';
-import path from 'path';
+import { contextBridgeApis } from '@main/preload';
 
-import { apiContextBridge } from '@main/preload';
+type ContextBridgeApis = typeof contextBridgeApis;
 
 declare global {
-  interface Window {
-    process: any;
-    path: typeof path;
-    log: typeof log.functions;
-    api: typeof apiContextBridge;
-  }
+  interface Window extends ContextBridgeApis {}
 }
 
 export {};
