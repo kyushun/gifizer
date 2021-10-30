@@ -46,12 +46,21 @@
     ],
     "afterSign": "scripts/notarize.js",
     "mac": {
+      "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
       "category": "public.app-category.graphics-design",
-      "target": "dmg",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
       "icon": "src/assets/icon.png",
       "extraResources": [
-        "node_modules/ffmpeg-static-electron/bin/mac",
-        "node_modules/ffprobe-static-electron/bin/mac"
+        "node_modules/ffmpeg-static-electron/bin/mac/${arch}",
+        "node_modules/ffprobe-static-electron/bin/mac/${arch}"
       ],
       "electronLanguages": [
         "en"
@@ -86,7 +95,7 @@
   },
   "dependencies": {
     "electron-log": "^4.4.1",
-    "electron-updater": "^4.3.9",
+    "electron-updater": "^4.6.1",
     "fluent-ffmpeg": "^2.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -116,7 +125,7 @@
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "electron": "15.2.0",
-    "electron-builder": "^22.13.1",
+    "electron-builder": "^22.14.5",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.1.1",
     "eslint": "^8.1.0",
