@@ -67,6 +67,7 @@
     },
     "win": {
       "target": ["nsis", "zip"],
+      "publisherName": "kyushun",
       "icon": "src/assets/icon-win.png",
       "extraResources": [
         "node_modules/ffmpeg-static-electron/bin/win",
