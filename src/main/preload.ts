@@ -10,7 +10,9 @@ import path from 'path';
 import { ConvertOption, ConvertStatus, InspectData } from '@shared/types';
 
 contextBridge.exposeInMainWorld('process', {
-  env: { ...process.env },
+  env: {
+    NODE_ENV: process.env.NODE_ENV,
+  },
   platform: process.platform,
 });
 
