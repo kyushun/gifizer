@@ -51,10 +51,11 @@
       "target": [
         {
           "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
         }
       ],
       "icon": "src/assets/icon.png",
@@ -62,12 +63,10 @@
         "node_modules/ffmpeg-static-electron/bin/mac/${arch}",
         "node_modules/ffprobe-static-electron/bin/mac/${arch}"
       ],
-      "electronLanguages": [
-        "en"
-      ]
+      "electronLanguages": ["en"]
     },
     "win": {
-      "target": "nsis",
+      "target": ["nsis", "zip"],
       "icon": "src/assets/icon-win.png",
       "extraResources": [
         "node_modules/ffmpeg-static-electron/bin/win",
