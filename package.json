@@ -93,7 +93,7 @@
     }
   },
   "dependencies": {
-    "electron-log": "^4.4.1",
+    "electron-log": "^4.4.5",
     "electron-updater": "^4.6.1",
     "fluent-ffmpeg": "^2.1.2",
     "react": "^17.0.2",
