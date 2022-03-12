@@ -6,6 +6,7 @@ import {
   MouseEvent,
   useCallback,
   RefObject,
+  useMemo,
 } from 'react';
 import { useRecoilState } from 'recoil';
 
@@ -35,14 +36,20 @@ export const useCrop = (
 
   const [crop, setCrop] = useRecoilState(cropOptionState);
 
+  const isCropping = useMemo(
+    () =>
+      crop.x !== 0 || crop.y !== 0 || crop.width !== 100 || crop.height !== 100,
+    [crop]
+  );
+
   const onMouseDown = useCallback(
     (event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
       event.preventDefault();
 
       if (event.button !== 0) return;
 
-      const cropType = (event.target as HTMLDivElement).dataset
-        .cropType as CropType;
+      const cropType = ((event.target as HTMLDivElement).dataset.cropType ??
+        (event.currentTarget as HTMLDivElement).dataset.cropType) as CropType;
 
       setCropTarget(cropType);
       prevMousePositionRef.current = { x: event.pageX, y: event.pageY };
@@ -150,5 +157,5 @@ export const useCrop = (
     cropperRef.current.style.height = `${crop.height}%`;
   }, [crop.height, crop.width, crop.x, crop.y, cropperRef]);
 
-  return { crop, cropTarget, onMouseDown };
+  return { crop, isCropping, cropTarget, onMouseDown };
 };
