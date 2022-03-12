@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/kyushun/gifizer",
   "scripts": {
+    "prepare": "husky install",
+    "lint-staged": "lint-staged",
     "build": "cross-env NODE_ENV=development webpack",
     "build:production": "cross-env NODE_ENV=production webpack",
     "build:main": "cross-env NODE_ENV=development webpack --config-name=main --config-name=preload",
@@ -51,11 +53,17 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "icon": "src/assets/icon.png",
@@ -63,10 +71,15 @@
         "node_modules/ffmpeg-static-electron/bin/mac/${arch}",
         "node_modules/ffprobe-static-electron/bin/mac/${arch}"
       ],
-      "electronLanguages": ["en"]
+      "electronLanguages": [
+        "en"
+      ]
     },
     "win": {
-      "target": ["nsis", "zip"],
+      "target": [
+        "nsis",
+        "zip"
+      ],
       "icon": "src/assets/icon-win.png",
       "extraResources": [
         "node_modules/ffmpeg-static-electron/bin/win",
@@ -87,70 +100,65 @@
       "yarn lint:fix"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "dependencies": {
-    "electron-log": "^4.4.1",
-    "electron-updater": "^4.6.1",
+    "electron-log": "^4.4.6",
+    "electron-updater": "^4.6.5",
     "fluent-ffmpeg": "^2.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-dropzone": "^11.4.2",
-    "recoil": "^0.4.1",
+    "react-dropzone": "^12.0.4",
+    "recoil": "^0.6.1",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/preset-env": "^7.14.0",
-    "@babel/preset-react": "^7.13.13",
-    "@babel/preset-typescript": "^7.13.0",
-    "@storybook/addon-actions": "^6.3.12",
-    "@storybook/addon-essentials": "^6.3.12",
-    "@storybook/addon-links": "^6.3.12",
-    "@storybook/react": "^6.3.12",
-    "@types/fluent-ffmpeg": "^2.1.18",
-    "@types/jest": "^27.0.2",
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
-    "@types/styled-components": "^5.1.15",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/react": "^6.4.19",
+    "@types/fluent-ffmpeg": "^2.1.20",
+    "@types/jest": "^27.4.1",
+    "@types/react": "^17.0.40",
+    "@types/react-dom": "^17.0.13",
+    "@types/styled-components": "^5.1.24",
     "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^5.2.0",
-    "@typescript-eslint/parser": "^5.2.0",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-styled-components": "^1.12.0",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
+    "babel-loader": "^8.2.3",
+    "babel-plugin-styled-components": "^2.0.6",
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
-    "electron": "15.2.0",
-    "electron-builder": "^22.14.5",
+    "electron": "16.1.0",
+    "electron-builder": "^22.14.13",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.1.1",
-    "eslint": "^8.1.0",
+    "eslint": "^8.11.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-webpack": "^0.13.2",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-import-helpers": "^1.1.0",
-    "eslint-plugin-jest": "^25.2.2",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-import-helpers": "^1.2.1",
+    "eslint-plugin-jest": "^26.1.1",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-react": "^7.29.3",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "ffmpeg-static-electron": "^2.0.3",
     "ffprobe-static-electron": "^2.0.2",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^4.3.8",
-    "jest": "^26.6.3",
-    "lint-staged": "^11.2.6",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.5",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.4.1",
-    "ts-jest": "^26.5.5",
-    "typescript": "^4.4.4",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.6.2",
     "url-loader": "^4.1.1",
-    "webpack": "^5.61.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.4.0"
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
   }
 }
