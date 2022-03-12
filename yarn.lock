@@ -8137,15 +8137,13 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
-ffmpeg-static-electron@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/ffmpeg-static-electron/-/ffmpeg-static-electron-2.0.3.tgz#4d49bf18ea929844bb135f60c51013fcb15d0790"
-  integrity sha512-VGix5A0LTM6RHgwkFvL5x+c5m4WfacBFeuw7Twq1gVrYRgLHOVpawOmydmWbrRz58LVO7ao00P2EDjb7ZmE5rg==
+ffmpeg-static-electron@kyushun/ffmpeg-static-electron:
+  version "4.4.0"
+  resolved "https://codeload.github.com/kyushun/ffmpeg-static-electron/tar.gz/4ce1df99a670b9cbd5ce97dda8bbb060e73952d5"
 
-ffprobe-static-electron@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/ffprobe-static-electron/-/ffprobe-static-electron-2.0.2.tgz#6b202cc7a20cf90a076a4686f2034222dfb65384"
-  integrity sha512-HtEUZ7qpi5WcbgnI7m0slS6qzjoKnlqfxW6Yx7cWV75hRhkWnwlhq0mVAyWtRm2hujMm2/8sfhq1A/8RC6A0GQ==
+ffprobe-static-electron@kyushun/ffprobe-static-electron:
+  version "4.4.0"
+  resolved "https://codeload.github.com/kyushun/ffprobe-static-electron/tar.gz/c21e6cca0fba1bc5f41a37b50a1da981da398954"
 
 figgy-pudding@^3.5.1:
   version "3.5.2"
