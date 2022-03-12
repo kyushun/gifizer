@@ -23,17 +23,14 @@ export const ItemWrapper = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-`;
-
-export const ItemSpacer = styled.div`
-  margin-right: 8px;
+  gap: 8px;
 `;
 
 export const IconButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4px 8px 4px 4px;
+  padding: 4px;
   border-radius: 4px;
   border: solid 1px ${({ theme }) => theme.palette.hover};
   cursor: pointer;
@@ -48,7 +45,7 @@ export const IconButton = styled.div`
 `;
 
 export const IconButtonText = styled.span`
-  margin-left: 4px;
+  margin: 0 4px;
 `;
 
 export const IconToggle = styled.div<{ selected: boolean }>`
@@ -66,4 +63,8 @@ export const IconToggle = styled.div<{ selected: boolean }>`
     background-color: ${({ selected, theme }) =>
       selected ? theme.palette.active : theme.palette.hover};
   }
+`;
+
+export const FlexWrapper = styled.div`
+  flex: 1;
 `;
