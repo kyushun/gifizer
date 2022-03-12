@@ -1,9 +1,16 @@
+import {
+  BarcodeScannerRegular,
+  ColorRegular,
+  CutRegular,
+  DocumentRegular,
+  SlideSize24Regular,
+} from '@fluentui/react-icons';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 import { timeToSeconds, secToTimeString } from '@renderer/util';
 
-import { Icon, Input } from '@components/Shared/index';
+import { Input } from '@components/Shared/index';
 import { theme } from '@components/Styles/theme';
 
 import {
@@ -13,11 +20,6 @@ import {
   boolOptionsStateFamily,
 } from '@recoil/atoms/index';
 
-import curIconSvg from './cut-icon.svg';
-import filenameIconSvg from './filename-icon.svg';
-import fpsIconSvg from './fps-icon.svg';
-import paletteIconSvg from './palette-icon.svg';
-import sizeIconSvg from './size-icon.svg';
 import * as Styled from './Styled';
 
 export const OptionSetter = () => {
@@ -89,7 +91,7 @@ export const OptionSetter = () => {
       <Styled.ItemSummery>File Name</Styled.ItemSummery>
       <Styled.ItemWrapper>
         <Styled.ItemSpacer>
-          <Icon icon={filenameIconSvg} size={22} />
+          <DocumentRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
         </Styled.ItemSpacer>
         <Input
           value={filenameState}
@@ -101,7 +103,11 @@ export const OptionSetter = () => {
       <Styled.ItemSummery>Size</Styled.ItemSummery>
       <Styled.ItemWrapper>
         <Styled.ItemSpacer>
-          <Icon icon={sizeIconSvg} size={22} />
+          <SlideSize24Regular
+            width={22}
+            height={22}
+            style={{ verticalAlign: 'middle' }}
+          />
         </Styled.ItemSpacer>
         <Styled.ItemSpacer>
           <Input
@@ -128,7 +134,10 @@ export const OptionSetter = () => {
       <Styled.ItemSummery>Framerate</Styled.ItemSummery>
       <Styled.ItemWrapper>
         <Styled.ItemSpacer>
-          <Icon icon={fpsIconSvg} size={22} />
+          <BarcodeScannerRegular
+            fontSize={22}
+            style={{ verticalAlign: 'middle' }}
+          />
         </Styled.ItemSpacer>
         <Styled.ItemSpacer>
           <Input
@@ -146,7 +155,7 @@ export const OptionSetter = () => {
       <Styled.ItemSummery>Cut</Styled.ItemSummery>
       <Styled.ItemWrapper>
         <Styled.ItemSpacer>
-          <Icon icon={curIconSvg} size={22} />
+          <CutRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
         </Styled.ItemSpacer>
         <Styled.ItemSpacer>
           <Input
@@ -182,7 +191,7 @@ export const OptionSetter = () => {
             selected={paletteState}
             onClick={() => setPaletteState((prev) => !prev)}
           >
-            <Icon icon={paletteIconSvg} size={22} />
+            <ColorRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
           </Styled.IconButton>
         </Styled.ItemSpacer>
         Use a palette to downsample an input video stream.
