@@ -1,8 +1,8 @@
+import { MoviesAndTvRegular } from '@fluentui/react-icons';
 import { Story, Meta } from '@storybook/react';
 import { ComponentProps } from 'react';
 
 import { MenuIcon } from '.';
-import convertIconSvg from '../convert-icon.svg';
 
 export default {
   title: 'Header/MenuIcon',
@@ -16,6 +16,6 @@ const Template: Story<ComponentProps<typeof MenuIcon>> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
   width: 60,
-  icon: convertIconSvg,
+  FluentIcon: MoviesAndTvRegular,
   text: 'Convert',
 };

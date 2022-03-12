@@ -101,6 +101,8 @@
     ]
   },
   "dependencies": {
+    "@fluentui/react-icons": "^2.0.153-canary.0",
+    "@fluentui/react-make-styles": "^9.0.0-beta.4",
     "electron-log": "^4.4.6",
     "electron-updater": "^4.6.5",
     "fluent-ffmpeg": "^2.1.2",

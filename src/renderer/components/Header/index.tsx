@@ -1,3 +1,4 @@
+import { DocumentAddRegular, MoviesAndTvRegular } from '@fluentui/react-icons';
 import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 
@@ -9,8 +10,6 @@ import { inputFilePathState } from '@recoil/atoms';
 
 import { isDarwin } from '@shared/util';
 
-import addFileIconSvg from './add-file-icon.svg';
-import convertIconSvg from './convert-icon.svg';
 import { MenuIcon } from './MenuIcon';
 import * as Styled from './Styled';
 import { TitleBar } from './TitleBar';
@@ -33,7 +32,7 @@ export const HeaderComponent = ({
 
     <Styled.Container>
       <Styled.IconWrapper left={isMac ? 100 : 15} onClick={onClickOpenFile}>
-        <MenuIcon width={60} icon={addFileIconSvg} text="Open File" />
+        <MenuIcon width={60} FluentIcon={DocumentAddRegular} text="Open File" />
       </Styled.IconWrapper>
 
       {isMac && (
@@ -43,7 +42,7 @@ export const HeaderComponent = ({
       )}
 
       <Styled.IconWrapper right={isMac ? 30 : 15} onClick={convert}>
-        <MenuIcon width={60} icon={convertIconSvg} text="Convert" />
+        <MenuIcon width={60} FluentIcon={MoviesAndTvRegular} text="Convert" />
       </Styled.IconWrapper>
     </Styled.Container>
   </>
