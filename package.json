@@ -51,11 +51,17 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "icon": "src/assets/icon.png",
@@ -63,10 +69,15 @@
         "node_modules/ffmpeg-static-electron/bin/mac/${arch}",
         "node_modules/ffprobe-static-electron/bin/mac/${arch}"
       ],
-      "electronLanguages": ["en"]
+      "electronLanguages": [
+        "en"
+      ]
     },
     "win": {
-      "target": ["nsis", "zip"],
+      "target": [
+        "nsis",
+        "zip"
+      ],
       "icon": "src/assets/icon-win.png",
       "extraResources": [
         "node_modules/ffmpeg-static-electron/bin/win",
@@ -93,13 +104,13 @@
     }
   },
   "dependencies": {
-    "electron-log": "^4.4.1",
-    "electron-updater": "^4.6.1",
+    "electron-log": "^4.4.6",
+    "electron-updater": "^4.6.5",
     "fluent-ffmpeg": "^2.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-dropzone": "^11.4.2",
-    "recoil": "^0.4.1",
+    "react-dropzone": "^12.0.4",
+    "recoil": "^0.6.1",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
