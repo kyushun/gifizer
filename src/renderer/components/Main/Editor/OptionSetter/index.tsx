@@ -1,12 +1,13 @@
 import {
   BarcodeScannerRegular,
   ColorRegular,
+  CropRegular,
   CutRegular,
   DocumentRegular,
   SlideSize24Regular,
 } from '@fluentui/react-icons';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { timeToSeconds, secToTimeString } from '@renderer/util';
 
@@ -18,6 +19,7 @@ import {
   intOptionsStateFamilyString,
   numberOptionStateFamily,
   boolOptionsStateFamily,
+  cropOptionState,
 } from '@recoil/atoms/index';
 
 import * as Styled from './Styled';
@@ -44,6 +46,8 @@ export const OptionSetter = () => {
   const [endTime, setEndTime] = useRecoilState(
     numberOptionStateFamily('option/endTime')
   );
+
+  const setCropOption = useSetRecoilState(cropOptionState);
 
   const [inputStartTime, setInputStartTime] = useState('');
   const [inputEndTime, setInputEndTime] = useState('');
@@ -73,6 +77,10 @@ export const OptionSetter = () => {
     },
     [setEndTime]
   );
+
+  const resetCropOption = useCallback(() => {
+    setCropOption({ x: 0, y: 0, width: 100, height: 100 });
+  }, [setCropOption]);
 
   useEffect(() => {
     setInputStartTime(
@@ -184,15 +192,25 @@ export const OptionSetter = () => {
         </Styled.ItemSpacer>
       </Styled.ItemWrapper>
 
+      <Styled.ItemSummery>Crop</Styled.ItemSummery>
+      <Styled.ItemWrapper>
+        <Styled.ItemSpacer>
+          <Styled.IconButton onClick={resetCropOption}>
+            <CropRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
+            <Styled.IconButtonText>Reset Crop</Styled.IconButtonText>
+          </Styled.IconButton>
+        </Styled.ItemSpacer>
+      </Styled.ItemWrapper>
+
       <Styled.ItemSummery>Palette</Styled.ItemSummery>
       <Styled.ItemWrapper>
         <Styled.ItemSpacer>
-          <Styled.IconButton
+          <Styled.IconToggle
             selected={paletteState}
             onClick={() => setPaletteState((prev) => !prev)}
           >
             <ColorRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
-          </Styled.IconButton>
+          </Styled.IconToggle>
         </Styled.ItemSpacer>
         Use a palette to downsample an input video stream.
       </Styled.ItemWrapper>

@@ -8,19 +8,38 @@ export const Wrapper = styled.div`
   left: 0%;
   width: 100%;
   height: 100%;
+`;
+
+export const Cropper = styled.div`
+  position: absolute;
+  cursor: pointer;
+  will-change: top, left, width, height;
+`;
+
+export const Border = styled.div<{ isCropping: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 3px * 2);
+  height: calc(100% - 3px * 2);
+  background-color: rgba(255, 255, 255, 0.2);
+  border: solid 3px rgba(255, 0, 0, 0.4);
+  opacity: ${({ isCropping }) => (isCropping ? '1' : '0')};
+  transition: opacity 0.2s;
+  pointer-events: none;
+  z-index: 2;
+`;
+
+export const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
   opacity: 0;
   transition: opacity 0.2s;
 
   &:hover {
     opacity: 1;
   }
-`;
-
-export const Cropper = styled.div`
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  will-change: top, left, width, height;
 `;
 
 export const Corner = styled.div<{ 'data-crop-type': CropType }>`
@@ -45,4 +64,5 @@ export const Corner = styled.div<{ 'data-crop-type': CropType }>`
     if (cropType === 'BOTTOM_LEFT') return 'sw-resize';
     return undefined;
   }};
+  z-index: 3;
 `;

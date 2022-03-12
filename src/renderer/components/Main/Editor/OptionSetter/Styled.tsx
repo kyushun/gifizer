@@ -29,12 +29,38 @@ export const ItemSpacer = styled.div`
   margin-right: 8px;
 `;
 
-export const IconButton = styled.div<{ selected: boolean }>`
+export const IconButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px 4px 4px;
+  border-radius: 4px;
+  border: solid 1px ${({ theme }) => theme.palette.hover};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.hover};
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.palette.active};
+  }
+`;
+
+export const IconButtonText = styled.span`
+  margin-left: 4px;
+`;
+
+export const IconToggle = styled.div<{ selected: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 4px;
   border-radius: 4px;
   background-color: ${({ selected, theme }) =>
     selected && theme.palette.active};
   border: solid 1px ${({ theme }) => theme.palette.hover};
+  cursor: pointer;
 
   &:hover {
     background-color: ${({ selected, theme }) =>
