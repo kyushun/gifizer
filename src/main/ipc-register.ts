@@ -34,6 +34,14 @@ export const ipcRegister = () => {
     return result;
   });
 
+  ipcMain.handle('show-save-dialog', async (_, defaultPath: string) => {
+    const win = BrowserWindow.getFocusedWindow();
+    const result = dialog.showSaveDialog(win || (undefined as any), {
+      defaultPath,
+    });
+    return result;
+  });
+
   ipcMain.handle(
     'convert',
     async (event, filePath: string, option: ConvertOption) => {

@@ -2,6 +2,7 @@ import {
   contextBridge,
   ipcRenderer,
   OpenDialogReturnValue,
+  SaveDialogReturnValue,
   shell,
 } from 'electron';
 import log from 'electron-log';
@@ -28,6 +29,8 @@ const contextBridgeApis = {
       ipcRenderer.invoke('inspect-file', filePath),
     showOpenDialog: (): Promise<OpenDialogReturnValue> =>
       ipcRenderer.invoke('show-open-dialog'),
+    showSaveDialog: (defaultPath: string): Promise<SaveDialogReturnValue> =>
+      ipcRenderer.invoke('show-save-dialog', defaultPath),
     convert: (filePath: string, option: ConvertOption) =>
       ipcRenderer.invoke('convert', filePath, option),
     onConvertStatus: (callback: (status: ConvertStatus) => void) => {

@@ -6,7 +6,7 @@ export const Input = styled.input<{
   center?: boolean;
 }>`
   padding: 6px 12px;
-  width: ${({ width }) => (width ? `${width}px` : '100%')};
+  width: ${({ width }) => (width ? `${width}px` : 'calc(100% - 24px)')};
   color: ${({ theme }) => theme.palette.textNormal};
   border: none;
   border-radius: 4px;
