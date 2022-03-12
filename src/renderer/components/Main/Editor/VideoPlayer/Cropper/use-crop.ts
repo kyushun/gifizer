@@ -134,7 +134,6 @@ export const useCrop = (
       }
 
       setCrop(newState);
-      prevCropRef.current = newState;
 
       prevMousePositionRef.current = { x, y };
     };
@@ -151,11 +150,13 @@ export const useCrop = (
   useEffect(() => {
     if (!cropperRef.current) return;
 
+    prevCropRef.current = crop;
+
     cropperRef.current.style.top = `${crop.y}%`;
     cropperRef.current.style.left = `${crop.x}%`;
     cropperRef.current.style.width = `${crop.width}%`;
     cropperRef.current.style.height = `${crop.height}%`;
-  }, [crop.height, crop.width, crop.x, crop.y, cropperRef]);
+  }, [crop, crop.height, crop.width, crop.x, crop.y, cropperRef]);
 
   return { crop, isCropping, cropTarget, onMouseDown };
 };
