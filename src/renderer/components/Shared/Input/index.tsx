@@ -11,6 +11,7 @@ type Props = {
   center?: boolean;
   onChange?: ComponentProps<'input'>['onChange'];
   onBlur?: ComponentProps<'input'>['onBlur'];
+  disabled?: boolean;
 };
 
 export const Input = (props: Props) => {
@@ -24,6 +25,7 @@ export const Input = (props: Props) => {
       placeholder={props.placeholder}
       onChange={props.onChange}
       onBlur={props.onBlur}
+      disabled={props.disabled}
     />
   );
 };

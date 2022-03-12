@@ -1,13 +1,16 @@
+import {
+  BorderLeftFilled,
+  BorderRightFilled,
+  PauseFilled,
+  PlayFilled,
+} from '@fluentui/react-icons';
+
 import { useVideoController } from '@hooks/index';
 
-import backwardIconSvg from './backward-icon.svg';
-import forwardIconSvg from './forward-icon.svg';
-import pauseIconSvg from './pause-icon.svg';
-import playIconSvg from './play-icon.svg';
 import { SeekBar } from './SeekBar';
 import * as Styled from './Styled';
 import { useSetOptionTime } from './use-set-option-time';
-import { VideoControllerIcon } from './VideoControllerIcon';
+import { VideoControllerIconV2 } from './VideoControllerIcon';
 import { VideoTime } from './VideoTime';
 
 export const VideoController = () => {
@@ -19,15 +22,18 @@ export const VideoController = () => {
   return (
     <Styled.Container>
       <Styled.ButtonContainer>
-        <VideoControllerIcon
-          icon={backwardIconSvg}
+        <VideoControllerIconV2
+          FluentIcon={BorderRightFilled}
           onClick={onBackwardClicked}
         />
-        <VideoControllerIcon
-          icon={isPlaying ? pauseIconSvg : playIconSvg}
+        <VideoControllerIconV2
+          FluentIcon={isPlaying ? PauseFilled : PlayFilled}
           onClick={togglePlaying}
         />
-        <VideoControllerIcon icon={forwardIconSvg} onClick={onForwardClicked} />
+        <VideoControllerIconV2
+          FluentIcon={BorderLeftFilled}
+          onClick={onForwardClicked}
+        />
       </Styled.ButtonContainer>
 
       <VideoTime currentTime={currentTime} duration={duration} />

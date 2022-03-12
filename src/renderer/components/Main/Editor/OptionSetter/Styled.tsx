@@ -23,21 +23,48 @@ export const ItemWrapper = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+  gap: 8px;
 `;
 
-export const ItemSpacer = styled.div`
-  margin-right: 8px;
+export const IconButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  border: solid 1px ${({ theme }) => theme.palette.hover};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.hover};
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.palette.active};
+  }
 `;
 
-export const IconButton = styled.div<{ selected: boolean }>`
+export const IconButtonText = styled.span`
+  margin: 0 4px;
+`;
+
+export const IconToggle = styled.div<{ selected: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 4px;
   border-radius: 4px;
   background-color: ${({ selected, theme }) =>
     selected && theme.palette.active};
   border: solid 1px ${({ theme }) => theme.palette.hover};
+  cursor: pointer;
 
   &:hover {
     background-color: ${({ selected, theme }) =>
       selected ? theme.palette.active : theme.palette.hover};
   }
+`;
+
+export const FlexWrapper = styled.div`
+  flex: 1;
 `;

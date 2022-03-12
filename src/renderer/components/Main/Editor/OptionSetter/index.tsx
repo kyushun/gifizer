@@ -1,9 +1,18 @@
+import {
+  BarcodeScannerRegular,
+  ColorRegular,
+  CropRegular,
+  CutRegular,
+  DocumentRegular,
+  FolderRegular,
+  SlideSize24Regular,
+} from '@fluentui/react-icons';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { timeToSeconds, secToTimeString } from '@renderer/util';
 
-import { Icon, Input } from '@components/Shared/index';
+import { Input } from '@components/Shared/index';
 import { theme } from '@components/Styles/theme';
 
 import {
@@ -11,13 +20,9 @@ import {
   intOptionsStateFamilyString,
   numberOptionStateFamily,
   boolOptionsStateFamily,
+  cropOptionState,
 } from '@recoil/atoms/index';
 
-import curIconSvg from './cut-icon.svg';
-import filenameIconSvg from './filename-icon.svg';
-import fpsIconSvg from './fps-icon.svg';
-import paletteIconSvg from './palette-icon.svg';
-import sizeIconSvg from './size-icon.svg';
 import * as Styled from './Styled';
 
 export const OptionSetter = () => {
@@ -43,8 +48,17 @@ export const OptionSetter = () => {
     numberOptionStateFamily('option/endTime')
   );
 
+  const setCropOption = useSetRecoilState(cropOptionState);
+
   const [inputStartTime, setInputStartTime] = useState('');
   const [inputEndTime, setInputEndTime] = useState('');
+
+  const openSaveDialog = useCallback(async () => {
+    const result = await window.api.showSaveDialog(filenameState);
+    if (result.canceled || !result.filePath) return;
+
+    setFilenameState(result.filePath);
+  }, [filenameState, setFilenameState]);
 
   const onStartTimeChanged = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +86,10 @@ export const OptionSetter = () => {
     [setEndTime]
   );
 
+  const resetCropOption = useCallback(() => {
+    setCropOption({ x: 0, y: 0, width: 100, height: 100 });
+  }, [setCropOption]);
+
   useEffect(() => {
     setInputStartTime(
       startTime !== undefined ? secToTimeString(startTime) : ''
@@ -88,33 +106,36 @@ export const OptionSetter = () => {
 
       <Styled.ItemSummery>File Name</Styled.ItemSummery>
       <Styled.ItemWrapper>
-        <Styled.ItemSpacer>
-          <Icon icon={filenameIconSvg} size={22} />
-        </Styled.ItemSpacer>
-        <Input
-          value={filenameState}
-          backgroundColor={theme.palette.mainSilent}
-          onChange={(e) => setFilenameState(e.target.value)}
-        />
+        <DocumentRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
+        <Styled.FlexWrapper>
+          <Input
+            value={filenameState}
+            backgroundColor={theme.palette.mainSilent}
+            disabled
+          />
+        </Styled.FlexWrapper>
+        <Styled.IconButton onClick={openSaveDialog}>
+          <FolderRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
+        </Styled.IconButton>
       </Styled.ItemWrapper>
 
       <Styled.ItemSummery>Size</Styled.ItemSummery>
       <Styled.ItemWrapper>
-        <Styled.ItemSpacer>
-          <Icon icon={sizeIconSvg} size={22} />
-        </Styled.ItemSpacer>
-        <Styled.ItemSpacer>
-          <Input
-            type="number"
-            value={widthState}
-            width={40}
-            backgroundColor={theme.palette.mainSilent}
-            center
-            placeholder="Auto"
-            onChange={(e) => setWidthState(e.target.value)}
-          />
-        </Styled.ItemSpacer>
-        <Styled.ItemSpacer>x</Styled.ItemSpacer>
+        <SlideSize24Regular
+          width={22}
+          height={22}
+          style={{ verticalAlign: 'middle' }}
+        />
+        <Input
+          type="number"
+          value={widthState}
+          width={40}
+          backgroundColor={theme.palette.mainSilent}
+          center
+          placeholder="Auto"
+          onChange={(e) => setWidthState(e.target.value)}
+        />
+        x
         <Input
           value={heightState}
           width={40}
@@ -127,64 +148,63 @@ export const OptionSetter = () => {
 
       <Styled.ItemSummery>Framerate</Styled.ItemSummery>
       <Styled.ItemWrapper>
-        <Styled.ItemSpacer>
-          <Icon icon={fpsIconSvg} size={22} />
-        </Styled.ItemSpacer>
-        <Styled.ItemSpacer>
-          <Input
-            value={fpsState}
-            width={30}
-            backgroundColor={theme.palette.mainSilent}
-            center
-            placeholder="Auto"
-            onChange={(e) => setFpsState(e.target.value)}
-          />
-        </Styled.ItemSpacer>
+        <BarcodeScannerRegular
+          fontSize={22}
+          style={{ verticalAlign: 'middle' }}
+        />
+        <Input
+          value={fpsState}
+          width={30}
+          backgroundColor={theme.palette.mainSilent}
+          center
+          placeholder="Auto"
+          onChange={(e) => setFpsState(e.target.value)}
+        />
         FPS
       </Styled.ItemWrapper>
 
       <Styled.ItemSummery>Cut</Styled.ItemSummery>
       <Styled.ItemWrapper>
-        <Styled.ItemSpacer>
-          <Icon icon={curIconSvg} size={22} />
-        </Styled.ItemSpacer>
-        <Styled.ItemSpacer>
-          <Input
-            type="text"
-            value={inputStartTime}
-            width={75}
-            backgroundColor={theme.palette.mainSilent}
-            center
-            placeholder="Auto"
-            onChange={(e) => setInputStartTime(e.target.value)}
-            onBlur={onStartTimeChanged}
-          />
-        </Styled.ItemSpacer>
-        <Styled.ItemSpacer>-</Styled.ItemSpacer>
-        <Styled.ItemSpacer>
-          <Input
-            type="text"
-            value={inputEndTime}
-            width={75}
-            backgroundColor={theme.palette.mainSilent}
-            center
-            placeholder="Auto"
-            onChange={(e) => setInputEndTime(e.target.value)}
-            onBlur={onEndTimeChanged}
-          />
-        </Styled.ItemSpacer>
+        <CutRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
+        <Input
+          type="text"
+          value={inputStartTime}
+          width={75}
+          backgroundColor={theme.palette.mainSilent}
+          center
+          placeholder="Auto"
+          onChange={(e) => setInputStartTime(e.target.value)}
+          onBlur={onStartTimeChanged}
+        />
+        -
+        <Input
+          type="text"
+          value={inputEndTime}
+          width={75}
+          backgroundColor={theme.palette.mainSilent}
+          center
+          placeholder="Auto"
+          onChange={(e) => setInputEndTime(e.target.value)}
+          onBlur={onEndTimeChanged}
+        />
+      </Styled.ItemWrapper>
+
+      <Styled.ItemSummery>Crop</Styled.ItemSummery>
+      <Styled.ItemWrapper>
+        <Styled.IconButton onClick={resetCropOption}>
+          <CropRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
+          <Styled.IconButtonText>Reset Crop</Styled.IconButtonText>
+        </Styled.IconButton>
       </Styled.ItemWrapper>
 
       <Styled.ItemSummery>Palette</Styled.ItemSummery>
       <Styled.ItemWrapper>
-        <Styled.ItemSpacer>
-          <Styled.IconButton
-            selected={paletteState}
-            onClick={() => setPaletteState((prev) => !prev)}
-          >
-            <Icon icon={paletteIconSvg} size={22} />
-          </Styled.IconButton>
-        </Styled.ItemSpacer>
+        <Styled.IconToggle
+          selected={paletteState}
+          onClick={() => setPaletteState((prev) => !prev)}
+        >
+          <ColorRegular fontSize={22} style={{ verticalAlign: 'middle' }} />
+        </Styled.IconToggle>
         Use a palette to downsample an input video stream.
       </Styled.ItemWrapper>
     </Styled.Container>
