@@ -1,6 +1,5 @@
 import { Story, Meta } from '@storybook/react';
-
-import { ComponentProps } from '@renderer/util/component-props';
+import { ComponentProps } from 'react';
 
 import { Cropper } from '.';
 
