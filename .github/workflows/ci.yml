@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-11
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v3
@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Extract branch name
         shell: bash
